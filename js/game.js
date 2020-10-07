@@ -5,7 +5,7 @@ var NaNalert = false;
 var gameEnded = false;
 
 let VERSION = {
-	num: "1.0.0",
+	num: "0.0.1",
 	name: "The Beginning"
 }
 
@@ -48,6 +48,7 @@ function getPointGen() {
 	let ab = layers.c.upgrades[21].effect().times(layers.c.upgrades[31].effect())
 	if (hasUpg("c", 33)) gain = gain.times(ab)
 	if (hasUpg("w", 13)) gain = gain.times(ab)
+	gain = gain.mul(tmp.layerEffs.w)
 	gain = gain.mul(tmp.buyables.b[11].effect)
 	gain = gain.mul(tmp.buyables.b[12].effect)
 	if (player.b.banking & 1) gain = gain.pow(0.5)

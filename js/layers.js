@@ -45,7 +45,7 @@ addLayer("c", {
 		},
 		12: {
 			desc:() => "Boosts points generation based on your total coin count.",
-			cost:() => new Decimal(10),
+			cost:() => new Decimal(5),
 			unl() { return hasUpg(this.layer, 11)},
 			effect() {
 				let ret = player[this.layer].total.div(5).add(1).max(1).log10().add(1)
@@ -62,7 +62,7 @@ addLayer("c", {
 		},
 		13: {
 			desc:() => "Boosts the previous upgrade based on your best coin count.",
-			cost:() => new Decimal(20),
+			cost:() => new Decimal(10),
 			unl() { return hasUpg(this.layer, 12) && !(player.b.banking & 2)},
 			effect() {
 				let ret = player[this.layer].best.div(2).add(1).max(1).log10().add(1)
@@ -78,7 +78,7 @@ addLayer("c", {
 		},
 		14: {
 			desc:() => "Boosts the previous upgrade based on your current coin count.",
-			cost:() => new Decimal(30),
+			cost:() => new Decimal(15),
 			unl() { return hasUpg(this.layer, 13)},
 			effect() {
 				let ret = player[this.layer].points.add(1).max(1).log10().add(1)
@@ -93,7 +93,7 @@ addLayer("c", {
 		},
 		21: {
 			desc:() => "Boosts all boost upgrades above based on your current point count.",
-			cost:() => new Decimal(50),
+			cost:() => new Decimal(30),
 			unl() { return hasUpg(this.layer, 14)},
 			effect() {
 				let ret = player.points.div(10).add(1).sqrt().max(1).log10().add(1)
@@ -110,7 +110,7 @@ addLayer("c", {
 		},
 		22: {
 			desc:() => "Boosts the previous upgrade based on your coins gain on coin reset.",
-			cost:() => new Decimal(250),
+			cost:() => new Decimal(100),
 			unl() { return hasUpg(this.layer, 21)},
 			effect() {
 				let p = new Decimal(1)
@@ -126,15 +126,15 @@ addLayer("c", {
 		},
 		23: {
 			desc:() => "The point generation upgrade also gets boosted by the “all previous boost upgrades” upgrade.",
-			cost:() => new Decimal(1000),
+			cost:() => new Decimal(300),
 			unl() { return hasUpg(this.layer, 22)},
 		},
 		24: {
 			desc:() => "Boosts coins gain on coin reset (unaffected by the “all previous boost upgrades” upgrades).",
-			cost:() => new Decimal(6000),
+			cost:() => new Decimal(1500),
 			unl() { return hasUpg(this.layer, 23)},
 			effect() {
-				let ret = new Decimal(2);
+				let ret = new Decimal(8);
 				ret = ret.times(player.wf.workDoneEffect)
 				if (hasUpg(this.layer, 34)) ret = ret.times(layers.c.upgrades[34].effect())
 				return ret;
@@ -143,7 +143,7 @@ addLayer("c", {
 		},
 		31: {
 			desc:() => "Boosts all boost upgrades and point production above based on your best worker count.",
-			cost:() => new Decimal(15000),
+			cost:() => new Decimal(6000),
 			unl() { return hasUpg(this.layer, 24) && player["w"].best.gte(1)},
 			effect() {
 				let ret = player["w"].best.cbrt().div(2).add(1);
@@ -157,7 +157,7 @@ addLayer("c", {
 		},
 		32: {
 			desc:() => "Boosts coins gain on coin reset based on point generation speed.",
-			cost:() => new Decimal(1000000),
+			cost:() => new Decimal(500000),
 			unl() { return hasUpg(this.layer, 31)},
 			effect() {
 				let ret = new Decimal(1);
@@ -209,7 +209,7 @@ addLayer("c", {
 		},
 		43: {
 			desc:() => "Same as the previous upgrade, but the boost is cube rooted.",
-			cost:() => new Decimal(2e12),
+			cost:() => new Decimal(4e12),
 			unl() { return hasUpg(this.layer, 42) },
 		},
 		44: {
@@ -261,10 +261,14 @@ addLayer("c", {
 		},
 	},
 	update(diff) {
-		if (player[this.layer].total.eq(0) && player["w"].best.gte(3)) {
-			player[this.layer].points = new Decimal(10000)
-			player[this.layer].best = new Decimal(10000)
-			player[this.layer].total = new Decimal(10000)
+		if (player[this.layer].total.eq(0)) {
+			let kickstart = new Decimal(0)
+			if (player["w"].best.gte(1)) kickstart = new Decimal(80)
+			if (player["w"].best.gte(2)) kickstart = new Decimal(250)
+			if (player["w"].best.gte(3)) kickstart = new Decimal(10000)
+			player[this.layer].points = kickstart
+			player[this.layer].best = kickstart
+			player[this.layer].total = kickstart
 		}
 		if (hasUpg("c", 11)) player.points = player.points.add(tmp.pointGen.times(diff)).max(0)
 		if (hasUpg("w", 21) && tmp.gainExp !== undefined) { 
@@ -711,7 +715,7 @@ addLayer("b", {
 					? "You have " + format(player[this.layer].buyables[this.id], 0) + " banked coins, which are boosting the point generation speed by ×" + format(data.effect) + ".\n\n\
 						Banking is currently " + (player.b.banking == 1 ? "enabled.\n\
 						Click here to disable banking and gain " + format(player.c.points.sub(player.b.buyables[11]).max(0), 0) + " banked coins." : "disabled.\n\
-						Click here to enable banking, which will force a bank reset and square root all of your point generation speed, coin gains, finished works' effects, banks' effects and your “all previous boost upgrades” upgrades' effects.")
+						Click here to enable banking, which will force a bank reset and square root all of your point generation speed, coin gains, workers' effect, finished works' effects, banks' effects and your “all previous boost upgrades” upgrades' effects.")
 					: "You need to build at least 2 banks before you can use this function."
 			},
 			unl() { return player[this.layer].unl }, 
@@ -817,6 +821,16 @@ addLayer("w", {
 	base: 15000,                  
 	exponent: 1.35,    
 	canBuyMax: () => false,
+	
+	effect() {
+		var eff = Decimal.pow(player.w.points.add(1), 2)
+		if (player.b.banking & 1) eff = eff.pow(0.5)
+		return eff
+	},
+	effectDescription() {
+		eff = tmp.layerEffs.w;
+		return "which are boosting your point gains by ×" + format(eff)
+	},
 
 	gainMult() {             
 		return new Decimal(1)
@@ -829,17 +843,17 @@ addLayer("w", {
 		0: {
 			requirementDesc:() => "1 Worker",
 			done() {return player[this.layer].best.gte(1)},
-			effectDesc:() => "Unlocks a new row of coin upgrades.",
+			effectDesc:() => "Unlocks a new row of coin upgrades. Also you kickstart your worker resets and below (not coins) with " + format(80) + " coins."
 		},
 		1: {
 			requirementDesc:() => "2 Workers",
 			done() {return player[this.layer].best.gte(2)},
-			effectDesc:() => "Unlocks an another new row of coin upgrades.",
+			effectDesc:() => "Unlocks an another new row of coin upgrades. Also you kickstart your worker resets and below (not coins) with " + format(250) + " coins."
 		},
 		2: {
 			requirementDesc:() => "3 Workers",
 			done() {return player[this.layer].best.gte(3)},
-			effectDesc:() => "Unlocks worker upgrades. Scroll down to find them! Also you kickstart your resets with " + format(10000) + " coins.",
+			effectDesc:() => "Unlocks worker upgrades. Scroll down to find them! Also you kickstart with " + format(10000) + " coins.",
 		},
 		3: {
 			requirementDesc:() => "4 Workers",
