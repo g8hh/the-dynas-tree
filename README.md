@@ -1,5 +1,5 @@
-# The-Modding-Tree
+# The Dynas Tree
 
-A modified version of The Prestige Tree that is much easier to mod. It still requires programming knowledge, but it's mostly pretty easy things and copy/pasting.
-
-You can look in the [documentation](docs/!general-info.md) for more information on how it all works, or look at the code in layers.js and sampleLayers.js to see what it all looks like.
+Made by ducdat0507
+a mod of The Prestige Tree made by Jacorb and Aarex
+using The Modding Tree by Acamaeda
