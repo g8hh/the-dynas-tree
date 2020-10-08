@@ -1095,11 +1095,6 @@ addLayer("w", {
 			done() {return player[this.layer].best.gte(16)},
 			effectDesc:() => "The workers' effect gets cubed again. Yay!",
 		},
-		12: {
-			requirementDesc:() => "Not available yet",
-			done() {return false},
-			effectDesc:() => "To be continued...",
-		},
 	},
 	
 	upgrades: {
@@ -1245,6 +1240,11 @@ addLayer("m", {
 			requirementDesc:() => "1 Manager",
 			done() {return player[this.layer].best.gte(1)},
 			effectDesc:() => "You can bulk hire workers and workfinders, kickstart with " + format(1000000) + " coins, gain 1000% of your coins gain on coin reset every second, and coin reset no longer reset anything."
+		},
+		1: {
+			requirementDesc:() => "Not available yet",
+			done() {return false},
+			effectDesc:() => "To be continued...",
 		},
 	},
 	
