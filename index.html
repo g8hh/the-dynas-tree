@@ -46,6 +46,11 @@
 		<div v-if="player.tab=='changelog'" class="col right">
 			<button class="back" onclick="showTab('tree')">←</button><br>
 			<ul>
+				<li><h3>v0.1.0</h3><li>
+				<li>Added one new layer.</li>
+				<li>Added some new things to the layers before that.</li>
+				<li>Fixed some bugs related to progressing.</li>
+				<br>
 				<li><h3>v0.0.1</h3><li>
 				<li>Made some rebalancing to the early game.</li>
 				<li><h3>v0.0.0</h3><li>
@@ -128,6 +133,12 @@
 				<td><button class="treeNode hidden"></button></td>
 			</table><table>
 				<td><layer-node layer='w' abb='W'></layer-node></td>
+			</table><table>
+				<td><button class="treeNode hidden"></button></td>
+			</table><table>
+				<td><button class="treeNode hidden"></button></td>
+			</table><table>
+				<td><layer-node layer='m' abb='M'></layer-node></td>
 			</table>
 			<canvas id="treeCanvas" class="canvas"></canvas>
 		</div>

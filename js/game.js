@@ -5,7 +5,7 @@ var NaNalert = false;
 var gameEnded = false;
 
 let VERSION = {
-	num: "0.0.1",
+	num: "0.1.0",
 	name: "The Beginning"
 }
 
@@ -17,7 +17,7 @@ function startPlayerBase() {
 		notify: {},
 		msDisplay: "always",
 		offlineProd: true,
-		versionType: "Modding",
+		versionType: "dyntree",
 		version: VERSION.num,
 		beta: VERSION.beta,
 		timePlayed: 0,
@@ -49,10 +49,15 @@ function getPointGen() {
 	if (hasUpg("c", 33)) gain = gain.times(ab)
 	if (hasUpg("w", 13)) gain = gain.times(ab)
 	gain = gain.mul(tmp.layerEffs.w)
+	gain = gain.mul(tmp.layerEffs.m)
 	gain = gain.mul(tmp.buyables.b[11].effect)
 	gain = gain.mul(tmp.buyables.b[12].effect)
+	gain = gain.mul(tmp.buyables.b[13].effect)
 	if (player.b.banking & 1) gain = gain.pow(0.5)
 	if (player.b.banking & 2) gain = gain.pow(0.3333333)
+	if (player.b.banking & 4) gain = gain.pow(0.1)  
+	if (player.b.banking == 15) gain = gain.mul(10000)
+	if (player.b.banking & 8) gain = gain.pow(Decimal.pow(player.b.bankTime, 2).add(1).recip())  
 	return gain
 }
 

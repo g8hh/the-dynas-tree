@@ -130,6 +130,7 @@ function importSave(imported=undefined, forced=false) {
 	if (imported===undefined) imported = prompt("Paste your save here")
 	try {
 		tempPlr = Object.assign(getStartPlayer(), JSON.parse(atob(imported)))
+		console.log(tempPlr.versionType)
 		if(tempPlr.versionType != modInfo.id && !forced) // Wrong save (use "Forced" to force it to accept.)
 			return
 		player = tempPlr;
@@ -138,6 +139,7 @@ function importSave(imported=undefined, forced=false) {
 		save()
 		window.location.reload()
 	} catch(e) {
+		throw e
 		return;
 	}
 }
