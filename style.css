@@ -58,7 +58,7 @@ td {
 	vertical-align: 0
 }
 
-h1, h2, h3, b, input {
+h1, h2, h3, b, input, .tabButton {
 	display: inline;
 	font-family: "Lucida Console", "Courier New", monospace
 }
@@ -66,7 +66,7 @@ h1, h2, h3, b, input {
 .treeNode {
 	height: 100px;
 	width: 100px;
-	margin: 5px;
+	margin: 2px;
 	border: var(--hqProperty1);
 	border-color: rgba(255, 255, 255, 0.125) rgba(0, 0, 0, 0.25) rgba(0, 0, 0, 0.25) rgba(255, 255, 255, 0.125);
 	border-radius: 50%;
@@ -78,7 +78,7 @@ h1, h2, h3, b, input {
 }
 
 .locked {
-	background-color: #bf8f8f !important;
+	background-color: #bf8f8f;
 	cursor: not-allowed;
 }
 
@@ -86,15 +86,15 @@ h1, h2, h3, b, input {
 	cursor: pointer;
 }
 
-.can:hover {
-	transform: scale(1.15, 1.15);
-	box-shadow: 0px 0px 20px var(--points)
-}
+	.can:hover {
+		transform: scale(1.15, 1.15);
+		box-shadow: 0px 0px 20px var(--points)
+	}
 
 .treeNode.notify {
 	transform: scale(1.1, 1.1);
 	border-color: rgba(255, 0, 0, 0.125) rgba(255, 0, 0, 0.25) rgba(255, 0, 0, 0.25) rgba(255, 0, 0, 0.125);
-	box-shadow: var(--hqProperty2a), 0px 0px 20px #ff0000 !important;
+	box-shadow: var(--hqProperty2a), 0px 0px 20px #ff0000;
 	z-index: 3
 }
 
@@ -105,7 +105,7 @@ h1, h2, h3, b, input {
 }
 
 .bought {
-	background-color: #77bf5f !important;
+	background-color: #77bf5f;
 	cursor: default;
 }
 
@@ -120,10 +120,29 @@ h1, h2, h3, b, input {
 	cursor: pointer;
 }
 
-.back:hover {
-	transform: scale(1.1, 1.1);
-	text-shadow: 0px 0px 7px var(--color);
+	.back:hover {
+		transform: scale(1.1, 1.1);
+		text-shadow: 0px 0px 7px var(--color);
+	}
+
+.tabButton {
+	background-color: transparent;
+	border: none;
+	color: rgba(0, 0, 0, 0.75);
+	font-size: 18px;
+	cursor: pointer;
+	padding: 8px 20px 5px 20px;
+	margin: 5px 3px 5px 3px;
+	border-radius: 25px;
+	border: var(--hqProperty1);
+	border-width: 2px;
+	border-color: rgba(255, 255, 255, 0.125) rgba(0, 0, 0, 0.25) rgba(0, 0, 0, 0.25) rgba(255, 255, 255, 0.125);
 }
+
+	.tabButton:hover {
+		transform: scale(1.1, 1.1);
+		box-shadow: 0px 0px 12px var(--color);
+	}
 
 .reset {
 	height: 120px;
@@ -136,6 +155,15 @@ h1, h2, h3, b, input {
 .upg {
 	height: 120px;
 	width: 120px;
+	border-radius: 25%;
+	border: 2px solid;
+	border-color: rgba(255, 255, 255, 0.125) rgba(0, 0, 0, 0.25) rgba(0, 0, 0, 0.25) rgba(255, 255, 255, 0.125);
+	font-size: 10px;
+}
+
+.buyable {
+	height: 200px;
+	width: 200px;
 	border-radius: 25%;
 	border: 2px solid;
 	border-color: rgba(255, 255, 255, 0.125) rgba(0, 0, 0, 0.25) rgba(0, 0, 0, 0.25) rgba(255, 255, 255, 0.125);
@@ -182,9 +210,9 @@ h1, h2, h3, b, input {
 	cursor: pointer;
 }
 
-#optionWheel:hover {
-	transform: rotate(360deg);
-}
+	#optionWheel:hover {
+		transform: rotate(360deg);
+	}
 
 #info {
 	font-size: 20px;
@@ -199,11 +227,10 @@ h1, h2, h3, b, input {
 	-webkit-text-stroke-color: #02f2f2;
 }
 
-#info:hover {
-	transform: scale(1.2, 1.2);
-	text-shadow: 5px 0px 10px #02f2f2,
-              -3px 0px 12px #02f2f2;
-}
+	#info:hover {
+		transform: scale(1.2, 1.2);
+		text-shadow: 5px 0px 10px #02f2f2, -3px 0px 12px #02f2f2;
+	}
 
 #discord {
 	position: absolute;
@@ -214,9 +241,9 @@ h1, h2, h3, b, input {
 	cursor: pointer
 }
 
-#discord:hover {
-	transform: scale(1.2, 1.2);
-}
+	#discord:hover {
+		transform: scale(1.2, 1.2);
+	}
 
 #version {
 	position: absolute;
@@ -228,10 +255,10 @@ h1, h2, h3, b, input {
 	cursor: pointer;
 }
 
-#version:hover {
-	transform: scale(1.2, 1.2);
-	right: 4.8px;
-}
+	#version:hover {
+		transform: scale(1.2, 1.2);
+		right: 4.8px;
+	}
 
 a {
 	color: #007fff;
@@ -253,11 +280,10 @@ a {
 	text-decoration: none;
 }
 
-.link:hover {
-	transform: scale(1.2, 1.2);
-	text-shadow: 5px 0px 10px #02f2f2,
-              -3px 0px 12px #02f2f2;
-}
+	.link:hover {
+		transform: scale(1.2, 1.2);
+		text-shadow: 5px 0px 10px #02f2f2, -3px 0px 12px #02f2f2;
+	}
 
 .opt {
 	height: 100px;
@@ -270,9 +296,9 @@ a {
 	cursor: pointer;
 }
 
-.opt:hover {
-	background-color: #439ea3;
-}
+	.opt:hover {
+		background-color: #439ea3;
+	}
 
 .hidden {
 	visibility: hidden;
@@ -288,7 +314,8 @@ a {
 
 .milestone {
 	width: 100%;
-	height: 75px;
+	height: 60px;
+	padding: 8px;
 	background-color: #bf8f8f;
 	border: 4px solid;
 	border-radius: 4px;
@@ -298,7 +325,8 @@ a {
 
 .milestoneDone {
 	width: 100%;
-	height: 75px;
+	height: 60px;
+	padding: 8px;
 	background-color: #77bf5f;
 	border: 4px solid;
 	border-radius: 4px;
@@ -317,9 +345,9 @@ a {
 	cursor: pointer;
 }
 
-.remove:hover {
-	transform: scale(1.1, 1.1);
-}
+	.remove:hover {
+		transform: scale(1.1, 1.1);
+	}
 
 .col {
 	min-width: 49.5%;
@@ -330,14 +358,17 @@ a {
 	column-span: 1;
 	position: absolute;
 	overflow-y: auto;
-	overflow-x: auto;
-	transition-duration: 0s
+	overflow-x: hidden;
+	transition-duration: 0.5s
 }
 
-.col.right {
-	top: 0;
-	right: 0;
-}
+	.col.right {
+		min-width: 49.5%;
+		max-width: 49.5%;
+		width: 49.5%;
+		top: 0;
+		right: 0;
+	}
 
 #app {
 	column-count: 2;
@@ -352,6 +383,15 @@ a {
 	left: 50%;
 	margin-left: -3px;
 	top: 0
+}
+
+.vl2 {
+	border-left: 3px solid var(--color);
+	height: 100%;
+}
+
+.hl {
+	border-top: 3px solid var(--color);
 }
 
 ul {
@@ -369,13 +409,13 @@ ul {
 	border-radius: 33.33%;
 }
 
-.hChall.done {
-	background-color: #77bf5f;
-}
+	.hChall.done {
+		background-color: #77bf5f;
+	}
 
-.hChall.canComplete {
-	background-color: #ffbf00;
-}
+	.hChall.canComplete {
+		background-color: #ffbf00;
+	}
 
 .fullWidth {
 	position: absolute;
@@ -389,61 +429,92 @@ ul {
 
 [tooltip] {
 	position: relative;
-	z-index: 2
+	z-index: 999999 !important
 }
 
-[tooltip]:before,
-[tooltip]:after {
-	visibility: hidden;
-	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
-	filter: progid: DXImageTransform.Microsoft.Alpha(Opacity=0);
-	opacity: 0;
-	pointer-events: none;
-	white-space: pre-wrap;
+	[tooltip]:before,
+	[tooltip]:after {
+		visibility: hidden;
+		-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+		filter: progid: DXImageTransform.Microsoft.Alpha(Opacity=0);
+		opacity: 0;
+		pointer-events: none;
+		white-space: pre-wrap;
+	}
+
+	[tooltip]:before {
+		position: absolute;
+		bottom: 100%;
+		left: 50%;
+		margin-bottom: 5px;
+		margin-left: -80px;
+		padding: 7px;
+		width: 160px;
+		-webkit-border-radius: 3px;
+		-moz-border-radius: 3px;
+		border-radius: 3px;
+		background-color: var(--background_tooltip);
+		color: var(--points);
+		content: attr(tooltip);
+		text-align: center;
+		font-size: 14px;
+		line-height: 1.2;
+		transition-duration: 0.5s;
+		white-space: pre-wrap;
+	}
+
+	[tooltip]:after {
+		position: absolute;
+		bottom: 100%;
+		left: 50%;
+		margin-left: -5px;
+		width: 0;
+		border-top: 5px solid var(--background_tooltip);
+		border-right: 5px solid transparent;
+		border-left: 5px solid transparent;
+		content: " ";
+		font-size: 0;
+		line-height: 0;
+		transition-duration: 0.5s;
+		white-space: pre-wrap;
+	}
+
+	[tooltip]:hover:before,
+	[tooltip]:hover:after {
+		visibility: visible;
+		-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+		filter: progid: DXImageTransform.Microsoft.Alpha(Opacity=100);
+		opacity: 1;
+		white-space: pre-wrap;
+	}
+
+#loadingSection {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
 }
 
-[tooltip]:before {
-	position: absolute;
-	bottom: 100%;
-	left: 50%;
-	margin-bottom: 5px;
-	margin-left: -80px;
-	padding: 7px;
-	width: 160px;
-	-webkit-border-radius: 3px;
-	-moz-border-radius: 3px;
-	border-radius: 3px;
-	background-color: var(--background_tooltip);
-	color: var(--points);
-	content: attr(tooltip);
-	text-align: center;
-	font-size: 14px;
-	line-height: 1.2;
-	transition-duration: 0.5s;
-	white-space: pre-wrap;
+spoiler{ 
+  color: var(--color); 
+  background-color: var(--color);
+  border-radius: 5px;
+  transition-duration: 0.2s;
 }
 
-[tooltip]:after {
-	position: absolute;
-	bottom: 100%;
-	left: 50%;
-	margin-left: -5px;
-	width: 0;
-	border-top: 5px solid var(--background_tooltip);
-	border-right: 5px solid transparent;
-	border-left: 5px solid transparent;
-	content: " ";
-	font-size: 0;
-	line-height: 0;
-	transition-duration: 0.5s;
-	white-space: pre-wrap;
+spoiler:hover{
+  background-color: #fff2;
 }
 
-[tooltip]:hover:before,
-[tooltip]:hover:after {
-	visibility: visible;
-	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
-	filter: progid: DXImageTransform.Microsoft.Alpha(Opacity=100);
-	opacity: 1;
-	white-space: pre-wrap;
+::-webkit-scrollbar {
+  width: 10px;
+  border-radius: 5px;
+}
+::-webkit-scrollbar-track {
+  background: #222;
+}
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #aaa;
 }

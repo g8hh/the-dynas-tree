@@ -3,7 +3,7 @@
 function exponentialFormat(num, precision) {
 	let e = num.log10().floor()
 	let m = num.div(Decimal.pow(10, e))
-	return m.toStringWithDecimalPlaces(3)+"e"+e.toStringWithDecimalPlaces(0)
+	return m.toStringWithDecimalPlaces(3) + "e" + e.toStringWithDecimalPlaces(0)
 }
 
 function commaFormat(num, precision) {
@@ -22,20 +22,19 @@ function sumValues(x) {
 	return x.reduce((a, b) => Decimal.add(a, b))
 }
 
-function format(decimal, precision=2) {
+function format(decimal, precision = 2) {
 	decimal = new Decimal(decimal)
-	if (isNaN(decimal.sign)||isNaN(decimal.layer)||isNaN(decimal.mag)) {
+	if (isNaN(decimal.sign) || isNaN(decimal.layer) || isNaN(decimal.mag)) {
 		player.hasNaN = true;
-		throw "Error: NaN detected. If you can see this please contact the developer."
 		return "NaN"
 	}
-	if (decimal.sign<0) return "-"+format(decimal.neg(), precision)
+	if (decimal.sign < 0) return "-" + format(decimal.neg(), precision)
 	if (decimal.mag == Number.POSITIVE_INFINITY) return "Infinity"
 	if (decimal.gte("eeee1000")) {
 		var slog = decimal.slog()
 		if (slog.gte(1e6)) return "F" + format(slog.floor())
 		else return Decimal.pow(10, slog.sub(slog.floor())).toStringWithDecimalPlaces(3) + "F" + commaFormat(slog.floor(), 0)
-	} else if (decimal.gte("1e1000")) return (Math.floor(decimal.mantissa + 0.01) + ("e"+formatWhole(decimal.log10())))
+	} else if (decimal.gte("1e1000")) return (Math.floor(decimal.mantissa + 0.01) + ("e" + formatWhole(decimal.log10())))
 	else if (decimal.gte(1e9)) return exponentialFormat(decimal, precision)
 	else if (decimal.gte(1e3)) return commaFormat(decimal, 0)
 	else return commaFormat(decimal, precision)
@@ -46,21 +45,71 @@ function formatWhole(decimal) {
 }
 
 function formatTime(s) {
-	if (s<60) return format(s)+"s"
-	else if (s<3600) return formatWhole(Math.floor(s/60))+"m "+format(s%60)+"s"
-	else return formatWhole(Math.floor(s/3600))+"h "+formatWhole(Math.floor(s/60)%60)+"m "+format(s%60)+"s"
+	if (s < 60) return format(s) + "s"
+	else if (s < 3600) return formatWhole(Math.floor(s / 60)) + "m " + format(s % 60) + "s"
+	else return formatWhole(Math.floor(s / 3600)) + "h " + formatWhole(Math.floor(s / 60) % 60) + "m " + format(s % 60) + "s"
 }
 
+function toPlaces(x, precision, maxAccepted) {
+	x = new Decimal(x)
+	let result = x.toStringWithDecimalPlaces(precision)
+	if (new Decimal(result).gte(maxAccepted)) {
+		result = new Decimal(maxAccepted - Math.pow(0.1, precision)).toStringWithDecimalPlaces(precision)
+	}
+	return result
+}
 // ************ Save stuff ************
 
 function save() {
 	localStorage.setItem(modInfo.id, btoa(JSON.stringify(player)))
 }
 
+function startPlayerBase() {
+	return {
+		tab: "tree",
+		time: Date.now(),
+		autosave: true,
+		notify: {},
+		msDisplay: "always",
+		offlineProd: true,
+		versionType: modInfo.id,
+		version: VERSION.num,
+		beta: VERSION.beta,
+		timePlayed: 0,
+		keepGoing: false,
+		hasNaN: false,
+		hideChalls: false,
+		points: new Decimal(10),
+		subtabs: {},
+	}
+}
+
+function getStartPlayer() {
+	playerdata = startPlayerBase()
+	for (layer in layers) {
+		playerdata[layer] = layers[layer].startData()
+		playerdata[layer].buyables = getStartBuyables(layer)
+		playerdata[layer].spentOnBuyables = new Decimal(0)
+		playerdata[layer].upgrades = []
+		playerdata[layer].milestones = []
+		playerdata[layer].challs = []
+		if (layers[layer].tabFormat && !Array.isArray(layers[layer].tabFormat)) {
+			playerdata.subtabs[layer] = {}
+			playerdata.subtabs[layer].mainTabs = Object.keys(layers[layer].tabFormat)[0]
+		}
+		if (layers[layer].microtabs) {
+			if (playerdata.subtabs[layer] == undefined) playerdata.subtabs[layer] = {}
+			for (item in layers[layer].microtabs)
+				playerdata.subtabs[layer][item] = Object.keys(layers[layer].microtabs[item])[0]
+		}
+	}
+	return playerdata
+}
+
 function fixSave() {
 	defaultData = startPlayerBase()
-	for (datum in defaultData){
-		if (player[datum] == undefined){
+	for (datum in defaultData) {
+		if (player[datum] == undefined) {
 			player[datum] = defaultData[datum]
 		}
 	}
@@ -73,8 +122,8 @@ function fixSave() {
 		if (player[layer].challs == undefined)
 			player[layer].challs = []
 
-		for (datum in defaultData){
-			if (player[layer][datum] == undefined){
+		for (datum in defaultData) {
+			if (player[layer][datum] == undefined) {
 				player[layer][datum] = defaultData[datum]
 			}
 		}
@@ -85,17 +134,29 @@ function fixSave() {
 		if (layers[layer].buyables) {
 			if (player[layer].buyables == undefined) player[layer].buyables = {}
 
-			for (id in layers[layer].buyables){
+			for (id in layers[layer].buyables) {
 				if (player[layer].buyables[id] == undefined && !isNaN(id))
 					player[layer].buyables[id] = new Decimal(0)
 			}
 		}
+
+		if (layers[layer].tabFormat && !Array.isArray(layers[layer].tabFormat)) {
+			if (player.subtabs[layer] == undefined) player.subtabs[layer] = {}
+			if (player.subtabs[layer].mainTabs == undefined) player.subtabs[layer].mainTabs = Object.keys(layers[layer].tabFormat)[0]
+		}
+
+		if (layers[layer].microtabs) {
+			if (player.subtabs[layer] == undefined) player.subtabs[layer] = {}
+			for (item in layers[layer].microtabs)
+				if (player.subtabs[layer][item] == undefined) player.subtabs[layer][item] = Object.keys(layers[layer].microtabs[item])[0]
+		}
+
 	}
 }
 
 function load() {
 	let get = localStorage.getItem(modInfo.id);
-	if (get===null || get===undefined) player = getStartPlayer()
+	if (get === null || get === undefined || get === "dW5kZWZpbmVk") player = getStartPlayer()
 	else player = Object.assign(getStartPlayer(), JSON.parse(atob(get)))
 	fixSave()
 
@@ -109,6 +170,7 @@ function load() {
 	versionCheck();
 	changeTheme();
 	changeTreeQuality();
+	setupTemp();
 	updateTemp();
 	updateTemp();
 	loadVue();
@@ -116,53 +178,51 @@ function load() {
 
 function exportSave() {
 	let str = btoa(JSON.stringify(player))
-	
+
 	const el = document.createElement("textarea");
 	el.value = str;
 	document.body.appendChild(el);
 	el.select();
-    el.setSelectionRange(0, 99999);
+	el.setSelectionRange(0, 99999);
 	document.execCommand("copy");
 	document.body.removeChild(el);
 }
 
-function importSave(imported=undefined, forced=false) {
-	if (imported===undefined) imported = prompt("Paste your save here")
+function importSave(imported = undefined, forced = false) {
+	if (imported === undefined) imported = prompt("Paste your save here")
 	try {
 		tempPlr = Object.assign(getStartPlayer(), JSON.parse(atob(imported)))
-		console.log(tempPlr.versionType)
-		if(tempPlr.versionType != modInfo.id && !forced) // Wrong save (use "Forced" to force it to accept.)
+		if (tempPlr.versionType != modInfo.id && !forced && !confirm("This save appears to be for a different mod! Are you sure you want to import?")) // Wrong save (use "Forced" to force it to accept.)
 			return
 		player = tempPlr;
 		player.versionType = modInfo.id
-		fixSave()	
+		fixSave()
 		save()
 		window.location.reload()
-	} catch(e) {
-		throw e
+	} catch (e) {
 		return;
 	}
 }
 
 function versionCheck() {
 	let setVersion = true
-	
-	if (player.versionType===undefined||player.version===undefined) {
-		player.versionType = "Modding"
+
+	if (player.versionType === undefined || player.version === undefined) {
+		player.versionType = modInfo.id
 		player.version = 0
 	}
-	
+
 	if (setVersion) {
-		if (player.versionType == "Modding" && VERSION.num > player.version) player.keepGoing = false
+		if (player.versionType == modInfo.id && VERSION.num > player.version) player.keepGoing = false
 		player.versionType = getStartPlayer().versionType
 		player.version = VERSION.num
 		player.beta = VERSION.beta
 	}
 }
 
-var saveInterval = setInterval(function() {
-	if (player===undefined) return;
-	if (gameEnded&&!player.keepGoing) return;
+var saveInterval = setInterval(function () {
+	if (player === undefined) return;
+	if (gameEnded && !player.keepGoing) return;
 	if (player.autosave) save();
 }, 5000)
 
@@ -182,6 +242,7 @@ function changeTheme() {
 	document.body.style.setProperty('--background_tooltip', aqua ? "rgba(0, 15, 31, 0.75)" : "rgba(0, 0, 0, 0.75)")
 	document.body.style.setProperty('--color', aqua ? "#bfdfff" : "#dfdfdf")
 	document.body.style.setProperty('--points', aqua ? "#dfefff" : "#ffffff")
+	document.body.style.setProperty("--locked", aqua ? "#c4a7b3" : "#bf8f8f")
 }
 
 function getThemeName() {
@@ -201,8 +262,21 @@ function switchTheme() {
 // ************ Options ************
 
 function toggleOpt(name) {
+	if (name == "oldStyle" && styleCooldown > 0) return;
+
 	player[name] = !player[name]
 	if (name == "hqTree") changeTreeQuality()
+	if (name == "oldStyle") updateStyle()
+}
+
+var styleCooldown = 0;
+
+
+function updateStyle() {
+	styleCooldown = 1;
+	let css = document.getElementById("styleStuff")
+	css.href = player.oldStyle ? "oldStyle.css" : "style.css"
+	needCanvasUpdate = true;
 }
 
 function changeTreeQuality() {
@@ -214,29 +288,29 @@ function changeTreeQuality() {
 }
 
 function toggleAuto(toggle) {
-	player[toggle[0]][toggle[1]] = !player[toggle[0]][toggle[1]] 
+	player[toggle[0]][toggle[1]] = !player[toggle[0]][toggle[1]]
 }
 
 function adjustMSDisp() {
 	let displays = ["always", "automation", "incomplete", "never"];
-	player.msDisplay = displays[(displays.indexOf(player.msDisplay)+1)%4]
+	player.msDisplay = displays[(displays.indexOf(player.msDisplay) + 1) % 4]
 }
 
 function milestoneShown(layer, id) {
 	complete = player[layer].milestones.includes(id)
 	auto = layers[layer].milestones[id].toggles
 
-	switch(player.msDisplay) {
-		case "always": 
+	switch (player.msDisplay) {
+		case "always":
 			return true;
 			break;
-		case "automation": 
-			return (auto)||!complete
+		case "automation":
+			return (auto) || !complete
 			break;
 		case "incomplete":
 			return !complete
 			break;
-		case "never": 
+		case "never":
 			return false;
 			break;
 	}
@@ -251,7 +325,7 @@ function showTab(name) {
 
 	var toTreeTab = name == "tree"
 	player.tab = name
-	
+
 	if (toTreeTab != onTreeTab) {
 		document.getElementById("treeTab").className = toTreeTab ? "fullWidth" : "col left"
 		onTreeTab = toTreeTab
@@ -267,7 +341,7 @@ function notifyLayer(name) {
 
 function nodeShown(layer) {
 	if (tmp.layerShown[layer]) return true
-	switch(layer) {
+	switch (layer) {
 		case "idk":
 			return player.l.unl
 			break;
@@ -290,8 +364,8 @@ function toNumber(x) {
 	return x
 }
 
-function updateMilestones(layer){
-	for (id in layers[layer].milestones){
+function updateMilestones(layer) {
+	for (id in layers[layer].milestones) {
 		if (!(player[layer].milestones.includes(id)) && layers[layer].milestones[id].done())
 			player[layer].milestones.push(id)
 	}
@@ -321,16 +395,16 @@ function addTime(diff, layer) {
 	else data.timePlayed = time
 }
 
-document.onkeydown = function(e) {
-	if (player===undefined) return;
-	if (gameEnded&&!player.keepGoing) return;
+document.onkeydown = function (e) {
+	if (player === undefined) return;
+	if (gameEnded && !player.keepGoing) return;
 	let shiftDown = e.shiftKey
 	let ctrlDown = e.ctrlKey
 	let key = e.key
 	if (ctrlDown) key = "ctrl+" + key
 	if (onFocused) return
 	if (ctrlDown && key != "-" && key != "_" && key != "+" && key != "=" && key != "r" && key != "R" && key != "F5") e.preventDefault()
-	if(hotkeys[key]){
+	if (hotkeys[key]) {
 		if (player[hotkeys[key].layer].unl)
 			hotkeys[key].onPress()
 	}

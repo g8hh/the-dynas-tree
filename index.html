@@ -1,5 +1,6 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <head>
+	<meta charset="utf-8">
 	<script>
 		const modInfo = {
 			name: "The Dynas Tree",
@@ -14,10 +15,15 @@
 	<script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>
 	<script type="text/javascript" src="js/break_eternity.js"></script>
 	<script type="text/javascript" src="js/layerSupport.js"></script>
-	<script type="text/javascript" src="js/layers.js"></script>
-	<script type="text/javascript" src="js/temp.js"></script>
-	<script type="text/javascript" src="js/saves.js"></script>
 	<script type="text/javascript" src="js/utils.js"></script>
+	<script type="text/javascript" src="js/saves.js"></script>
+
+	<script type="text/javascript" src="js/layers/row1.js"></script>
+	<script type="text/javascript" src="js/layers/row2.js"></script>
+	<script type="text/javascript" src="js/layers/row3.js"></script>
+	<script type="text/javascript" src="js/layers/row4.js"></script>
+
+	<script type="text/javascript" src="js/temp.js"></script>
 	<script type="text/javascript" src="js/game.js"></script>
 	<script type="text/javascript" src="js/v.js"></script>
 	<script type="text/javascript" src="js/canvas.js"></script>
@@ -44,10 +50,18 @@
 			<br>
 		</div>
 		<div v-if="player.tab=='changelog'" class="col right">
-			<button class="back" onclick="showTab('tree')">←</button><br>
+			<button class="back" onclick="showTab('tree')">&gt;</button><br>
 			<ul>
+				<li><h3>v0.2.0</h3><li>
+				<li>Added the <spoiler>builder</spoiler> and the <spoiler>spiritual power</spoiler> layer.</li>
+				<li>Added more mechanics to the <spoiler>manager</spoiler> layer.</li>
+				<li>Replaced two of the last <spoiler>bankings</spoiler> and renamed the <spoiler>banking</spoiler> before that.</li>
+				<li>Migrated to The Modding Tree v1.3.4.</li>
+				<li>Added spoiler boxes to the changelog, which should be looking like <spoiler>this one over here</spoiler>.</li>
+				<li>Made various UI adjustments.</li>
+				<br>
 				<li><h3>v0.1.0</h3><li>
-				<li>Added one new layer (didn't have anything for now).</li>
+				<li>Added the <spoiler>manager</spoiler> layer (didn't have anything for now).</li>
 				<li>Added some new things to the layers before that.</li>
 				<li>Fixed some bugs related to progressing and save importing.</li>
 				<br>
@@ -58,11 +72,11 @@
 			</ul>
 		</div>
 		<div v-if="player.tab=='old-stuff'" class="col right">
-			<button class="back" onclick="showTab('changelog')">←</button><br>
+			<button class="back" onclick="showTab('changelog')">&gt;</button><br>
 			<h3>v1.1.1</h3>
 		</div>
 		<div v-if="player.tab=='info'" class="col right">
-			<button class="back" onclick="showTab('tree')">←</button><br>
+			<button class="back" onclick="showTab('tree')">&gt;</button><br>
 			<br>
 			<h2>{{modInfo.name}}</h2>
 			<br>
@@ -83,7 +97,7 @@
 			<span v-for="key in hotkeys" v-if="player[key.layer].unl"><br>{{key.desc}}</span>
 		</div>
 		<div v-if="player.tab=='options'" class="col right">
-			<button class="back" onclick="showTab('tree')">←</button><br>
+			<button class="back" onclick="showTab('tree')">&gt;</button><br>
 			<table>
 				<tr>
 					<td><button class="opt" onclick="save()">Save</button></td>
@@ -128,6 +142,7 @@
 				<td><button class="treeNode hidden"></button></td>
 			</table><table>
 				<td><layer-node layer='wf' abb='WF'></layer-node></td>
+				<td><layer-node layer='sp' abb='SP'></layer-node></td>
 				<td><layer-node layer='b' abb='B'></layer-node></td>
 			</table><table>
 				<td><button class="treeNode hidden"></button></td>
@@ -136,15 +151,15 @@
 			</table><table>
 				<td><button class="treeNode hidden"></button></td>
 			</table><table>
-				<td><button class="treeNode hidden"></button></td>
-			</table><table>
+				<td><layer-node layer='bd' abb='BD'></layer-node></td>
 				<td><layer-node layer='m' abb='M'></layer-node></td>
 			</table>
 			<canvas id="treeCanvas" class="canvas"></canvas>
+			<br><br>
 		</div>
 		<div v-for="layer in LAYERS">
-			<div v-if="player.tab==layer" v-bind:class="'col right'" v-bind:style="tmp.style[layer] ? tmp.style[layer] : {}">
-				<button class="back" onclick="showTab('tree')">←</button><br><br><br>
+			<div v-if="player.tab==layer" v-bind:class="'col right'" v-bind:style="tmp.style[layer] ? tmp.style[layer] : {}" style="background-color: var(--background)">
+				<button class="back" onclick="showTab('tree')">&gt;</button><br><br><br>
 				<div v-if="!layers[layer].tabFormat">
 					<main-display :layer="layer"></main-display>
 					<prestige-button :layer="layer"></prestige-button>
