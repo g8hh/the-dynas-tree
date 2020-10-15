@@ -13,6 +13,7 @@
 	<link rel="stylesheet" type="text/css" href="style.css" />
 	<link href="https://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet">
 	<script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>
+	<script type="text/javascript" src="js/modal.js"></script>
 	<script type="text/javascript" src="js/break_eternity.js"></script>
 	<script type="text/javascript" src="js/layerSupport.js"></script>
 	<script type="text/javascript" src="js/utils.js"></script>
@@ -52,7 +53,13 @@
 		<div v-if="player.tab=='changelog'" class="col right">
 			<button class="back" onclick="showTab('tree')">&gt;</button><br>
 			<ul>
-				<li><h3>v0.2.0</h3><li>
+				<li><h3>v0.3.0</h3><h5><i>“Expanding Civilization”</i></h5><br/><li>
+				<li>Added the <spoiler>territory</spoiler> and the <spoiler>solider</spoiler> layer.</li>
+				<li>Added more <spoiler>buildings</spoiler>, <spoiler>magic spells</spoiler> and <spoiler>manager</spoiler> milestones.</li>
+				<li>Hotkeys should work even if you don't unlock that layer yet.</li>
+				<li>Added a concept of a modal. It should appear if you have an error along with details of it for easier reporting.</li>
+				<br>
+				<li><h3>v0.2.0</h3><h5><i>“A New Age”</i></h5><br/><li>
 				<li>Added the <spoiler>builder</spoiler> and the <spoiler>spiritual power</spoiler> layer.</li>
 				<li>Added more mechanics to the <spoiler>manager</spoiler> layer.</li>
 				<li>Replaced two of the last <spoiler>bankings</spoiler> and renamed the <spoiler>banking</spoiler> before that.</li>
@@ -60,7 +67,7 @@
 				<li>Added spoiler boxes to the changelog, which should be looking like <spoiler>this one over here</spoiler>.</li>
 				<li>Made various UI adjustments.</li>
 				<br>
-				<li><h3>v0.1.0</h3><li>
+				<li><h3>v0.1.0</h3><h5><i>“The Beginning”</i></h5><br/><li>
 				<li>Added the <spoiler>manager</spoiler> layer (didn't have anything for now).</li>
 				<li>Added some new things to the layers before that.</li>
 				<li>Fixed some bugs related to progressing and save importing.</li>
@@ -152,7 +159,9 @@
 				<td><button class="treeNode hidden"></button></td>
 			</table><table>
 				<td><layer-node layer='bd' abb='BD'></layer-node></td>
+				<td><layer-node layer='so' abb='SO'></layer-node></td>
 				<td><layer-node layer='m' abb='M'></layer-node></td>
+				<td><layer-node layer='t' abb='T'></layer-node></td>
 			</table>
 			<canvas id="treeCanvas" class="canvas"></canvas>
 			<br><br>
@@ -175,12 +184,20 @@
 				</div>
 				<div v-if="layers[layer].tabFormat">
 					<div v-for="data in layers[layer].tabFormat">
-						<div v-if="!Array.isArray(data)" v-bind:is="data" :layer= "layer"></div>
-						<div v-else-if="data.length==3" v-bind:style="(data[2] ? data[2] : {})" v-bind:is="data[0]" :layer= "layer" :data= "data[1]"></div>
-						<div v-else-if="data.length==2" v-bind:is="data[0]" :layer= "layer" :data= "data[1]">	
+						<div v-if="!Array.isArray(data)" v-bind:is="data" :layer="layer"></div>
+						<div v-else-if="data.length==3" v-bind:style="(data[2] ? data[2] : {})" v-bind:is="data[0]" :layer="layer" :data="data[1]"></div>
+						<div v-else-if="data.length==2" v-bind:is="data[0]" :layer="layer" :data="data[1]">
+						</div>
 					</div>
-				</divs>
+				</div>
 			</div>
+		</div>
+		<div class="fullWidth" v-if="modal.showing" style="background-color: #0007; display: flex; z-index: 2147483000">
+			<div class="modal">
+				<h3>{{modal.title}}</h3>
+				<p v-html="modal.content"></p>
+				<button class="tabButton" style="background-color: var(--color); padding: 5px 20px 5px 20px" onclick="{modal.showing = false}"><p>Close</p></button>
+			<div>
 		</div>
 	</div>
 </body>

@@ -31,7 +31,9 @@ addLayer("c", {
 		if (hasUpg(this.layer, 32)) mul = mul.mul(layers.c.upgrades[32].effect())
 		mul = mul.mul(tmp.layerEffs.b)
 		mul = mul.mul(tmp.layerEffs.m)
+		if (player.sp.buyables[22].gt(0)) mul = mul.mul(tmp.buyables.sp[22].effect)
 		if (player.b.banking & 1) mul = mul.pow(0.5)
+		if (inChallenge("t", 11)) mul = mul.pow(0.5)
 		return mul
 	},
 	gainExp() {
@@ -371,6 +373,6 @@ addLayer("c", {
 	},
 
 	hotkeys: [
-		{ key: "c", desc: "C: Reset for coins", onPress() { if (player[this.layer].unl) doReset(this.layer) } },
+		{ key: "c", desc: "C: Reset for coins", onPress() { doReset(this.layer) } },
 	],
 })

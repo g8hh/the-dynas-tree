@@ -5,8 +5,8 @@ var NaNalert = false;
 var gameEnded = false;
 
 let VERSION = {
-	num: "0.2.0",
-	name: "A New Age"
+	num: "0.3.0",
+	name: "Expanding Civilization"
 }
 
 // Determines if it should show points/sec
@@ -30,10 +30,13 @@ function getPointGen() {
 	gain = gain.mul(tmp.buyables.b[13].effect)
 	if (tmp.layerEffs.sp) gain = gain.mul(tmp.layerEffs.sp)
 	if (player.sp.buyables[21].gt(0)) gain = gain.mul(tmp.buyables.sp[21].effect)
+	if (tmp.layerEffs.so) gain = gain.mul(tmp.layerEffs.so)
 	if (player.b.banking & 1) gain = gain.pow(0.5)
 	if (player.b.banking & 2) gain = gain.pow(0.3333333)
 	if (player.b.banking & 4) gain = gain.pow(0.1)
 	if (player.b.banking & 8) gain = player.c.points.pow(0.1).sub(1)
+	if (player.b.banking & 16) gain = gain.pow(Decimal.pow(player.b.bankTime, 2).add(1).recip())  
+	if (inChallenge("t", 11)) gain = gain.pow(0.5)
 	if (player.bd.building != 0) gain = gain.pow(tmp.layerEffs.bd.penalty)
 	return gain
 }
@@ -45,8 +48,10 @@ function inChallenge(layer, id) {
 	let chall = player[layer].active
 	if (chall == toNumber(id)) return true
 
-	if (layers[layer].challs[chall].countsAs)
-		return layers[layer].challs[id].countsAs.includes(id)
+	if (layers[layer].challs[chall] && layers[layer].challs[chall].countsAs)
+		return layers[layer].challs[chall].countsAs.includes(id)
+	
+	return false
 }
 
 function convertToDecimal() {
@@ -379,14 +384,14 @@ function canCompleteChall(layer, x) {
 		let name = chall.currencyInternalName
 		if (chall.currencyLayer) {
 			let lr = chall.currencyLayer
-			return !(player[lr][name].lt(readData(chall.goal)))
+			return player[lr][name].gte(readData(chall.goal()))
 		}
 		else {
-			return !(player[name].lt(chall.cost))
+			return player[name].gte(chall.goal())
 		}
 	}
 	else {
-		return !(player[layer].points.lt(chall.cost))
+		return player[layer].points.gte(chall.goal())
 	}
 
 }
@@ -419,6 +424,7 @@ function gameLoop(diff) {
 		player.tab = "gameEnded"
 	}
 	if (player.devSpeed) diff *= player.devSpeed
+	if (player.b.banking & 16) diff = Math.min(diff, 0.05)
 
 	addTime(diff)
 

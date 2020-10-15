@@ -12,7 +12,7 @@ addLayer("w", {
 		}
 	},
 
-	layerShown() { return hasUpg("c", 21) || player[this.layer].unl || player.m.unl },
+	layerShown() { return (hasUpg("c", 21) || player[this.layer].unl || player.m.unl) && !inChallenge("t", 21) },
 
 	color: () => "#FFFFFF",
 	resource: "workers",
@@ -64,7 +64,7 @@ addLayer("w", {
 		2: {
 			requirementDesc: () => "3 Workers",
 			done() { return player[this.layer].best.gte(3) },
-			effectDesc: () => "Unlocks worker upgrades. Scroll down to find them! Also you kickstart with " + format(10000) + " coins.",
+			effectDesc: () => "Unlocks worker upgrades. They're on an another tab! Also you kickstart with " + format(10000) + " coins.",
 		},
 		3: {
 			requirementDesc: () => "4 Workers",
@@ -86,7 +86,7 @@ addLayer("w", {
 		6: {
 			requirementDesc: () => "7 Workers",
 			done() { return player[this.layer].best.gte(7) },
-			effectDesc: () => hasMilestone("m", 0) ? "Hiring workfinders no longer resets anything." : "Unlocks banks, which you can manage bankings and lendings. They are reseted on worker reset too.",
+			effectDesc: () => hasMilestone("m", 0) ? "Hiring workfinders no longer resets anything." : "Unlocks banks, which you can manage bankings. They are reseted on worker reset too.",
 		},
 		7: {
 			requirementDesc: () => "8 Workers",
@@ -198,7 +198,16 @@ addLayer("w", {
 	},
 	
 	automate() {
-		if (player.m.autoWorkerReset) doReset("w")
+		if (player.m.autoWorkerReset && !inChallenge("t", 21)) doReset("w")
+			
+		if (player["t"].autoWorkerUpgrade) {
+			for (let x = 10; x <= 20; x += 10) for (let y = 1; y <= 5; y++) {
+				var z = x + y
+				if (!hasUpg("w", z) && canAffordUpg("w", z) && tmp.upgrades.w[z].unl) {
+					buyUpg("w", z)
+				}
+			}
+		}
 	},
 
 	microtabs: {
@@ -213,12 +222,12 @@ addLayer("w", {
 			["prestige-button", function () { return "Hire " }],
 			["blank", "5px"],
 			["display-text",
-				function () { return "You have at best " + format(player[this.layer].best, 0) + " " + " workers." }],
+				function () { return "You have at best " + format(player.w.best, 0) + " " + " workers." }],
 			["blank", "5px"],
 			["microtabs", "stuff"]],
 
 	hotkeys: [
-		{ key: "w", desc: "W: Hire workers", onPress() { if (player[this.layer].unl) doReset(this.layer) } },
+		{ key: "w", desc: "W: Hire workers", onPress() { doReset(this.layer) } },
 	],
 
 })
