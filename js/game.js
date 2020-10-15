@@ -5,7 +5,7 @@ var NaNalert = false;
 var gameEnded = false;
 
 let VERSION = {
-	num: "0.3.0",
+	num: "0.3.1",
 	name: "Expanding Civilization"
 }
 

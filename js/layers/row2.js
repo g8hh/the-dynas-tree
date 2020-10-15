@@ -763,7 +763,7 @@ addLayer("sp", {
 		}
 	},
 
-	layerShown() { return player.bd.buyables[13].gte(1) && !inChallenge("t", 21) },
+	layerShown() { return player.bd.buyables[13].gte(1) && !inChallenge("t", 22) },
 
 	color: () => "#FF00FF",
 	resource: "spiritual power",

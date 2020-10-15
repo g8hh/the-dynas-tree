@@ -12,7 +12,7 @@ addLayer("w", {
 		}
 	},
 
-	layerShown() { return (hasUpg("c", 21) || player[this.layer].unl || player.m.unl) && !inChallenge("t", 21) },
+	layerShown() { return (hasUpg("c", 21) || player[this.layer].unl || player.m.unl) && !inChallenge("t", 22) },
 
 	color: () => "#FFFFFF",
 	resource: "workers",
