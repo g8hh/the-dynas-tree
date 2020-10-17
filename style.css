@@ -495,6 +495,31 @@ ul {
 	justify-content: center;
 }
 
+#mapbox {
+	width: 500px;
+	height: 448px;
+	border: 2px solid;
+	border-color: rgba(255, 255, 255, 0.125) rgba(0, 0, 0, 0.25) rgba(0, 0, 0, 0.25) rgba(255, 255, 255, 0.125);
+}
+
+.bar {
+	width: 500px;
+	height: 20px;
+	background-color: var(--background);
+	border: 2px solid;
+	border-color: rgba(255, 255, 255, 0.125) rgba(0, 0, 0, 0.25) rgba(0, 0, 0, 0.25) rgba(255, 255, 255, 0.125);
+	border-radius: 10px;
+}
+.bar-fill {
+	font-size: 1px;
+	height: 16px;
+	border-radius: 8px;
+	background-color: var(--color);
+	border: 2px solid;
+	border-color: rgba(255, 255, 255, 0.125) rgba(0, 0, 0, 0.25) rgba(0, 0, 0, 0.25) rgba(255, 255, 255, 0.125);
+	float:left;
+}
+
 spoiler{ 
 	color: var(--color); 
 	background-color: var(--color);

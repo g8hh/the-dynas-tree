@@ -1,4 +1,6 @@
 
+var mapFocusDesc = ""
+
 // ----- Fifth row -----
 addLayer("m", {
 	startData() {
@@ -521,6 +523,10 @@ addLayer("t", {
 			if (hasMilestone("w", 7)) player.w.autoFinderUpgrade = true
 			player.m.autoWorkfinderReset = hasMilestone("w", 6)
 		}
+		
+		if (player.tab == "t" && player.subtabs.t.stuff == "map") {
+			updateMapCanvas()
+		}
 	},
 	
 	microtabs: {
@@ -533,7 +539,27 @@ addLayer("t", {
             milestones: { title: () => "Milestones", content: [
 				"milestones"] 
 			},
+            map: { title: () => "World Map", unl: () => player.so.unl, content: [
+				["blank", "5px"],
+				["display-text", "You have 0 conquered land, which are decreasing the territories' requirements by ÷1.00 and soldiers' requirements by ÷1.00."], 
+				["blank", "5px"], ["display-text", "Soldiers are Idle."], ["bar", "0"],
+				["blank", "0px"], "map-box",
+				["microtabs", "mapCommands"],
+				["blank", "5px"],
+				] 
+			},
         },
+		mapCommands: {
+            commands: { title: () => "Map Commands", unl: () => player.so.unl, content: [
+					"upgrades",
+					["display-text", "Selected: " + mapFocusDesc], 
+					["display-text", "<h5>Click on a tile to see its description.<br/>Drag the tiles to move the map around.</h5>"], 
+				]
+			},
+            report: { title: () => "Soldiers' Report", unl: () => player.so.unl, content: [
+				]
+			},
+		}
 	},
 	
 
@@ -566,7 +592,7 @@ addLayer("so", {
 	layerShown() { return player.bd.buyables[23].gte(1) || player[this.layer].unl },
 
 	color: () => "#009900",
-	resource: "soliders",
+	resource: "soldiers",
 	row: 4,
 
 	baseResource: "coins",
@@ -582,7 +608,7 @@ addLayer("so", {
 	
 	effect() {
 		var actualRat = Decimal.add(player.so.rating, 1)
-		var eff = actualRat.pow(10).mul(actualRat.log(10).add(1).pow(5))
+		var eff = actualRat.pow(15).mul(actualRat.log(10).add(1).pow(5))
 		return eff
 	},
 
@@ -613,7 +639,7 @@ addLayer("so", {
 				let data = tmp.buyables[this.layer][this.id]
 				return "Base stat: " + format(data.effect) + "\n\
 				Cost: " + format(data.cost) + " coins\n\
-				Increase your soliders' attack power."
+				Increase your soldiers' attack power."
 			},
 			unl() { return player.so.unl },
 			canAfford() {
@@ -647,7 +673,7 @@ addLayer("so", {
 				let data = tmp.buyables[this.layer][this.id]
 				return "Base stat: " + format(data.effect) + "\n\
 				Cost: " + format(data.cost) + " coins\n\
-				Increase your soliders' max hit points."
+				Increase your soldiers' max hit points."
 			},
 			unl() { return player.so.unl },
 			canAfford() {
@@ -679,16 +705,16 @@ addLayer("so", {
 			["prestige-button", function () { return "Recruit " }],
 			["blank", "5px"],
 			["display-text",
-				function () { return "You have at best " + format(player.so.best, 0) + " soliders." }],
+				function () { return "You have at best " + format(player.so.best, 0) + " soldiers." }],
 			["display-text",
 				function () { return "Your current military rating is " + format(player.so.rating) + ", which is boosting your point generation speed by ×" + format(tmp.layerEffs.so) + "." }],
 			["blank", "5px"],
 			["display-text",
-				function () { return player.so.unl ? "<h3>Solider Attributes</h3>" : "" }],
+				function () { return player.so.unl ? "<h3>Soldier Attributes</h3>" : "" }],
 			"buyables"],
 
 	hotkeys: [
-		{ key: "o", desc: "O: Recruit soliders", onPress() { doReset(this.layer) } },
+		{ key: "o", desc: "O: Recruit soldiers", onPress() { doReset(this.layer) } },
 	],
 
 })

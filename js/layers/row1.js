@@ -365,7 +365,6 @@ addLayer("c", {
 				var z = x + y
 				if (!hasUpg("c", z) && canAffordUpg("c", z) && tmp.upgrades.c[z].unl) {
 					buyUpg("c", z)
-					console.log(z)
 					player.wf.workUndone = player.wf.workUndone.add(penalty)
 				}
 			}

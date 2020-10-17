@@ -301,6 +301,24 @@ function loadVue() {
 		</button>
 		`
 	})
+	
+	Vue.component('bar', {
+		props: ['data'],
+		template: `
+			<div class="bar">
+				<div class="bar-fill" v-bind:style="[{'width': (data * 100) + '%'}]">
+					&nbsp;
+				</div>
+			</div>
+		`
+	})
+	
+	Vue.component('map-box', {
+		template: `
+			<canvas id="mapbox" style="font-stretch:150%" width="500px" height="450px" onmousedown="onMapMouseDown(event)" onmousemove="onMapMouseMove(event)" onmouseup="onMapMouseUp(event)">
+			</canvas>
+		`
+	})
 
 
 	app = new Vue({
