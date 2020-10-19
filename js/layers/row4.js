@@ -1,5 +1,8 @@
 
-var mapFocusDesc = ""
+var mapFocusDesc = "Unselected"
+var expansionDetails = [
+	["display-text", () => "<h5>Click on a tile in the map to see its details. Drag the tiles on the map to see more of it.</h5>"]
+]
 
 // ----- Fifth row -----
 addLayer("m", {
@@ -171,6 +174,7 @@ addLayer("bd", {
 					? "You have " + format(player[this.layer].buyables[this.id], 0) + " taverns, which are boosting the find and finish work speed by ×" + format(data.effect) + "." + 
 						(player.bd.building == 11 ? "\n\n\
 						Progress: " + format(player.bd.progress, 0) + " / " + format(data.cost, 0) + " (" + format(Decimal.div(player.bd.progress, data.cost).mul(100)) + "%) \n\
+						ETA: " + (Decimal.lte(tmp.layerEffs.bd.speed, 0) ? "never" : formatTime(data.cost.sub(player.bd.progress).div(tmp.layerEffs.bd.speed))) + "\n\
 						Click here to stop building and discard the building progress." : "\n\n\
 						Progress needed: " + format(data.cost, 0) + "\n\
 						Click here to start building.")
@@ -199,6 +203,7 @@ addLayer("bd", {
 					? "You have " + format(player[this.layer].buyables[this.id], 0) + " housing areas, which are boosting all of the first three rows of coin upgrades by ×" + format(data.effect) + "." + 
 						(player.bd.building == 12 ? "\n\n\
 						Progress: " + format(player.bd.progress, 0) + " / " + format(data.cost, 0) + " (" + format(Decimal.div(player.bd.progress, data.cost).mul(100)) + "%) \n\
+						ETA: " + (Decimal.lte(tmp.layerEffs.bd.speed, 0) ? "never" : formatTime(data.cost.sub(player.bd.progress).div(tmp.layerEffs.bd.speed))) + "\n\
 						Click here to stop building and discard the building progress." : "\n\n\
 						Progress needed: " + format(data.cost, 0) + "\n\
 						Click here to start building.")
@@ -227,6 +232,7 @@ addLayer("bd", {
 					? "You have " + format(player[this.layer].buyables[this.id], 0) + " shrines." + (player[this.layer].buyables[this.id].gte(1) ? (player[this.layer].buyables[this.id].gte(7) ? " Building more will make your spells stronger." : " Building more will give you an another spell to cast.") : " Building one will unlock another layer.") + 
 						(player.bd.building == 13 ? "\n\n\
 						Progress: " + format(player.bd.progress, 0) + " / " + format(data.cost, 0) + " (" + format(Decimal.div(player.bd.progress, data.cost).mul(100)) + "%) \n\
+						ETA: " + (Decimal.lte(tmp.layerEffs.bd.speed, 0) ? "never" : formatTime(data.cost.sub(player.bd.progress).div(tmp.layerEffs.bd.speed))) + "\n\
 						Click here to stop building and discard the building progress." : "\n\n\
 						Progress needed: " + format(data.cost, 0) + "\n\
 						Click here to start building.")
@@ -255,6 +261,7 @@ addLayer("bd", {
 					? "You have " + format(player[this.layer].buyables[this.id], 0) + " roads." + (player[this.layer].buyables[this.id].gte(1) ? (player[this.layer].buyables[this.id].gte(6) ? " Building more will make your obstacle rewards stronger." : " Building more will give you an another obstacle to be completed.") : " Building one will unlock another prestige layer.") + 
 						(player.bd.building == 21 ? "\n\n\
 						Progress: " + format(player.bd.progress, 0) + " / " + format(data.cost, 0) + " (" + format(Decimal.div(player.bd.progress, data.cost).mul(100)) + "%) \n\
+						ETA: " + (Decimal.lte(tmp.layerEffs.bd.speed, 0) ? "never" : formatTime(data.cost.sub(player.bd.progress).div(tmp.layerEffs.bd.speed))) + "\n\
 						Click here to stop building and discard the building progress." : "\n\n\
 						Progress needed: " + format(data.cost, 0) + "\n\
 						Click here to start building.")
@@ -283,6 +290,7 @@ addLayer("bd", {
 					? "You have " + format(player[this.layer].buyables[this.id], 0) + " construction sites, which are making your builders build " + format(data.effect) + "× faster." + 
 						(player.bd.building == 22 ? "\n\n\
 						Progress: " + format(player.bd.progress, 0) + " / " + format(data.cost, 0) + " (" + format(Decimal.div(player.bd.progress, data.cost).mul(100)) + "%) \n\
+						ETA: " + (Decimal.lte(tmp.layerEffs.bd.speed, 0) ? "never" : formatTime(data.cost.sub(player.bd.progress).div(tmp.layerEffs.bd.speed))) + "\n\
 						Click here to stop building and discard the building progress." : "\n\n\
 						Progress needed: " + format(data.cost, 0) + "\n\
 						Click here to start building.")
@@ -311,6 +319,7 @@ addLayer("bd", {
 					? "You have " + format(player[this.layer].buyables[this.id], 0) + " military bases." + (player[this.layer].buyables[this.id].gte(1) ? "" : " Building one will unlock another prestige layer.") + 
 						(player.bd.building == 23 ? "\n\n\
 						Progress: " + format(player.bd.progress, 0) + " / " + format(data.cost, 0) + " (" + format(Decimal.div(player.bd.progress, data.cost).mul(100)) + "%) \n\
+						ETA: " + (Decimal.lte(tmp.layerEffs.bd.speed, 0) ? "never" : formatTime(data.cost.sub(player.bd.progress).div(tmp.layerEffs.bd.speed))) + "\n\
 						Click here to stop building and discard the building progress." : "\n\n\
 						Progress needed: " + format(data.cost, 0) + "\n\
 						Click here to start building.")
@@ -539,26 +548,62 @@ addLayer("t", {
             milestones: { title: () => "Milestones", content: [
 				"milestones"] 
 			},
-            map: { title: () => "World Map", unl: () => player.so.unl, content: [
+            map: { title: () => "World Map", unl: () => player.so.buyables[13].gte(1), content: [
 				["blank", "5px"],
 				["display-text", "You have 0 conquered land, which are decreasing the territories' requirements by ÷1.00 and soldiers' requirements by ÷1.00."], 
-				["blank", "5px"], ["display-text", "Soldiers are Idle."], ["bar", "0"],
-				["blank", "0px"], "map-box",
-				["microtabs", "mapCommands"],
+				["blank", "0px"], "map-box", ["blank", "0px"],
+				["info-box", [
+					["display-text", function () { return "Selected Tile: " + mapFocusDesc + "<br/><p style='color:transparent; font-size:0.001px'>" + format(player.time) + "</p>"}],
+					["display-text", function () { return (
+						mapFocusDesc === "Unselected" ? "<h5>Click on a tile on the map to view its details.<br/>Drag the tiles to move the map around.</h5>" :
+						isConquered(mapFocusX, mapFocusY) ? "<h5>This land has already been conquered.<br/>You can not reconquer the land that you already conquered, duh!</h5>" : 
+						!isConquerable(mapFocusX, mapFocusY) ? "<h5>You can not initialize conquering on this tile yet.<br/>Please select the tile that is closer to your land.</h5>" : 
+						"<h5>Difficulty: " + format(getMapDifficulty(mapFocusX, mapFocusY)) + " -> Best Conquer Time: " + formatTime(Decimal.div(getMapDifficulty(mapFocusX, mapFocusY), soldierStats.spd)) + (player.world.conquering && player.world.conquerX == mapFocusX && player.world.conquerY == mapFocusY ? "<br/>You are conquering this tile. Click it again to abort conquering." : "<br/>Click on the tile again to initialize conquering on that tile.")
+					) + "<p style='color:transparent; font-size:0.001px'>" + format(player.time) + "</p>" }]
+					], {"width": "480px"}
+				], 
+				["row", [
+					["info-box", [
+						["display-text", function () { return "Your Soldiers<h5 style='font-size:6px'><br/>" }],
+						["mini-bar", function () { return format(Decimal.div(player.world.health, soldierStats.mhp)) }, {"background-color": "#300"}],
+						["display-text", function () { return "<h5>Health: " + formatWhole(player.world.health) + " / " + formatWhole(soldierStats.mhp) + "</h5>" }],
+						["display-text", function () { return "<h5>Power: " + formatWhole(Decimal.div(player.world.health, soldierStats.mhp).mul(soldierStats.atk)) + " / " + formatWhole(soldierStats.atk) + "</h5>" }],
+						], {"width": "228px"}
+					], 
+					["info-box", [
+						["display-text", function () { return "Your Encounters<h5 style='font-size:6px'><br/>" }],
+						["mini-bar", function () { return format(Decimal.div(player.world.health, soldierStats.mhp)) }, {"background-color": "#300"}],
+						["display-text", function () { return "<h5>Health: " + formatWhole(player.world.health) + " / " + formatWhole(soldierStats.mhp) + "</h5>" }],
+						["display-text", function () { return "<h5>Power: " + formatWhole(Decimal.div(player.world.health, soldierStats.mhp).mul(soldierStats.atk)) + " / " + formatWhole(soldierStats.atk) + "</h5>" }],
+						], {"width": "228px"}
+					], 
+				]],
+				["info-box", [
+					["display-text", function () { return (
+						player.world.conquering ? "Conquering " + player.world.conquerTarget + "..." : "Solider Idle."
+						) + "<p style='color:transparent; font-size:0.001px'>" + format(player.time) + "</p>"
+					}],
+					["display-text", function () { return (
+						player.world.conquering ? "<h5>Progress: " + formatWhole(player.world.conquerProgress) + " / " + formatWhole(player.world.conquerGoal) + "</h5>" : "<h5>Please select a land to be conquered</h5>"
+						) + "<p style='color:transparent; font-size:0.001px'>" + format(player.time) + "</p><h5 style='font-size:6px'><br/>"
+					}],
+					["mini-bar", function () { return format(player.world.conquering ? Decimal.div(player.world.conquerProgress, player.world.conquerGoal) : 0) }, {"background-color": "#300"}],
+					], {"width": "480px"}
+				], 
 				["blank", "5px"],
 				] 
 			},
         },
-		mapCommands: {
-            commands: { title: () => "Map Commands", unl: () => player.so.unl, content: [
-					"upgrades",
-					["display-text", "Selected: " + mapFocusDesc], 
-					["display-text", "<h5>Click on a tile to see its description.<br/>Drag the tiles to move the map around.</h5>"], 
-				]
-			},
-            report: { title: () => "Soldiers' Report", unl: () => player.so.unl, content: [
-				]
-			},
+	},
+	
+	update(diff) {
+		if (player.world === undefined) player.world = {}
+		if (player.world.conquering) {
+			player.world.conquerProgress = Decimal.add(player.world.conquerProgress, Decimal.mul(soldierStats ? soldierStats.spd : 0, diff))
+			if (player.world.conquerProgress.gte(player.world.conquerGoal)) {
+				player.world.conquerProgress = new Decimal(0)
+				doneConquering()
+			}
 		}
 	},
 	
@@ -570,7 +615,8 @@ addLayer("t", {
 			["display-text",
 				function () { return "You have at best " + format(player.t.best, 0) + " " + " territories." }],
 			["blank", "5px"],
-			["microtabs", "stuff"]],
+			["microtabs", "stuff"],
+		],
 
 	hotkeys: [
 		{ key: "t", desc: "T: Explore territories", onPress() { doReset(this.layer) } },
@@ -621,7 +667,7 @@ addLayer("so", {
 	
 	buyables: {
 		rows: 1,
-		cols: 2,
+		cols: 3,
 		11: {
 			title: () => "Strength",
 			cost(x) {
@@ -690,14 +736,58 @@ addLayer("so", {
 				}
 			}
 		},
+		13: {
+			title: () => "Dexterity",
+			cost(x) {
+				if (x.gte(100)) x = x.pow(2).div(100)
+				if (x.gte(50)) x = x.pow(2).div(50)
+				if (x.gte(20)) x = x.pow(2).div(20)
+				if (x.gte(10)) x = x.pow(2).div(10)
+				let cost = Decimal.mul("e1000", Decimal.pow(1e80, x))
+				return cost.floor()
+			},
+			effect(x) { 
+				return x.add(5)
+			},
+			display() { // Everything else displayed in the buyable button after the title
+				let data = tmp.buyables[this.layer][this.id]
+				return "Base stat: " + format(data.effect) + "\n\
+				Cost: " + format(data.cost) + " coins\n\
+				Increase your soldiers' speeds." + (data.effect.gte(6) ? "" : " Increasing this number to 6 will unlock a new tab for the territory layer.")
+			},
+			unl() { return player.so.unl },
+			canAfford() {
+				return player.c.points.gte(tmp.buyables[this.layer][this.id].cost)
+			},
+			buy() {
+				cost = tmp.buyables[this.layer][this.id].cost
+				player.c.points = player.c.points.sub(cost)
+				player[this.layer].buyables[this.id] = player[this.layer].buyables[this.id].add(1)
+			},
+			style() {
+				return {
+					"height": "200px"
+				}
+			}
+		},
 	},
 	
 	update(diff) {
 		var rat = player.so.points
-			for (let x = 10; x <= 10; x += 10) for (let y = x + 1; y <= x + 2; y++) {
+			for (let x = 10; x <= 10; x += 10) for (let y = x + 1; y <= x + 3; y++) {
 				rat = rat.mul(tmp.buyables.so[y].effect).div(5)
 			}
 		player.so.rating = rat
+		
+		soldierStats = {
+			atk: player.so.points.mul(tmp.buyables.so[11].effect),
+			mhp: player.so.points.mul(tmp.buyables.so[12].effect).mul(5),
+			spd: player.so.points.mul(tmp.buyables.so[13].effect).div(5),
+			gen: player.so.points.mul(tmp.buyables.so[13].effect.cbrt()).div(2),
+		}
+		
+		if (player.world === undefined) player.world = {}
+		player.world.health = Decimal.add(player.world.health, Decimal.mul(soldierStats.gen, diff)).min(soldierStats.mhp)
 	},
 
 	tabFormat:
@@ -708,6 +798,26 @@ addLayer("so", {
 				function () { return "You have at best " + format(player.so.best, 0) + " soldiers." }],
 			["display-text",
 				function () { return "Your current military rating is " + format(player.so.rating) + ", which is boosting your point generation speed by ×" + format(tmp.layerEffs.so) + "." }],
+			["blank", "5px"],
+			["display-text",
+				function () { return player.so.unl ? "<h3>Soldier Statistics</h3><br/><h5>Accounts for all soldiers</h5>" : "" }],
+			["blank", "5px"],
+			["row", [
+				["display-text",
+					function () { return (player.so.unl ? "<h5/>" + 
+						"Base Power: " + formatWhole(soldierStats.atk).padEnd(15, '\u00A0') + "<br/>" +
+						"Regen SPD : " + (format(soldierStats.gen) + "/s").padEnd(15, '\u00A0') 
+						: "") + "<br/><p style='color:transparent; font-size:0.001px'>" + format(player.time) + "</p>" }],
+				["display-text",
+					function () { return (player.so.unl ? "<h5/>" + 
+						"Max Health: " + formatWhole(soldierStats.mhp).padEnd(15, '\u00A0')
+						: "") + "<br/><p style='color:transparent; font-size:0.001px'>" + format(player.time) + "</p>" }],
+				["display-text",
+					function () { return (player.so.unl ? "<h5/>" + 
+						"Move Speed: " + formatWhole(soldierStats.spd).padEnd(15, '\u00A0')
+						: "") + "<br/><p style='color:transparent; font-size:0.001px'>" + format(player.time) + "</p>" }],
+						
+			]],
 			["blank", "5px"],
 			["display-text",
 				function () { return player.so.unl ? "<h3>Soldier Attributes</h3>" : "" }],

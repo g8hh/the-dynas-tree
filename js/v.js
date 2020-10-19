@@ -1,4 +1,5 @@
 var app;
+var soldierStats;
 
 function loadVue() {
 	// data = a function returning the content (actually HTML)
@@ -303,19 +304,45 @@ function loadVue() {
 	})
 	
 	Vue.component('bar', {
-		props: ['data'],
+		props: ['data', 'style'],
 		template: `
 			<div class="bar">
-				<div class="bar-fill" v-bind:style="[{'width': (data * 100) + '%'}]">
+				<div class="bar-fill" v-bind:style="[{
+						'width': 'max(calc(' + (readData(data) * 100) + '% - 4px), 14px)'
+					}, style]">
+					&nbsp;
+				</div>
+			</div>
+		`
+	})
+	Vue.component('mini-bar', {
+		props: ['data', 'style'],
+		template: `
+			<div class="mini-bar">
+				<div class="mini-bar-fill" v-bind:style="[{
+						'width': 'max(calc(' + (readData(data) * 100) + '% - 4px), 7px)'
+					}, style]">
 					&nbsp;
 				</div>
 			</div>
 		`
 	})
 	
+	Vue.component('info-box', {
+		props: ['data', 'style'],
+		template: `
+			<div class="info-box" v-bind:style="[style]">
+				<div v-for="item in data">
+				<div v-if="!Array.isArray(item)" v-bind:is="item" :layer= "layer" v-bind:style="tmp.componentStyles[layer][item]"></div>
+				<div v-else-if="item.length==3" v-bind:style="[tmp.componentStyles[layer][item], (item[2] ? item[2] : {})]" v-bind:is="item[0]" :layer= "layer" :data= "item[1]"></div>
+				<div v-else-if="item.length==2" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" v-bind:style="tmp.componentStyles[layer][item]"></div>
+			</div>
+		`
+	})
+	
 	Vue.component('map-box', {
 		template: `
-			<canvas id="mapbox" style="font-stretch:150%" width="500px" height="450px" onmousedown="onMapMouseDown(event)" onmousemove="onMapMouseMove(event)" onmouseup="onMapMouseUp(event)">
+			<canvas id="mapbox" style="font-stretch:150%" width="500px" height="449px" onmousedown="onMapMouseDown(event)" onmousemove="onMapMouseMove(event)" onmouseup="onMapMouseUp(event)">
 			</canvas>
 		`
 	})
@@ -325,11 +352,15 @@ function loadVue() {
 		el: "#app",
 		data: {
 			player,
+			soldierStats,
+			mapFocusDesc,
+			isConquered,
 			tmp,
 			Decimal,
 			format,
 			formatWhole,
 			formatTime,
+			formatTimeLong,
 			focused,
 			getThemeName,
 			layerUnl,

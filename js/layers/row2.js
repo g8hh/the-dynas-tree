@@ -683,14 +683,30 @@ addLayer("b", {
                 doReset(this.layer, true)	
 			},	
 		},
-		32: {
-			title: () => "Placeholder.",
-			cost(x) { return new Decimal("1ee308") },
-			effect(x) { return new Decimal("1") },
-			display() { return "" },
-			unl() { return false },
-			canAfford() { return false },
-			buy() { },
+		32: {	
+			title:() => "Production Banking",	
+			cost(x) {	
+				return new Decimal(0)	
+			},	
+			effect(x) { 	
+				return new Decimal(1)
+			},	
+			display() { 	
+				let data = tmp.buyables[this.layer][this.id]	
+				return data.canAfford 	
+					? "You have " + format(player[this.layer].buyables[this.id], 0) + " banked production.\n\n\
+						Banking is currently " + (player.b.banking == 19 ? "enabled.\n\
+						Click here to disable banking and gain " + format(Decimal.sub(player.b.speed, player.b.buyables[32]).max(0), 0) + " banked speed." : "disabled.\n\
+						Click here to enable banking, which will apply “Speed Banking” and “Time Banking” at once. This banking has no more purposes than just to produce banked speed.")	
+					: (player.b.banking > 0 ? "Please disable the current active banking before you can activate another one." : "You need to build at least 80 banks before you can use this function.")	
+			},	
+			unl() { return hasChall("t", 21) }, 	
+			canAfford() { return player[this.layer].best.gte(80) && (player.b.banking == 0 || player.b.banking == 19) },	
+			buy() { 	
+				if (player.b.banking == 19) player.b.buyables[32] = player.b.buyables[32].max(player.b.speed)	
+				player.b.banking = player.b.banking == 19 ? 0 : 19	
+                doReset(this.layer, true)	
+			},	
 		},
 		33: {
 			title: () => "Placeholder.",
@@ -717,7 +733,7 @@ addLayer("b", {
 		}
 		
 		if (hasMilestone("m", 5)) {
-			let mults = [1e75, 1e50, 1e20, 1e8, 1e5, 5]
+			let mults = [1e75, 1e50, 1e20, 1e8, 1e5, 5, 1]
 			let curr = 11;
 			for (var a = 1; a <= mults.length; a++) {
 				let layer = Math.floor(a / 3 + 1) * 10 + ((a % 3) + 1)
@@ -742,7 +758,7 @@ addLayer("b", {
 				function () { return player.b.banking & 16 ? ("You have " + format(player.b.speed) + " speed.") : "" }],
 			["blank", "5px"],
 			["display-text",
-				function () { return "<h3>Bankings</h3><br/><h5>Note: Enabling/Disabling bankings will force a bank reset.</h5>" }],
+				function () { return "<h3>Bankings</h3><br/><h5>Note: Enabling/Disabling bankings will force a bank reset.<br/>Total multiplier to point generation: ×" + format(tmp.buyables.b[11].effect.mul(tmp.buyables.b[12].effect).mul(tmp.buyables.b[13].effect)) + "</h5>" }],
 			"buyables", ["blank", "5px"]
 			, "milestones", "upgrades"],
 
@@ -779,8 +795,8 @@ addLayer("sp", {
 	exponent: 0.02,
 
 	effect() {
-		var eff = Decimal.pow(player.sp.points, 0.1).add(1)
-		if (player.sp.buyables[26].gt(0)) eff = eff.mul(tmp.buyables.sp[26].effect)
+		var eff = Decimal.pow(player.sp.points, 0.2).add(1)
+		if (player.sp.buyables[26].gt(0)) eff = eff.pow(tmp.buyables.sp[26].effect)
 		return eff
 	},
 	effectDescription() {
@@ -831,7 +847,7 @@ addLayer("sp", {
 		12: {
 			title: () => "Extend the fabric of time using spiritual power",
 			cost(x) {
-				let cost = Decimal.pow(1e10, Decimal.pow(1.25, x))
+				let cost = Decimal.pow(1e10, Decimal.pow(1.3, x))
 				return cost.floor()
 			},
 			effect(x) { 
@@ -859,22 +875,64 @@ addLayer("sp", {
 			}
 		},
 		13: {
-			title: () => "Placeholder.",
-			cost(x) { return new Decimal("1ee308") },
-			effect(x) { return new Decimal("1") },
-			display() { return "" },
-			unl() { return false },
-			canAfford() { return false },
-			buy() { },
+			title: () => "Use spiritual power to enchant basic spells",
+			cost(x) {
+				let cost = Decimal.pow(1e15, Decimal.pow(1.25, x))
+				return cost.floor()
+			},
+			effect(x) { 
+				return x.add(1).pow(7.5)
+			},
+			display() { // Everything else displayed in the buyable button after the title
+				let data = tmp.buyables[this.layer][this.id]
+				return "Level " + player[this.layer].buyables[this.id] + "\n\
+				Cost: " + format(data.cost) + " spiritual power\n\
+				Increase the effect of the first three spells by ×" + format(data.effect) + "."
+			},
+			unl() { return hasChall("t", 31) },
+			canAfford() {
+				return player.sp.points.gte(tmp.buyables[this.layer][this.id].cost)
+			},
+			buy() {
+				cost = tmp.buyables[this.layer][this.id].cost
+				player.sp.points = player.sp.points.sub(cost)
+				player[this.layer].buyables[this.id] = player[this.layer].buyables[this.id].add(1)
+			},
+			style() {
+				return {
+					"height": "200px"
+				}
+			}
 		},
 		14: {
-			title: () => "Placeholder.",
-			cost(x) { return new Decimal("1ee308") },
-			effect(x) { return new Decimal("1") },
-			display() { return "" },
-			unl() { return false },
-			canAfford() { return false },
-			buy() { },
+			title: () => "Use spiritual power to power magic in advanced spells",
+			cost(x) {
+				let cost = Decimal.pow(1e17, Decimal.pow(1.35, x))
+				return cost.floor()
+			},
+			effect(x) { 
+				return x.mul(Decimal.add(player.sp.magic, 1).log(100).add(1)).sqrt().div(20).add(1)
+			},
+			display() { // Everything else displayed in the buyable button after the title
+				let data = tmp.buyables[this.layer][this.id]
+				return "Level " + player[this.layer].buyables[this.id] + "\n\
+				Cost: " + format(data.cost) + " spiritual power\n\
+				Increase the effect of the second three spells by ×" + format(data.effect, 3) + " (based on current magic)."
+			},
+			unl() { return hasChall("t", 31) },
+			canAfford() {
+				return player.sp.points.gte(tmp.buyables[this.layer][this.id].cost)
+			},
+			buy() {
+				cost = tmp.buyables[this.layer][this.id].cost
+				player.sp.points = player.sp.points.sub(cost)
+				player[this.layer].buyables[this.id] = player[this.layer].buyables[this.id].add(1)
+			},
+			style() {
+				return {
+					"height": "200px"
+				}
+			}
 		},
 		15: {
 			title: () => "Placeholder.",
@@ -911,6 +969,7 @@ addLayer("sp", {
 			effect(x) { 
 				let eff = Decimal.pow(player.bd.buyables[13].mul(99).add(1), 3)
 				if (player.sp.buyables[27].gt(0)) eff = eff.pow(tmp.buyables.sp[27].effect.first)
+				if (tmp.buyables.sp[13].effect) eff = eff.mul(tmp.buyables.sp[13].effect)
 				return eff
 			},
 			display() { // Everything else displayed in the buyable button after the title
@@ -949,6 +1008,7 @@ addLayer("sp", {
 			effect(x) { 
 				let eff = Decimal.pow(player.bd.buyables[13].mul(99).add(1), 2)
 				if (player.sp.buyables[27].gt(0)) eff = eff.pow(tmp.buyables.sp[27].effect.first)
+				if (tmp.buyables.sp[13].effect) eff = eff.mul(tmp.buyables.sp[13].effect)
 				return eff
 			},
 			display() { // Everything else displayed in the buyable button after the title
@@ -987,6 +1047,7 @@ addLayer("sp", {
 			effect(x) { 
 				let eff = Decimal.pow(player.bd.buyables[13].add(1), 2)
 				if (player.sp.buyables[27].gt(0)) eff = eff.pow(tmp.buyables.sp[27].effect.first)
+				if (tmp.buyables.sp[13].effect) eff = eff.mul(tmp.buyables.sp[13].effect)
 				return eff
 			},
 			display() { // Everything else displayed in the buyable button after the title
@@ -1025,6 +1086,7 @@ addLayer("sp", {
 			effect(x) { 
 				let eff = player.bd.buyables[13].div(60).add(1).sqrt()
 				if (player.sp.buyables[27].gt(0)) eff = eff.mul(tmp.buyables.sp[27].effect.second)
+				if (tmp.buyables.sp[14].effect) eff = eff.mul(tmp.buyables.sp[14].effect)
 				return eff
 			},
 			display() { // Everything else displayed in the buyable button after the title
@@ -1063,6 +1125,7 @@ addLayer("sp", {
 			effect(x) { 
 				let eff = player.bd.buyables[13].div(40).add(1).sqrt()
 				if (player.sp.buyables[27].gt(0)) eff = eff.mul(tmp.buyables.sp[27].effect.second)
+				if (tmp.buyables.sp[14].effect) eff = eff.mul(tmp.buyables.sp[14].effect)
 				return eff
 			},
 			display() { // Everything else displayed in the buyable button after the title
@@ -1099,8 +1162,9 @@ addLayer("sp", {
 				return new Decimal(1800)
 			},
 			effect(x) { 
-				let eff = player.bd.buyables[13].div(5).add(1).sqrt()
+				let eff = player.bd.buyables[13].div(2).add(1).sqrt()
 				if (player.sp.buyables[27].gt(0)) eff = eff.mul(tmp.buyables.sp[27].effect.second)
+				if (tmp.buyables.sp[14].effect) eff = eff.mul(tmp.buyables.sp[14].effect)
 				return eff
 			},
 			display() { // Everything else displayed in the buyable button after the title
@@ -1146,7 +1210,7 @@ addLayer("sp", {
 				let data = tmp.buyables[this.layer][this.id]
 				return (player.sp.buyables[27].lte(0) ? "Duration on cast: " + formatTime(tmp.buyables.sp[12].effect.mul(1.5)) + " (1.5× normal spells' duration)" : "Time left: " + formatTime(player.sp.buyables[27])) + "\n\
 				Casting cost: " + format(data.cost) + " magic\n\
-				Rasise all of the first row of spells' effect by ^" + format(data.effect.first, 3) + " and multiply all of your second row of spells by ×" + format(data.effect.second, 3) + " (based on your shrines)."
+				Raises all of the first row of spells' effects by ^" + format(data.effect.first, 3) + " and multiplies all of your second row of spells' effects by ×" + format(data.effect.second, 3) + " (based on your shrines)."
 			},
 			unl() { return player.bd.buyables[13].gte(7) },
 			canAfford() {
@@ -1185,6 +1249,7 @@ addLayer("sp", {
             buyables: { title: () => "Rebuyables", content: [
 				["blank", "5px"],
 				["row", [["buyable", "11"], ["buyable", "12"]]],
+				["row", [["buyable", "13"], ["buyable", "14"]]],
 				["blank", "5px"],
 			] },
             spells: { title: () => "Spells", content: [

@@ -497,23 +497,41 @@ ul {
 
 #mapbox {
 	width: 500px;
-	height: 448px;
+	height: 449px;
 	border: 2px solid;
 	border-color: rgba(255, 255, 255, 0.125) rgba(0, 0, 0, 0.25) rgba(0, 0, 0, 0.25) rgba(255, 255, 255, 0.125);
 }
 
 .bar {
-	width: 500px;
+	width: min(500px, calc(100% - 5px));
 	height: 20px;
 	background-color: var(--background);
 	border: 2px solid;
-	border-color: rgba(255, 255, 255, 0.125) rgba(0, 0, 0, 0.25) rgba(0, 0, 0, 0.25) rgba(255, 255, 255, 0.125);
+	border-color: rgba(0, 0, 0, 0.25) rgba(255, 255, 255, 0.125) rgba(255, 255, 255, 0.125) rgba(0, 0, 0, 0.25);
 	border-radius: 10px;
 }
 .bar-fill {
 	font-size: 1px;
 	height: 16px;
 	border-radius: 8px;
+	background-color: var(--color);
+	border: 2px solid;
+	border-color: rgba(255, 255, 255, 0.125) rgba(0, 0, 0, 0.25) rgba(0, 0, 0, 0.25) rgba(255, 255, 255, 0.125);
+	float:left;
+}
+
+.mini-bar {
+	width: min(500px, calc(100% - 5px));
+	height: 10px;
+	background-color: var(--background);
+	border: 2px solid;
+	border-color: rgba(0, 0, 0, 0.25) rgba(255, 255, 255, 0.125) rgba(255, 255, 255, 0.125) rgba(0, 0, 0, 0.25);
+	border-radius: 5px;
+}
+.mini-bar-fill {
+	font-size: 1px;
+	height: 6px;
+	border-radius: 4px;
 	background-color: var(--color);
 	border: 2px solid;
 	border-color: rgba(255, 255, 255, 0.125) rgba(0, 0, 0, 0.25) rgba(0, 0, 0, 0.25) rgba(255, 255, 255, 0.125);
@@ -543,6 +561,15 @@ spoiler:hover{
 }
 ::-webkit-scrollbar-thumb:hover {
 	background: #aaa;
+}
+
+.info-box {
+	background-color: var(--background);
+	color: var(--color);
+	padding: 10px;
+	border: 2px solid;
+	border-color:  rgba(255, 255, 255, 0.125) rgba(0, 0, 0, 0.25) rgba(0, 0, 0, 0.25) rgba(255, 255, 255, 0.125);
+	border-radius: 10px;
 }
 
 .modal {

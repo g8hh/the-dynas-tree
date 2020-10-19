@@ -20,6 +20,7 @@
 	<script type="text/javascript" src="js/layerSupport.js"></script>
 	<script type="text/javascript" src="js/utils.js"></script>
 	<script type="text/javascript" src="js/saves.js"></script>
+	<script type="text/javascript" src="js/map.js"></script>
 
 	<script type="text/javascript" src="js/layers/row1.js"></script>
 	<script type="text/javascript" src="js/layers/row2.js"></script>
@@ -30,8 +31,6 @@
 	<script type="text/javascript" src="js/game.js"></script>
 	<script type="text/javascript" src="js/v.js"></script>
 	<script type="text/javascript" src="js/canvas.js"></script>
-	<script type="text/javascript" src="js/map.js"></script>
-
 </head>
 <body onload="load()">
 	<div id="app">
@@ -41,7 +40,7 @@
 			<h2>{{modInfo.name}} {{VERSION.withoutName}}</h2><br><br>
 			<h3>Congratulations! You have reached the end and beaten this game, but for now...</h3><br>
 			<h3>Please check the Discord to see there are new content updates!</h3><br><br>
-			<div v-if="!player.timePlayedReset">It took you {{formatTime(player.timePlayed)}} to beat the game.</div>
+			<div v-if="!player.timePlayedReset">It took you {{formatTimeLong(player.timePlayed)}} to beat the game.</div>
 			<div v-if="player.timePlayedReset">Make sure that you record the time in your stream or else your speedrun won't count!</div>
 			<br>
 			<button class="longUpg can" onclick="hardReset(true)">Play Again</button>&nbsp;&nbsp;&nbsp;&nbsp;<button class="longUpg can" onclick="keepGoing()">Keep Going</button>
@@ -56,6 +55,12 @@
 		<div v-if="player.tab=='changelog'" class="col right">
 			<button class="back" onclick="showTab('tree')">&gt;</button><br>
 			<ul>
+				<h5><i>“Conquer the World”</i></h5>
+				<li><h3>v0.4.0</h3><li>
+				<li>Added the <spoiler>World Map</spoiler> with <spoiler>procedural world generation</spoiler> to the <spoiler>territory</spoiler> layer.</li>
+				<li>Added more <spoiler>bankings</spoiler> and <spoiler>spiritual power</spoiler> rebuyables.</li>
+				<li>Fix the number formatting not working correctly over e1,000 bug.</li>
+				<br>
 				<h5><i>“Expanding Civilization”</i></h5>
 				<li><h3>v0.3.1</h3><li>
 				<li>Fixed the <spoiler>“Market Crash” obstacle</spoiler> not functioning as intended.</li>
@@ -107,8 +112,9 @@
 			<br><br>
 			<div class="link" onclick="showTab('changelog')">Changelog</div><br>
 			<a class="link" href="http://discord.gg/wwQfgPa" target="_blank">Main Prestige Tree server</a><br>
+			<a class="link" href="http://discord.gg/wwQfgPa" target="_blank">Main Prestige Tree server</a><br>
 			<br><br>
-			You have played this for: {{ formatTime(player.timePlayed) }}<br><br>
+			You have played this for: {{ formatTimeLong(player.timePlayed) }}<br><br>
 			<h3>Hotkeys</h3><br>
 			<span v-for="key in hotkeys" v-if="player[key.layer].unl"><br>{{key.desc}}</span>
 		</div>

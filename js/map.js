@@ -1,14 +1,5 @@
-/*
-	Biome Chart:
-	
-	Ocean           | @
-	Fields          | A
-	Mountains       | B
-	High Mountains  | C
-*/
 
-var worldMap;
-var mapX = 94
+var mapX = 93
 var mapY = 80
 var mapFocusX = -1
 var mapFocusY = -1
@@ -17,16 +8,19 @@ function updateMapCanvas () {
 	var mapc = document.getElementById("mapbox")
 	var mapctx = mapc.getContext("2d")
 	
-	if (worldMap === undefined) worldMap = createMap()
+	if (player.world === undefined) player.world = {}
+	if (player.world.map === undefined) player.world.map = createMap()
 	
-	mapctx.clearRect(0, 0, mapc.width, mapc.height)
+    mapctx.fillStyle = "rgb(0, 0, 0)"
+	mapctx.fillRect(0, 0, mapc.width, mapc.height)
+	
     mapctx.fillStyle = "rgb(255, 255, 255)"
 	var width = Math.floor(500 / 8)
 	var height = Math.floor(450 / 12)
 	for (var x = 0; x < width; x++) for (var y = 0; y < height; y++) {
-		mapctx.font = "12px 'Lucida Console'"
+		mapctx.font = "bold 12px 'Lucida Console'"
 		var glyph = "░"
-		var id = worldMap[y+Math.floor(mapY)].charCodeAt(x+Math.floor(mapX))
+		var id = player.world.map[y+Math.floor(mapY)].charCodeAt(x+Math.floor(mapX))
 		var type = id & 15
 		     if (type === 0) { mapctx.fillStyle = "rgb(0, 0, 255)"; }
 		else if (type === 1) { mapctx.fillStyle = "rgb(127, 255, 0)"; }
@@ -37,13 +31,18 @@ function updateMapCanvas () {
 		else if (type === 6) { mapctx.fillStyle = "rgb(127, 255, 0)"; }
 		else if (type === 7) { mapctx.fillStyle = "rgb(255, 255, 127)"; }
 		else if (type === 8) { mapctx.fillStyle = "rgb(0, 255, 0)"; }
-		if (id & 16) { mapctx.font = "bold 10px 'Lucida Console'"; glyph = "█" }
-		if (x + Math.floor(mapX) == mapFocusX && y + Math.floor(mapY) == mapFocusY) { mapctx.fillStyle = "rgb(255, 255, 255)"; glyph = Date.now() % 1000 > 500 ? "¤" : glyph }
+		else if (type === 9) { mapctx.fillStyle = "rgb(127, 127, 255)"; }
+		if (isConquerable(x+Math.floor(mapX), y+Math.floor(mapY))) { glyph = "▒" }
+		if (player.world.conquering && player.world.conquerX == x+Math.floor(mapX) && player.world.conquerY == y+Math.floor(mapY)) { 
+			glyph = ["░", "▒", "▓", "█", "▓", "▒", "░", " "][Math.floor(Date.now() / 100) % 8]
+		}
+		if (id & 16) { mapctx.font = "bold 12px 'Lucida Console'"; glyph = "█" }
+		if (x + Math.floor(mapX) == mapFocusX && y + Math.floor(mapY) == mapFocusY) { if (Date.now() % 1000 > 500) mapctx.fillStyle = "rgb(255, 255, 255)"; glyph = Date.now() % 500 > 250 ? "¤" : glyph }
 		mapctx.fillText(glyph, 1 + x * 8, 10 + y * 12)
 	}
-	mapctx.fillStyle = "rgb(0, 255, 0)";
-	mapctx.rect((mapX / 250) * 498, 448, (width / 250) * 498, 2); mapctx.fill()
-	mapctx.rect(498, (mapY / 200) * 448, 2, (height / 200) * 448); mapctx.fill()
+	mapctx.fillStyle = "rgb(255, 255, 255)";
+	mapctx.fillRect((Math.floor(mapX) / 250) * 498, 447, (width / 250) * 498, 2);
+	mapctx.fillRect(498, (Math.floor(mapY) / 200) * 447, 2, (height / 200) * 447);
 }
 
 function createMap () {
@@ -77,9 +76,10 @@ function createMap () {
 		for (var b = 0; b < 250; b++) {
 			var level = (getNoise(a / 10 + 50, b / 10 + 50) + getNoise(a / 5 + 30, b / 5 + 30) * 0.5 + getNoise(a / 2 + 10, b / 2 + 10) * 0.25 + getNoise(a, b) * 0.125) / 1.875
 			var temp = getNoise(-a / 15 + 150, -b / 15 + 150)
-			var moist = getNoise(-a / 5 + 200, -b / 5 + 200)
+			var moist = 1 - getNoise(a / 10 + 50, b / 10 + 50)
 			var chr = 64                            // Waters
-			if (level > Math.min((Math.abs(a - 100) + Math.abs(b - 100)) / 40, .4)) {
+			if (temp < .15) chr = 73                // Iced Waters
+			if (level > Math.min((Math.abs(a - 100) + Math.abs(b - 125)) / 40, .4)) {
 				if (temp > .85) {
 					if (moist > .5) chr = 72        // Rainforest
 					else if (moist > .3) chr = 71   // Savanna
@@ -97,12 +97,52 @@ function createMap () {
 			if (level > 0.875) {
 				chr = 67                            // Tall Mountains
 			}
-			if ([98, 99].includes(a) && [148, 149].includes(b)) chr += 16
+			if (([98, 99].includes(a) && [122, 123, 124, 125].includes(b)) || ([97, 98, 99, 100].includes(a) && [123, 124].includes(b))) chr += 16
 			map[a] += String.fromCharCode(chr)
 		}
 	}
 
 	return map
+}
+
+function getMapDifficulty (x, y) {
+	var dist = (x - 123.5) * (x - 123.5) + (y - 98.5) * (y - 98.5)
+	return Decimal.pow(dist, 1.65).mul(Decimal.log(dist + 2, 2)).mul(5)
+}
+
+function isConquered(x, y) {
+	return player.world.map && player.world.map[y] && !!(player.world.map[y].charCodeAt(x) & 16)
+}
+
+function setCharAt(str,index,chr) {
+	if(index > str.length-1) return str;
+	return str.substr(0,index) + chr + str.substr(index+1);
+}
+
+function setConquered(x, y) {
+	if (!isConquered(x, y))
+		player.world.map[y] = setCharAt(player.world.map[y], x, String.fromCharCode(player.world.map[y].charCodeAt(x) + 16))
+}
+
+function isConquerable(x, y) {
+	return isConquered(x+1, y) || isConquered(x-1, y) || isConquered(x, y+1) || isConquered(x, y-1)
+}
+
+function initConquering(x, y) {
+	if (!isConquered(x, y) && isConquerable(x, y)) {
+		player.world.conquerX = x
+		player.world.conquerY = y
+		player.world.conquering = true
+		player.world.conquerTarget = mapFocusDesc 
+		player.world.conquerProgress = new Decimal(0)
+		player.world.conquerGoal = getMapDifficulty(x, y)
+	}
+}
+function doneConquering() {
+	if (player.world.conquering) {
+		player.world.conquering = false
+		setConquered(player.world.conquerX, player.world.conquerY)
+	}
 }
 
 var mapMouse = false
@@ -113,16 +153,28 @@ function onMapMouseDown (e) {
 	mapMouseX = e.clientX
 	mapMouseY = e.clientY
 	
+	var oldX = mapFocusX; var oldY = mapFocusY
 	mapFocusX = parseInt((e.clientX - $("#mapbox").offset().left) / 8 + Math.floor(mapX))
 	mapFocusY = parseInt((e.clientY - $("#mapbox").offset().top) / 12 + Math.floor(mapY))
+	if (oldX === mapFocusX && oldY === mapFocusY) initConquering(mapFocusX, mapFocusY)
 	
-	var id = worldMap[mapFocusX].charCodeAt(mapFocusY)
+	var id = player.world.map[mapFocusY].charCodeAt(mapFocusX)
 	var type = id & 15
-	if (type === 0) mapFocusDesc = "Waters"
-	else if (type === 1) mapFocusDesc = "Fields"
-	else if (type === 2) mapFocusDesc = "Mountains"
-	else if (type === 3) mapFocusDesc = "Tall Mountains"
+	mapFocusDesc = ["Waters", "Grasslands", "Mountains", "Tall Mountains", "Desert", "Tundra", "Forest", "Savanna", "Rainforest", "Iced Waters"][type]
+	if (id & 16) mapFocusDesc += ", Conquered"
+	
+	if (id & 16) {
+		expansionDetails = [
+			["display-text", "Conquered Land<br/><h5>You have already conqured this land.</h5>"]
+		]
+	}
+	else {
+		expansionDetails = [
+			["display-text", "Expanding Details"]
+		]
+	}
 }
+
 function onMapMouseMove (e) {
 	if (mapMouse) {
 		mapX = Math.max(0, Math.min(188, mapX + (mapMouseX - e.clientX) / 8))

@@ -34,7 +34,7 @@ function format(decimal, precision = 2) {
 		var slog = decimal.slog()
 		if (slog.gte(1e6)) return "F" + format(slog.floor())
 		else return Decimal.pow(10, slog.sub(slog.floor())).toStringWithDecimalPlaces(3) + "F" + commaFormat(slog.floor(), 0)
-	} else if (decimal.gte("1e1000")) return (Math.floor(decimal.mantissa + 0.01) + ("e" + formatWhole(decimal.log10())))
+	} else if (decimal.gte("1e1000")) return (Math.floor(decimal.mantissa + 0.01) + ("e" + formatWhole(decimal.log10().floor())))
 	else if (decimal.gte(1e9)) return exponentialFormat(decimal, precision)
 	else if (decimal.gte(1e3)) return commaFormat(decimal, 0)
 	else return commaFormat(decimal, precision)
@@ -44,10 +44,22 @@ function formatWhole(decimal) {
 	return format(decimal, 0)
 }
 
+function formatTimeLong(s) {
+	let str = format(s % 60) + " seconds"; s /= 60
+	if (s >= 1) str = formatWhole(Math.floor(s) % 60) + " minutes and " + str; s /= 60
+	if (s >= 1) str = formatWhole(Math.floor(s) % 24) + " hours, " + str; s /= 24
+	if (s >= 1) str = formatWhole(Math.floor(s) % 365) + " days, " + str; s /= 365
+	if (s >= 1) str = formatWhole(Math.floor(s)) + " years, " + str
+	return str
+}
+
 function formatTime(s) {
-	if (s < 60) return format(s) + "s"
-	else if (s < 3600) return formatWhole(Math.floor(s / 60)) + "m " + format(s % 60) + "s"
-	else return formatWhole(Math.floor(s / 3600)) + "h " + formatWhole(Math.floor(s / 60) % 60) + "m " + format(s % 60) + "s"
+	let str = format(s % 60) + "s"; s /= 60
+	if (s >= 1) str = formatWhole(Math.floor(s) % 60) + "m " + str; s /= 60
+	if (s >= 1) str = formatWhole(Math.floor(s) % 24) + "h " + str; s /= 24
+	if (s >= 1) str = formatWhole(Math.floor(s) % 365) + "d " + str; s /= 365
+	if (s >= 1) str = formatWhole(Math.floor(s)) + "y " + str
+	return str
 }
 
 function toPlaces(x, precision, maxAccepted) {

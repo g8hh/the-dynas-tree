@@ -5,8 +5,9 @@ var NaNalert = false;
 var gameEnded = false;
 
 let VERSION = {
-	num: "0.3.1",
-	name: "Expanding Civilization"
+	num: "0.4.0",
+	name: "Conquer the World",
+	beta: "1"
 }
 
 // Determines if it should show points/sec
@@ -409,7 +410,7 @@ function completeChall(layer, x) {
 	updateChallTemp(layer)
 }
 
-VERSION.withoutName = "v" + VERSION.num + (VERSION.pre ? " Pre-Release " + VERSION.pre : VERSION.pre ? " Beta " + VERSION.beta : "")
+VERSION.withoutName = "v" + VERSION.num + (VERSION.pre ? " Pre-Release " + VERSION.pre : VERSION.beta ? "β" + VERSION.beta : "")
 VERSION.withName = VERSION.withoutName + (VERSION.name ? ": " + VERSION.name : "")
 
 
