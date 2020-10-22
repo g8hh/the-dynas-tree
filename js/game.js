@@ -7,7 +7,7 @@ var gameEnded = false;
 let VERSION = {
 	num: "0.4.0",
 	name: "Conquer the World",
-	beta: "1"
+	beta: "2"
 }
 
 // Determines if it should show points/sec
@@ -255,6 +255,7 @@ function respecBuyables(layer) {
 function canAffordUpg(layer, id) {
 	let upg = layers[layer].upgrades[id]
 	let cost = tmp.upgrades[layer][id].cost
+	if (upg.extraReq && !upg.extraReq()) return false
 	return canAffordPurchase(layer, upg, cost)
 }
 
@@ -287,10 +288,10 @@ function canAffordPurchase(layer, thing, cost) {
 		let name = thing.currencyInternalName
 		if (thing.currencyLayer) {
 			let lr = thing.currencyLayer
-			return !(player[lr][name].lt(cost))
+			return !Decimal.lt(player[lr][name], cost)
 		}
 		else {
-			return !(player[name].lt(cost))
+			return !Decimal.lt(player[name], cost)
 		}
 	}
 	else {
@@ -304,6 +305,7 @@ function buyUpg(layer, id) {
 	if (player[layer].upgrades.includes(id)) return
 	let upg = layers[layer].upgrades[id]
 	let cost = tmp.upgrades[layer][id].cost
+	if (upg.extraReq && !upg.extraReq()) return
 
 	if (upg.currencyInternalName) {
 		let name = upg.currencyInternalName

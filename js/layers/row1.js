@@ -64,6 +64,7 @@ addLayer("c", {
 				if (hasUpg(this.layer, 41)) ret = ret.times(layers.c.upgrades[41].effect())
 				if (hasUpg(this.layer, 51)) ret = ret.mul(layers.c.upgrades[51].effect())
 				if (tmp.buyables.bd[12].effect) ret = ret.mul(tmp.buyables.bd[12].effect)
+				if (hasUpg("wi", 11)) ret = ret.mul(layers.wi.upgrades[11].effect())
 				if (hasUpg("w", 12)) ret = ret.pow(layers.w.upgrades[12].effect())
 				return ret;
 			},
@@ -81,6 +82,7 @@ addLayer("c", {
 				if (hasUpg(this.layer, 31)) ret = ret.times(layers.c.upgrades[31].effect())
 				if (hasUpg(this.layer, 41)) ret = ret.times(layers.c.upgrades[41].effect())
 				if (hasUpg(this.layer, 51)) ret = ret.mul(layers.c.upgrades[51].effect())
+				if (hasUpg("wi", 11)) ret = ret.mul(layers.wi.upgrades[11].effect())
 				if (tmp.buyables.bd[12].effect) ret = ret.mul(tmp.buyables.bd[12].effect)
 				return ret;
 			},
@@ -97,6 +99,7 @@ addLayer("c", {
 				if (hasUpg(this.layer, 31)) ret = ret.times(layers.c.upgrades[31].effect())
 				if (hasUpg(this.layer, 41)) ret = ret.times(layers.c.upgrades[41].effect())
 				if (hasUpg(this.layer, 51)) ret = ret.mul(layers.c.upgrades[51].effect())
+				if (hasUpg("wi", 11)) ret = ret.mul(layers.wi.upgrades[11].effect())
 				if (tmp.buyables.bd[12].effect) ret = ret.mul(tmp.buyables.bd[12].effect)
 				return ret;
 			},
@@ -114,6 +117,7 @@ addLayer("c", {
 				if (hasUpg(this.layer, 41)) ret = ret.times(layers.c.upgrades[41].effect())
 				if (hasUpg(this.layer, 51)) ret = ret.mul(layers.c.upgrades[51].effect())
 				if (tmp.buyables.bd[12].effect) ret = ret.mul(tmp.buyables.bd[12].effect)
+				if (hasUpg("wi", 21)) ret = ret.mul(layers.wi.upgrades[21].effect())
 				if (hasUpg("w", 11)) ret = ret.pow(layers.w.upgrades[11].effect())
 				if (player.b.banking & 1) ret = ret.pow(0.5)
 				return ret;
@@ -133,6 +137,7 @@ addLayer("c", {
 				if (hasUpg(this.layer, 41)) ret = ret.times(layers.c.upgrades[41].effect())
 				if (hasUpg(this.layer, 51)) ret = ret.mul(layers.c.upgrades[51].effect())
 				if (tmp.buyables.bd[12].effect) ret = ret.mul(tmp.buyables.bd[12].effect)
+				if (hasUpg("wi", 21)) ret = ret.mul(layers.wi.upgrades[21].effect())
 				return ret;
 			},
 			effectDisplay(fx) { return "×" + format(fx) },
@@ -151,6 +156,7 @@ addLayer("c", {
 				ret = ret.times(player.wf.workDoneEffect)
 				if (hasUpg(this.layer, 34)) ret = ret.times(layers.c.upgrades[34].effect())
 				if (tmp.buyables.bd[12].effect) ret = ret.mul(tmp.buyables.bd[12].effect)
+				if (hasUpg("wi", 21)) ret = ret.mul(layers.wi.upgrades[21].effect())
 				return ret;
 			},
 			effectDisplay(fx) { return "×" + format(fx) },

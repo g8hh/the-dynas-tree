@@ -75,7 +75,7 @@ addLayer("w", {
 		4: {
 			requirementDesc: () => "5 Workers",
 			done() { return player[this.layer].best.gte(5) },
-			effectDesc: () => "Automates buying coin upgrades, but each upgrade bought by the autobuyer will give you " + format(5 * player[this.layer].points.add(1).pow(1.05)) + " unfinished work (based on current worker count).",
+			effectDesc: () => "Automates buying coin upgrades, but each upgrade bought by the autobuyer will give you " + format(player[this.layer].points.add(1).mul(5).pow(1.05)) + " unfinished work (based on current worker count).",
 			toggles: [["w", "autoCoinUpgrade"]]
 		},
 		5: {

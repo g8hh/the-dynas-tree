@@ -107,7 +107,12 @@ function createMap () {
 
 function getMapDifficulty (x, y) {
 	var dist = (x - 123.5) * (x - 123.5) + (y - 98.5) * (y - 98.5)
-	return Decimal.pow(dist, 1.65).mul(Decimal.log(dist + 2, 2)).mul(5)
+	var typeDiff = [1000, 1, 5, 10, 2, 3, 2, 1.5, 2.5, 10000]
+	return Decimal.pow(dist, 1.65).mul(Decimal.log(dist + 2, 2)).mul(5).mul(typeDiff[getTileType(x, y)])
+}
+
+function getTileType(x, y) {
+	return player.world.map[y].charCodeAt(x) & 15
 }
 
 function isConquered(x, y) {
@@ -141,7 +146,13 @@ function initConquering(x, y) {
 function doneConquering() {
 	if (player.world.conquering) {
 		player.world.conquering = false
+		player.t.lands = Decimal.add(player.t.lands, 1)
 		setConquered(player.world.conquerX, player.world.conquerY)
+	}
+}
+function abortConquering() {
+	if (player.world.conquering) {
+		player.world.conquering = false
 	}
 }
 
@@ -154,25 +165,19 @@ function onMapMouseDown (e) {
 	mapMouseY = e.clientY
 	
 	var oldX = mapFocusX; var oldY = mapFocusY
-	mapFocusX = parseInt((e.clientX - $("#mapbox").offset().left) / 8 + Math.floor(mapX))
+	mapFocusX = parseInt((e.clientX - $("#mapbox").offset().left - 2) / 8 + Math.floor(mapX))
 	mapFocusY = parseInt((e.clientY - $("#mapbox").offset().top) / 12 + Math.floor(mapY))
-	if (oldX === mapFocusX && oldY === mapFocusY) initConquering(mapFocusX, mapFocusY)
+	if (oldX === mapFocusX && oldY === mapFocusY) {
+		if (player.world.conquering && player.world.conquerX === mapFocusX && player.world.conquerY === mapFocusY)
+			abortConquering()
+		else
+			initConquering(mapFocusX, mapFocusY)
+	}
 	
 	var id = player.world.map[mapFocusY].charCodeAt(mapFocusX)
 	var type = id & 15
 	mapFocusDesc = ["Waters", "Grasslands", "Mountains", "Tall Mountains", "Desert", "Tundra", "Forest", "Savanna", "Rainforest", "Iced Waters"][type]
 	if (id & 16) mapFocusDesc += ", Conquered"
-	
-	if (id & 16) {
-		expansionDetails = [
-			["display-text", "Conquered Land<br/><h5>You have already conqured this land.</h5>"]
-		]
-	}
-	else {
-		expansionDetails = [
-			["display-text", "Expanding Details"]
-		]
-	}
 }
 
 function onMapMouseMove (e) {

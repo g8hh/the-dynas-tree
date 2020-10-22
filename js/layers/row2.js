@@ -383,6 +383,7 @@ addLayer("wf", {
 			let wde = wd.add(1).pow(0.1).pow(tmp.buyables[this.layer][22].effect).pow(wue)
 			if (hasUpg("wf", 21)) wde = wde.mul(layers.wf.upgrades[21].effect())
 			if (player.sp.buyables[25].gt(0)) wde = wde.mul(tmp.buyables.sp[25].effect)
+			if (hasUpg("wi", 12)) wde = wde.mul(tmp.upgrades.wi[12].effect)
 			if (player.b.banking & 1) wde = wde.pow(0.5)
 			player[this.layer].workDoneEffect = wde
 		}
@@ -480,6 +481,7 @@ addLayer("b", {
 				if (tmp.buyables.b[31]) eff = eff.mul(tmp.buyables.b[31].effect)
 				if (hasMilestone("m", 0) && hasMilestone("w", 9)) eff = eff.mul(25)
 				if (hasUpg("w", 25)) eff = eff.pow(layers.w.upgrades[25].effect())
+				if (hasUpg("wi", 22)) eff = eff.mul(layers.wi.upgrades[22].effect())
 				if (eff.gte(1e45)) eff = eff.mul(1e45).sqrt()
 				return eff
 			},
@@ -493,7 +495,7 @@ addLayer("b", {
 					: (player.b.banking > 0 ? "Please disable the current active banking before you can activate another one." : "You need to build at least 2 banks before you can use this function.")
 			},
 			unl() { return true },
-			canAfford() { return player[this.layer].best.gte(2) && (player.b.banking == 0 || player.b.banking == 1) },
+			canAfford() { return (player[this.layer].best.gte(2) || player.b.buyables[33].gt(0)) && (player.b.banking == 0 || player.b.banking == 1) },
 			buy() {
 				if (player.b.banking == 1) player.b.buyables[11] = player.b.buyables[11].max(player.c.points)
 				player.b.banking = player.b.banking == 1 ? 0 : 1
@@ -514,6 +516,7 @@ addLayer("b", {
 				if (tmp.buyables.b[31]) eff = eff.mul(tmp.buyables.b[31].effect)
 				if (hasMilestone("m", 0) && hasMilestone("w", 9)) eff = eff.mul(25)
 				if (hasUpg("w", 25)) eff = eff.pow(layers.w.upgrades[25].effect())
+				if (hasUpg("wi", 22)) eff = eff.mul(layers.wi.upgrades[22].effect())
 				if (eff.gte(1e45)) eff = eff.mul(1e45).sqrt()
 				return eff
 			},
@@ -527,7 +530,7 @@ addLayer("b", {
 					: (player.b.banking > 0 ? "Please disable the current active banking before you can activate another one." : "You need to build at least 4 banks before you can use this function.")
 			},
 			unl() { return true },
-			canAfford() { return player[this.layer].best.gte(4) && (player.b.banking == 0 || player.b.banking == 2) },
+			canAfford() { return (player[this.layer].best.gte(4) || player.b.buyables[33].gt(0)) && (player.b.banking == 0 || player.b.banking == 2) },
 			buy() {
 				if (player.b.banking == 2) player.b.buyables[12] = player.b.buyables[12].max(player.points)
 				player.b.banking = player.b.banking == 2 ? 0 : 2
@@ -548,6 +551,7 @@ addLayer("b", {
 				if (tmp.buyables.b[31]) eff = eff.mul(tmp.buyables.b[31].effect)
 				if (hasMilestone("m", 0) && hasMilestone("w", 9)) eff = eff.mul(25)
 				if (hasUpg("w", 25)) eff = eff.pow(layers.w.upgrades[25].effect())
+				if (hasUpg("wi", 22)) eff = eff.mul(layers.wi.upgrades[22].effect())
 				if (eff.gte(1e45)) eff = eff.mul(1e45).sqrt()
 				return eff
 			},
@@ -561,7 +565,7 @@ addLayer("b", {
 					: (player.b.banking > 0 ? "Please disable the current active banking before you can activate another one." : "You need to build at least 6 banks before you can use this function.")
 			},
 			unl() { return true },
-			canAfford() { return player[this.layer].best.gte(6) && (player.b.banking == 0 || player.b.banking == 3) },
+			canAfford() { return (player[this.layer].best.gte(6) || player.b.buyables[33].gt(0)) && (player.b.banking == 0 || player.b.banking == 3) },
 			buy() {
 				if (player.b.banking == 3) player.b.buyables[13] = player.b.buyables[13].max(tmp.pointGen)
 				player.b.banking = player.b.banking == 3 ? 0 : 3
@@ -591,7 +595,7 @@ addLayer("b", {
 					: (player.b.banking > 0 ? "Please disable the current active banking before you can activate another one." : "You need to build at least 12 banks before you can use this function.")
 			},
 			unl() { return hasMilestone("w", 10) },
-			canAfford() { return player[this.layer].best.gte(12) && (player.b.banking == 0 || player.b.banking == 4) },
+			canAfford() { return (player[this.layer].best.gte(12) || player.b.buyables[33].gt(0)) && (player.b.banking == 0 || player.b.banking == 4) },
 			buy() {
 				if (player.b.banking == 4) player.b.buyables[21] = player.b.buyables[21].max(tmp.resetGain["c"])
 				player.b.banking = player.b.banking == 4 ? 0 : 4
@@ -620,7 +624,7 @@ addLayer("b", {
 					: (player.b.banking > 0 ? "Please disable the current active banking before you can activate another one." : "You need to build at least 15 banks before you can use this function.")
 			},
 			unl() { return hasMilestone("w", 10) },
-			canAfford() { return player[this.layer].best.gte(15) && (player.b.banking == 0 || player.b.banking == 8) },
+			canAfford() { return (player[this.layer].best.gte(15) || player.b.buyables[33].gt(0)) && (player.b.banking == 0 || player.b.banking == 8) },
 			buy() {
 				if (player.b.banking == 8) player.b.buyables[22] = player.b.buyables[22].max(tmp.pointGen)
 				player.b.banking = player.b.banking == 8 ? 0 : 8
@@ -648,7 +652,7 @@ addLayer("b", {
 					: (player.b.banking > 0 ? "Please disable the current active banking before you can activate another one." : "You need to build at least 19 banks before you can use this function.")
 			},
 			unl() { return hasMilestone("w", 10) },
-			canAfford() { return player[this.layer].best.gte(19) && (player.b.banking == 0 || player.b.banking == 15) },
+			canAfford() { return (player[this.layer].best.gte(19) || player.b.buyables[33].gt(0)) && (player.b.banking == 0 || player.b.banking == 15) },
 			buy() {
 				if (player.b.banking == 15) player.b.buyables[23] = player.b.buyables[23].max(player.wf.workDone)
 				player.b.banking = player.b.banking == 15 ? 0 : 15
@@ -676,7 +680,7 @@ addLayer("b", {
 					: (player.b.banking > 0 ? "Please disable the current active banking before you can activate another one." : "You need to build at least 60 banks before you can use this function.")	
 			},	
 			unl() { return hasChall("t", 21) }, 	
-			canAfford() { return player[this.layer].best.gte(60) && (player.b.banking == 0 || player.b.banking == 16) },	
+			canAfford() { return (player[this.layer].best.gte(60) || player.b.buyables[33].gt(0)) && (player.b.banking == 0 || player.b.banking == 16) },	
 			buy() { 	
 				if (player.b.banking == 16) player.b.buyables[31] = player.b.buyables[31].max(player.b.speed)	
 				player.b.banking = player.b.banking == 16 ? 0 : 16	
@@ -701,21 +705,36 @@ addLayer("b", {
 					: (player.b.banking > 0 ? "Please disable the current active banking before you can activate another one." : "You need to build at least 80 banks before you can use this function.")	
 			},	
 			unl() { return hasChall("t", 21) }, 	
-			canAfford() { return player[this.layer].best.gte(80) && (player.b.banking == 0 || player.b.banking == 19) },	
+			canAfford() { return (player[this.layer].best.gte(80) || player.b.buyables[33].gt(0)) && (player.b.banking == 0 || player.b.banking == 19) },	
 			buy() { 	
 				if (player.b.banking == 19) player.b.buyables[32] = player.b.buyables[32].max(player.b.speed)	
 				player.b.banking = player.b.banking == 19 ? 0 : 19	
                 doReset(this.layer, true)	
 			},	
 		},
-		33: {
-			title: () => "Placeholder.",
-			cost(x) { return new Decimal("1ee308") },
-			effect(x) { return new Decimal("1") },
-			display() { return "" },
-			unl() { return false },
-			canAfford() { return false },
-			buy() { },
+		33: {	
+			title:() => "Generation Banking",	
+			cost(x) {	
+				return new Decimal(0)	
+			},	
+			effect(x) { 	
+				var eff = player[this.layer].buyables[this.id].add(1).pow(0.5)	
+				return eff	
+			},	
+			display() { 	
+				let data = tmp.buyables[this.layer][this.id]	
+				return data.canAfford 	
+					? "You have " + format(player[this.layer].buyables[this.id], 0) + " banked generation, which are speeding the banking generation speed by ×" + format(data.effect) + ".\n\n\
+						This one isn't much of a banking. Instead, this “banking” allows you to reset your banks for a boost in banking generation. This will not reset your bankings and does not produce banked production. Click here to gain " + format(Decimal.sub(player.b.points, player.b.buyables[33]).max(0), 0) + " banked generation."	
+					: "You need to build at least 125 banks before you can use this function."
+			},	
+			unl() { return hasUpg("wi", 23) }, 	
+			canAfford() { return player[this.layer].best.gte(125) || player.b.buyables[33].gt(0) },	
+			buy() { 	
+				player.b.buyables[33] = player.b.buyables[33].max(player.b.points)	
+				player.b.points = new Decimal(0)
+                doReset(this.layer, true)	
+			},	
 		},
 	},
 
@@ -737,7 +756,8 @@ addLayer("b", {
 			let curr = 11;
 			for (var a = 1; a <= mults.length; a++) {
 				let layer = Math.floor(a / 3 + 1) * 10 + ((a % 3) + 1)
-				player.b.buyables[curr] = player.b.buyables[curr].add(Decimal.mul(player.b.buyables[layer], diff).mul(mults[a-1]))
+				let realMult = tmp.buyables.b[33].effect.mul(mults[a-1])
+				player.b.buyables[curr] = player.b.buyables[curr].add(Decimal.mul(player.b.buyables[layer], diff).mul(realMult))
 				curr = layer
 			}
 		}

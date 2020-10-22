@@ -89,6 +89,11 @@ addLayer("m", {
 			effectDesc: () => "Unlocks an another new structure. This one is very important.",
 		},
 		7: {
+			requirementDesc: () => "8 Managers",
+			done() { return player[this.layer].best.gte(8) },
+			effectDesc: () => "Unlocks an another new structure. This one is also important.",
+		},
+		8: {
 			requirementDesc: () => "Not available yet",
 			done() { return false },
 			effectDesc: () => "To be continued...",
@@ -156,7 +161,7 @@ addLayer("bd", {
 	},
 	
 	buyables: {
-		rows: 2,
+		rows: 3,
 		cols: 3,
 		11: {
 			title: () => "Tavern",
@@ -332,7 +337,36 @@ addLayer("bd", {
 				if (player.bd.building != 0) doReset("bd", true)
 			},
 		},
-		/* 23: {
+		31: {
+			title: () => "School",
+			cost(x) {
+				if (x.gte(25)) x = x.pow(2).div(25)
+				if (x.gte(15)) x = x.pow(2).div(15)
+				return Decimal.pow(2, x).mul(1e9)
+			},
+			effect(x) {
+				return Decimal.pow(1.2, x)
+			},
+			display() { // Everything else displayed in the buyable button after the title
+				let data = tmp.buyables[this.layer][this.id]
+				return data.canAfford
+					? "You have " + format(player[this.layer].buyables[this.id], 0) + " schools." + (player[this.layer].buyables[this.id].gte(1) ? "" : " Building one will unlock another prestige layer.") + 
+						(player.bd.building == 31 ? "\n\n\
+						Progress: " + format(player.bd.progress, 0) + " / " + format(data.cost, 0) + " (" + format(Decimal.div(player.bd.progress, data.cost).mul(100)) + "%) \n\
+						ETA: " + (Decimal.lte(tmp.layerEffs.bd.speed, 0) ? "never" : formatTime(data.cost.sub(player.bd.progress).div(tmp.layerEffs.bd.speed))) + "\n\
+						Click here to stop building and discard the building progress." : "\n\n\
+						Progress needed: " + format(data.cost, 0) + "\n\
+						Click here to start building.")
+					: "You can not build more than one structure at once."
+			},
+			unl() { return player.bd.points.gte(1) && hasMilestone("m", 7) },
+			canAfford() { return (player.bd.building == 0 || player.bd.building == 31) },
+			buy() {
+				player.bd.building = (player.bd.building == 31 ? 0 : 31)
+				if (player.bd.building != 0) doReset("bd", true)
+			},
+		},
+		32: {
 			title: () => "Placeholder.",
 			cost(x) { return new Decimal("1ee308") },
 			effect(x) { return new Decimal("1") },
@@ -340,7 +374,16 @@ addLayer("bd", {
 			unl() { return false },
 			canAfford() { return false },
 			buy() { },
-		}, */
+		},
+		33: {
+			title: () => "Placeholder.",
+			cost(x) { return new Decimal("1ee308") },
+			effect(x) { return new Decimal("1") },
+			display() { return "" },
+			unl() { return false },
+			canAfford() { return false },
+			buy() { },
+		},
 	},
 	
 	update(diff) {
@@ -410,12 +453,19 @@ addLayer("t", {
 	baseAmount() { return player.c.points },
 	branches: [["w", 2], ["c", 2]],
 
-	requires: () => new Decimal("e520"),
+	requires: () => new Decimal("e520").div(tmp.layerEffs ? tmp.layerEffs.t.territoryRed : 1),
+	
+	effect() {
+		return {
+			territoryRed: Decimal.pow(100, Decimal.pow(player.t.lands, 0.9)),
+			soldierRed: Decimal.pow(10, Decimal.pow(player.t.lands, 0.6)),
+		}
+	},
 
 	type: "static",
 	base: "1e30",
 	exponent: 1.5,
-	canBuyMax: () => false,
+	canBuyMax: () => hasMilestone("t", 3),
 
 	gainMult() {
 		return new Decimal(1)
@@ -524,6 +574,11 @@ addLayer("t", {
 			effectDesc: () => "You can automate buying workfinder upgrades.",
 			toggles: [["t", "autoFinderUpgrade"]],
 		},
+		3: {
+			requirementDesc: () => "6 Territories",
+			done() { return player[this.layer].best.gte(6) },
+			effectDesc: () => "You can bulk explore territories.",
+		},
 	},
 	
 	automate() {
@@ -550,7 +605,7 @@ addLayer("t", {
 			},
             map: { title: () => "World Map", unl: () => player.so.buyables[13].gte(1), content: [
 				["blank", "5px"],
-				["display-text", "You have 0 conquered land, which are decreasing the territories' requirements by ÷1.00 and soldiers' requirements by ÷1.00."], 
+				["display-text", function () { return "You have " + formatWhole(player.t.lands) + " conquered land, which are decreasing the territories' requirements by ÷" + format(tmp.layerEffs.t.territoryRed) + " and soldiers' requirements by ÷" + format(tmp.layerEffs.t.soldierRed) + "." }], 
 				["blank", "0px"], "map-box", ["blank", "0px"],
 				["info-box", [
 					["display-text", function () { return "Selected Tile: " + mapFocusDesc + "<br/><p style='color:transparent; font-size:0.001px'>" + format(player.time) + "</p>"}],
@@ -587,7 +642,7 @@ addLayer("t", {
 						player.world.conquering ? "<h5>Progress: " + formatWhole(player.world.conquerProgress) + " / " + formatWhole(player.world.conquerGoal) + "</h5>" : "<h5>Please select a land to be conquered</h5>"
 						) + "<p style='color:transparent; font-size:0.001px'>" + format(player.time) + "</p><h5 style='font-size:6px'><br/>"
 					}],
-					["mini-bar", function () { return format(player.world.conquering ? Decimal.div(player.world.conquerProgress, player.world.conquerGoal) : 0) }, {"background-color": "#300"}],
+					["mini-bar", function () { return format(player.world.conquering ? Decimal.div(player.world.conquerProgress, player.world.conquerGoal) : 0) }, {"background-color": "#333"}],
 					], {"width": "480px"}
 				], 
 				["blank", "5px"],
@@ -645,7 +700,7 @@ addLayer("so", {
 	baseAmount() { return player.c.points },
 	branches: [["w", 1], ["c", 2]],
 
-	requires: () => new Decimal("e800"),
+	requires: () => new Decimal("e800").div(tmp.layerEffs ? tmp.layerEffs.t.soldierRed : 1),
 
 	type: "static",
 	base: "1e30",
@@ -825,6 +880,237 @@ addLayer("so", {
 
 	hotkeys: [
 		{ key: "o", desc: "O: Recruit soldiers", onPress() { doReset(this.layer) } },
+	],
+
+})
+addLayer("wi", {
+	startData() {
+		return {
+			unl: false,
+			points: new Decimal(0),
+			best: new Decimal(0),
+			total: new Decimal(0),
+			knowledge: new Decimal(0),
+			bought: new Decimal(0),
+			spent: new Decimal(0),
+		}
+	},
+
+	layerShown() { return player.bd.buyables[31].gte(1) || player[this.layer].unl },
+
+	color: () => "#0077ff",
+	name: "wisdom",
+	resource: "wisdom",
+	row: 4,
+
+	baseResource: "spiritual power",
+	baseAmount() { return player.sp.points },
+	branches: [["w", 3], ["sp", 3]],
+
+	requires: () => new Decimal("e18"),
+
+	type: "static",
+	base: "2",
+	exponent: 2.65,
+	canBuyMax: () => true,
+	
+	effect() {
+		return Decimal.pow(2, Decimal.pow(player.wi.best, 1.05)).sub(1)
+	},
+	
+	effectDescription() {
+		return "which are generating " + format(tmp.layerEffs.wi) + " knowledge per second"
+	},
+	
+	
+	upgrades: {
+		rows: 3,
+		cols: 5,
+		11: {
+			desc: () => "Knowledge boosts your first row of coin boost upgrades.",
+			cost: () => new Decimal(1),
+			currencyLayer: "wi",
+			currencyInternalName: "knowledge",
+			currencyDisplayName: "knowledge",
+			unl() { return player[this.layer].unl },
+			extraReq() { return player.wi.points.gt(player.wi.bought) },
+			effect() {
+				let ret = Decimal.pow(player.wi.knowledge, 2.25).add(1)
+				return ret;
+			},
+			effectDisplay(fx) { return "×" + format(fx) },
+			onPurchase() { player.wi.spent = Decimal.add(player.wi.spent, tmp.upgrades.wi[11].cost); player.wi.bought = Decimal.add(player.wi.bought, 1) }
+		},
+		12: {
+			desc: () => "Knowledge boosts finished work's effect.",
+			cost: () => new Decimal(100),
+			currencyLayer: "wi",
+			currencyInternalName: "knowledge",
+			currencyDisplayName: "knowledge",
+			unl() { return player[this.layer].unl },
+			extraReq() { return hasUpg("wi", 11) && player.wi.points.gt(player.wi.bought) },
+			effect() {
+				let ret = Decimal.pow(player.wi.knowledge, 0.25).add(1)
+				return ret;
+			},
+			effectDisplay(fx) { return "×" + format(fx) },
+			onPurchase() { player.wi.spent = Decimal.add(player.wi.spent, tmp.upgrades.wi[12].cost); player.wi.bought = Decimal.add(player.wi.bought, 1) }
+		},
+		13: {
+			desc: () => "Brick. It's fun.",
+			cost: () => Decimal.dInf,
+			unl() { return player[this.layer].unl },
+			extraReq() { return false },
+			effect() {},
+			style() { return {"background-color": "var(--background)", "color": "#fff2"} },
+		},
+		14: {
+			desc: () => "Not yet implemented.",
+			cost: () => new Decimal(0),
+			unl() { return player[this.layer].unl },
+			extraReq() { return false },
+			effect() {},
+		},
+		15: {
+			desc: () => "Not yet implemented.",
+			cost: () => new Decimal(0),
+			unl() { return player[this.layer].unl },
+			extraReq() { return false },
+			effect() {},
+		},
+		21: {
+			desc: () => "Knowledge boosts your second row of coin boost upgrades.",
+			cost: () => new Decimal(100),
+			currencyLayer: "wi",
+			currencyInternalName: "knowledge",
+			currencyDisplayName: "knowledge",
+			unl() { return player[this.layer].unl },
+			extraReq() { return hasUpg("wi", 11) && player.wi.points.gt(player.wi.bought) },
+			effect() {
+				let ret = Decimal.pow(player.wi.knowledge, 0.5).add(1)
+				return ret;
+			},
+			effectDisplay(fx) { return "×" + format(fx) },
+			onPurchase() { player.wi.spent = Decimal.add(player.wi.spent, tmp.upgrades.wi[21].cost); player.wi.bought = Decimal.add(player.wi.bought, 1) }
+		},
+		22: {
+			desc: () => "Knowledge boosts your first three banking buffs.",
+			cost: () => new Decimal(3000),
+			currencyLayer: "wi",
+			currencyInternalName: "knowledge",
+			currencyDisplayName: "knowledge",
+			unl() { return player[this.layer].unl },
+			extraReq() { return (hasUpg("wi", 12) || hasUpg("wi", 21)) && player.wi.points.gt(player.wi.bought) },
+			effect() {
+				let ret = Decimal.pow(player.wi.knowledge, 0.9).add(1)
+				return ret;
+			},
+			effectDisplay(fx) { return "×" + format(fx) },
+			onPurchase() { player.wi.spent = Decimal.add(player.wi.spent, tmp.upgrades.wi[22].cost); player.wi.bought = Decimal.add(player.wi.bought, 1) }
+		},
+		23: {
+			desc: () => "Unlocks a new banking option.",
+			cost: () => new Decimal(7500),
+			currencyLayer: "wi",
+			currencyInternalName: "knowledge",
+			currencyDisplayName: "knowledge",
+			unl() { return player[this.layer].unl },
+			extraReq() { return hasUpg("wi", 22) && player.wi.points.gt(player.wi.bought) },
+			onPurchase() { player.wi.spent = Decimal.add(player.wi.spent, tmp.upgrades.wi[22].cost); player.wi.bought = Decimal.add(player.wi.bought, 1) }
+		},
+		24: {
+			desc: () => "Not yet implemented.",
+			cost: () => new Decimal(0),
+			unl() { return player[this.layer].unl },
+			extraReq() { return false },
+		},
+		25: {
+			desc: () => "Not yet implemented.",
+			cost: () => new Decimal(0),
+			unl() { return player[this.layer].unl },
+			extraReq() { return false },
+		},
+		31: {
+			desc: () => "You thought it was a discovery, but it was me, A Brick!",
+			cost: () => Decimal.dInf,
+			unl() { return player[this.layer].unl },
+			extraReq() { return false },
+			effect() {},
+			style() { return {"background-color": "var(--background)", "color": "#fff2"} },
+		},
+		32: {
+			desc: () => "Wait, it's all bricks? Always has been.",
+			cost: () => Decimal.dInf,
+			unl() { return player[this.layer].unl },
+			extraReq() { return false },
+			effect() {},
+			style() { return {"background-color": "var(--background)", "color": "#fff2"} },
+		},
+		33: {
+			desc: () => "One does not simply discover a brick.",
+			cost: () => Decimal.dInf,
+			unl() { return player[this.layer].unl },
+			extraReq() { return false },
+			effect() {},
+			style() { return {"background-color": "var(--background)", "color": "#fff2"} },
+		},
+		34: {
+			desc: () => "I'm sorry, but the brick is in this castle.",
+			cost: () => Decimal.dInf,
+			unl() { return player[this.layer].unl },
+			extraReq() { return false },
+			effect() {},
+			style() { return {"background-color": "var(--background)", "color": "#fff2"} },
+		},
+		35: {
+			desc: () => "Not yet implemented.",
+			cost: () => new Decimal(0),
+			unl() { return player[this.layer].unl },
+			extraReq() { return false },
+		},
+	},
+	
+	buyables: {
+	
+		respec() { 
+			player.wi.upgrades = []
+			player.wi.bought = new Decimal(0)
+			player.wi.knowledge = Decimal.add(player.wi.knowledge, player.wi.spent)
+			player.wi.spent = new Decimal(0)
+			doReset(this.layer, true)
+		},
+		respecText:() => "Respec Wisdom Discovers",
+	},
+
+	gainMult() {
+		return new Decimal(1)
+	},
+	gainExp() {
+		return new Decimal(1)
+	},
+	
+	update(diff) {
+		player.wi.knowledge = Decimal.add(player.wi.knowledge, tmp.layerEffs.wi.mul(diff))
+	},
+
+	tabFormat:
+		["main-display",
+			["prestige-button", function () { return "Gain " }],
+			["blank", "5px"],
+			["display-text",
+				function () { return "You have at best " + format(player.wi.best, 0) + " wisdom." }],
+			["blank", "5px"],
+			["display-text",
+				function () { return "You have " + format(player.wi.knowledge, 0) + " knowledge." }],
+			["blank", "5px"],
+			["display-text",
+				function () { return "You have " + format(player.wi.points.sub(player.wi.bought), 0) + " undiscovered wisdom.<h5>You have " + formatWhole(player.wi.spent) + " spent knowledge.</h5>" }],
+			"buyables", 
+			"upgrades"
+		],
+
+	hotkeys: [
+		{ key: "i", desc: "I: Gain wisdom", onPress() { doReset(this.layer) } },
 	],
 
 })

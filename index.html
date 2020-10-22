@@ -13,7 +13,7 @@
 	<link rel="stylesheet" type="text/css" href="style.css" />
 	<link href="https://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css2?family=Inconsolata:wdth@150&display=swap" rel="stylesheet">
-	<script src="http://code.jquery.com/jquery.min.js"></script>
+	<script src="https://code.jquery.com/jquery.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>
 	<script type="text/javascript" src="js/modal.js"></script>
 	<script type="text/javascript" src="js/break_eternity.js"></script>
@@ -57,13 +57,19 @@
 			<ul>
 				<h5><i>“Conquer the World”</i></h5>
 				<li><h3>v0.4.0</h3><li>
+				<li>Added the <spoiler>knowledge</spoiler> layer.</li>
 				<li>Added the <spoiler>World Map</spoiler> with <spoiler>procedural world generation</spoiler> to the <spoiler>territory</spoiler> layer.</li>
 				<li>Added more <spoiler>bankings</spoiler> and <spoiler>spiritual power</spoiler> rebuyables.</li>
+				<li>Added ETAs to <spoiler>buildings</spoiler> and total <spoiler>banking</spoiler> multiplier.</li>
 				<li>Fix the number formatting not working correctly over e1,000 bug.</li>
+				<li>Make more various UI adjustments.</li>
+				<button class="tabButton" onclick="showTab('old-stuff')" style="background-color:var(--color); padding: 5px 20px 5px 20px"><h4>Experimental Changelog</h4><h5>(Content in experimental build can subject to change.)</h5></button><br>
+				<br>
 				<br>
 				<h5><i>“Expanding Civilization”</i></h5>
 				<li><h3>v0.3.1</h3><li>
 				<li>Fixed the <spoiler>“Market Crash” obstacle</spoiler> not functioning as intended.</li>
+				<br>
 				<li><h3>v0.3.0</h3><li>
 				<li>Added the <spoiler>territory</spoiler> and the <spoiler>solider</spoiler> layer.</li>
 				<li>Added more <spoiler>buildings</spoiler>, <spoiler>magic spells</spoiler> and <spoiler>manager</spoiler> milestones.</li>
@@ -79,22 +85,37 @@
 				<li>Added spoiler boxes to the changelog, which should be looking like <spoiler>this one over here</spoiler>.</li>
 				<li>Made various UI adjustments.</li>
 				<br>
+				<br>
 				<h5><i>“The Beginning”</i></h5>
 				<li><h3>v0.1.0</h3><li>
 				<li>Added the <spoiler>manager</spoiler> layer (didn't have anything for now).</li>
 				<li>Added some new things to the layers before that.</li>
 				<li>Fixed some bugs related to progressing and save importing.</li>
 				<br>
+				<br>
 				<h5><i>“Before Life”</i></h5>
 				<li><h3>v0.0.1</h3><li>
 				<li>Made some rebalancing to the early game.</li>
+				<br>
 				<li><h3>v0.0.0</h3><li>
 				<li>This exists. Posibly buggy. Very unbalanced. Need suggestions.</li>
 			</ul>
 		</div>
 		<div v-if="player.tab=='old-stuff'" class="col right">
 			<button class="back" onclick="showTab('changelog')">&gt;</button><br>
-			<h3>v1.1.1</h3>
+			<ul>
+				<li><h3>v0.4.0&beta;2</h3><li>
+				<li>Added the <spoiler>knowledge</spoiler> layer.</li>
+				<li>Adjusted the <spoiler>conquering</spoiler> difficulty.</li>
+				<li>Redesigned link buttons.</li>
+				<li>Made jQuery HTTPS.</li>
+				<br>
+				<li><h3>v0.4.0&beta;1</h3><li>
+				<li>Added the <spoiler>World Map</spoiler> with <spoiler>procedural world generation</spoiler> to the <spoiler>territory</spoiler> layer.</li>
+				<li>Added more <spoiler>bankings</spoiler> and <spoiler>spiritual power</spoiler> rebuyables.</li>
+				<li>Added ETAs to <spoiler>buildings</spoiler> and total <spoiler>banking</spoiler> multiplier.</li>
+				<li>Fix the number formatting not working correctly over e1,000 bug.</li>
+			</ul>
 		</div>
 		<div v-if="player.tab=='info'" class="col right">
 			<button class="back" onclick="showTab('tree')">&gt;</button><br>
@@ -110,9 +131,12 @@
 			<br>
 			using The Modding Tree by Acamaeda
 			<br><br>
-			<div class="link" onclick="showTab('changelog')">Changelog</div><br>
-			<a class="link" href="http://discord.gg/wwQfgPa" target="_blank">Main Prestige Tree server</a><br>
-			<a class="link" href="http://discord.gg/wwQfgPa" target="_blank">Main Prestige Tree server</a><br>
+			<button class="tabButton" onclick="showTab('changelog')" style="background-color:var(--color)">Game Changelog</button><br>
+			<br>
+			Discord servers:
+			<br>
+			<button class="tabButton" onClick="window.open('https://discord.gg/wwQfgPa','_blank')" style="background-color:var(--color)">Jacorb's Main server<h5>The (original) Prestige Tree, Distance Incremental and more</h5></button><br>
+			<button class="tabButton" onClick="window.open('https://discord.gg/F3xveHV','_blank')" style="background-color:var(--color)">Acamaeda's TMT server<h5>Dedicated to the "The Modding Tree" community and mods</h5></button><br>
 			<br><br>
 			You have played this for: {{ formatTimeLong(player.timePlayed) }}<br><br>
 			<h3>Hotkeys</h3><br>
@@ -177,6 +201,7 @@
 				<td><layer-node layer='so' abb='SO'></layer-node></td>
 				<td><layer-node layer='m' abb='M'></layer-node></td>
 				<td><layer-node layer='t' abb='T'></layer-node></td>
+				<td><layer-node layer='wi' abb='WI'></layer-node></td>
 			</table>
 			<canvas id="treeCanvas" class="canvas"></canvas>
 			<br><br>
