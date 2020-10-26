@@ -7,7 +7,7 @@ var gameEnded = false;
 let VERSION = {
 	num: "0.4.0",
 	name: "Conquer the World",
-	beta: "2"
+	beta: "3"
 }
 
 // Determines if it should show points/sec
@@ -32,6 +32,14 @@ function getPointGen() {
 	if (tmp.layerEffs.sp) gain = gain.mul(tmp.layerEffs.sp)
 	if (player.sp.buyables[21].gt(0)) gain = gain.mul(tmp.buyables.sp[21].effect)
 	if (tmp.layerEffs.so) gain = gain.mul(tmp.layerEffs.so)
+		
+	var landMul = new Decimal(1)
+	for (var a = 11; a <= 16; a++)
+		if (player.m.buyables[a].gt(0)) landMul = landMul.mul(tmp.buyables.m[a].effect)
+	gain = gain.mul(landMul)
+	if (tmp) tmp.landMul = landMul
+	
+		
 	if (player.b.banking & 1) gain = gain.pow(0.5)
 	if (player.b.banking & 2) gain = gain.pow(0.3333333)
 	if (player.b.banking & 4) gain = gain.pow(0.1)
@@ -247,9 +255,10 @@ function doReset(layer, force = false) {
 function respecBuyables(layer) {
 	if (!layers[layer].buyables) return
 	if (!layers[layer].buyables.respec) return
-	if (!confirm("Are you sure you want to respec? This will force you to do a \"" + (layers[layer].name ? layers[layer].name : layer) + "\" reset as well!")) return
-	layers[layer].buyables.respec()
-	updateBuyableTemp(layer)
+	
+	modal.title = "Are you sure you want to respec?"
+	modal.content = `Doing this will also force you to do a "${(layers[layer].name ? layers[layer].name : layer)}" reset as well!<br/><button class="tabButton" style="background-color: var(--color); padding: 5px 20px 5px 20px" onclick="{layers['${layer}'].buyables.respec(); updateBuyableTemp('${layer}'); modal.showing = false}"><p>Do it!</p></button>`
+	modal.showing = true
 }
 
 function canAffordUpg(layer, id) {
@@ -448,15 +457,16 @@ function gameLoop(diff) {
 		player.autosave = false;
 		NaNalert = true;
 
-		alert("We have detected a corruption in your save. Please visit https://discord.gg/wwQfgPa for help.")
+		modal.title = "An error has occured."
+		modal.content = `<br/>Details of error:<h5>The game has detected NaN in your save. If you can see this please contact the mod developer.</h5><br/>If you can see this, please visit https://discord.gg/wwQfgPa for help.<br/><button class="tabButton" style="background-color: var(--color); padding: 5px 20px 5px 20px" onclick="exportSave()"><p>Export save to clipboard</p></button>`
+		modal.showing = true
 	}
 }
 
 function hardReset() {
-	if (!confirm("Are you sure you want to do this? You will lose all your progress!")) return
-	player = getStartPlayer()
-	save();
-	window.location.reload();
+	modal.title = "Are you sure you want to hard reset?"
+	modal.content = `This is a dangerous process! You'll lose all of your progress if you continue doing this!<br/><button class="tabButton" style="background-color: var(--color); padding: 5px 20px 5px 20px" onclick="{player = getStartPlayer(); save(); window.location.reload()}"><p>I understand the consequences, do it!</p></button>`
+	modal.showing = true
 }
 
 var ticking = false

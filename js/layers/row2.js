@@ -837,7 +837,8 @@ addLayer("sp", {
 		11: {
 			title: () => "Convert spiritual power into castable magic fountain",
 			cost(x) {
-				let cost = Decimal.pow(2500, Decimal.pow(1.25, x))
+				let inc = hasUpg("wi", 14) ? 1.125 : 1.25
+				let cost = Decimal.pow(2500, Decimal.pow(inc, x))
 				return cost.floor()
 			},
 			effect(x) { 
@@ -867,7 +868,8 @@ addLayer("sp", {
 		12: {
 			title: () => "Extend the fabric of time using spiritual power",
 			cost(x) {
-				let cost = Decimal.pow(1e10, Decimal.pow(1.3, x))
+				let inc = hasUpg("wi", 14) ? 1.15 : 1.3
+				let cost = Decimal.pow(1e10, Decimal.pow(inc, x))
 				return cost.floor()
 			},
 			effect(x) { 
@@ -931,7 +933,9 @@ addLayer("sp", {
 				return cost.floor()
 			},
 			effect(x) { 
-				return x.mul(Decimal.add(player.sp.magic, 1).log(100).add(1)).sqrt().div(20).add(1)
+				let eff = x.mul(Decimal.add(player.sp.magic, 1).log(100).add(1)).sqrt().div(20).add(1)
+				if (hasUpg("wi", 15)) eff = eff.pow(tmp.upgrades.wi[15].effect)
+				return eff
 			},
 			display() { // Everything else displayed in the buyable button after the title
 				let data = tmp.buyables[this.layer][this.id]
@@ -1261,6 +1265,12 @@ addLayer("sp", {
 		player.sp.magic = Decimal.add(player.sp.magic, tmp.buyables.sp[11].effect.mul(diff))
 		for (var a = 21; a <= 27; a++) {
 			player.sp.buyables[a] = Decimal.sub(player.sp.buyables[a], diff).max(0)
+			if (player.t.autoSpells && tmp.buyables.sp[a].canAfford) buyBuyable("sp", a)
+		}
+		
+		if (hasUpg("wi", 24) && tmp.gainExp !== undefined) {
+			let delta = tmp.resetGain["sp"].mul(1).mul(diff)
+			addPoints("sp", delta)
 		}
 	},
 	

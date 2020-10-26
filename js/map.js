@@ -1,6 +1,6 @@
 
-var mapX = 93
-var mapY = 80
+var mapX = 108
+var mapY = 90
 var mapFocusX = -1
 var mapFocusY = -1
 
@@ -15,10 +15,10 @@ function updateMapCanvas () {
 	mapctx.fillRect(0, 0, mapc.width, mapc.height)
 	
     mapctx.fillStyle = "rgb(255, 255, 255)"
-	var width = Math.floor(500 / 8)
-	var height = Math.floor(450 / 12)
+	var width = Math.floor(500 / 16)
+	var height = Math.floor(450 / 25)
 	for (var x = 0; x < width; x++) for (var y = 0; y < height; y++) {
-		mapctx.font = "bold 12px 'Lucida Console'"
+		mapctx.font = "bold 26px 'Lucida Console'"
 		var glyph = "░"
 		var id = player.world.map[y+Math.floor(mapY)].charCodeAt(x+Math.floor(mapX))
 		var type = id & 15
@@ -28,21 +28,21 @@ function updateMapCanvas () {
 		else if (type === 3) { mapctx.fillStyle = "rgb(255, 255, 255)"; }
 		else if (type === 4) { mapctx.fillStyle = "rgb(255, 255, 0)"; }
 		else if (type === 5) { mapctx.fillStyle = "rgb(255, 255, 255)";}
-		else if (type === 6) { mapctx.fillStyle = "rgb(127, 255, 0)"; }
+		else if (type === 6) { mapctx.fillStyle = "rgb(0, 255, 0)"; }
 		else if (type === 7) { mapctx.fillStyle = "rgb(255, 255, 127)"; }
-		else if (type === 8) { mapctx.fillStyle = "rgb(0, 255, 0)"; }
+		else if (type === 8) { mapctx.fillStyle = "rgb(0, 127, 0)"; }
 		else if (type === 9) { mapctx.fillStyle = "rgb(127, 127, 255)"; }
 		if (isConquerable(x+Math.floor(mapX), y+Math.floor(mapY))) { glyph = "▒" }
 		if (player.world.conquering && player.world.conquerX == x+Math.floor(mapX) && player.world.conquerY == y+Math.floor(mapY)) { 
 			glyph = ["░", "▒", "▓", "█", "▓", "▒", "░", " "][Math.floor(Date.now() / 100) % 8]
 		}
-		if (id & 16) { mapctx.font = "bold 12px 'Lucida Console'"; glyph = "█" }
+		if (id & 16) { mapctx.font = "bold 26px 'Lucida Console'"; glyph = "█" }
 		if (x + Math.floor(mapX) == mapFocusX && y + Math.floor(mapY) == mapFocusY) { if (Date.now() % 1000 > 500) mapctx.fillStyle = "rgb(255, 255, 255)"; glyph = Date.now() % 500 > 250 ? "¤" : glyph }
-		mapctx.fillText(glyph, 1 + x * 8, 10 + y * 12)
+		mapctx.fillText(glyph, 1 + x * 16, 22 + y * 25)
 	}
 	mapctx.fillStyle = "rgb(255, 255, 255)";
-	mapctx.fillRect((Math.floor(mapX) / 250) * 498, 447, (width / 250) * 498, 2);
-	mapctx.fillRect(498, (Math.floor(mapY) / 200) * 447, 2, (height / 200) * 447);
+	mapctx.fillRect((Math.floor(mapX) / 250) * 498, 453, (width / 250) * 498, 2);
+	mapctx.fillRect(498, (Math.floor(mapY) / 200) * 453, 2, (height / 200) * 453);
 }
 
 function createMap () {
@@ -86,7 +86,7 @@ function createMap () {
 					else chr = 68                   // Desert
 				}            
 				else if (temp > .15) {
-					if (moist > .9) chr = 70        // Forest
+					if (moist > .8) chr = 70        // Forest
 					else chr = 65                   // Grasslands
 				}
 				else chr = 69                       // Tundra
@@ -147,6 +147,7 @@ function doneConquering() {
 	if (player.world.conquering) {
 		player.world.conquering = false
 		player.t.lands = Decimal.add(player.t.lands, 1)
+		player.m.landsAvailable[getTileType(player.world.conquerX, player.world.conquerY)]++
 		setConquered(player.world.conquerX, player.world.conquerY)
 	}
 }
@@ -165,8 +166,8 @@ function onMapMouseDown (e) {
 	mapMouseY = e.clientY
 	
 	var oldX = mapFocusX; var oldY = mapFocusY
-	mapFocusX = parseInt((e.clientX - $("#mapbox").offset().left - 2) / 8 + Math.floor(mapX))
-	mapFocusY = parseInt((e.clientY - $("#mapbox").offset().top) / 12 + Math.floor(mapY))
+	mapFocusX = parseInt((e.clientX - $("#mapbox").offset().left - 2) / 16 + Math.floor(mapX))
+	mapFocusY = parseInt((e.clientY - $("#mapbox").offset().top) / 25 + Math.floor(mapY))
 	if (oldX === mapFocusX && oldY === mapFocusY) {
 		if (player.world.conquering && player.world.conquerX === mapFocusX && player.world.conquerY === mapFocusY)
 			abortConquering()
@@ -182,8 +183,8 @@ function onMapMouseDown (e) {
 
 function onMapMouseMove (e) {
 	if (mapMouse) {
-		mapX = Math.max(0, Math.min(188, mapX + (mapMouseX - e.clientX) / 8))
-		mapY = Math.max(0, Math.min(163, mapY + (mapMouseY - e.clientY) / 12))
+		mapX = Math.max(0, Math.min(219, mapX + (mapMouseX - e.clientX) / 16))
+		mapY = Math.max(0, Math.min(182, mapY + (mapMouseY - e.clientY) / 24))
 		mapMouseX = e.clientX
 		mapMouseY = e.clientY
 	}

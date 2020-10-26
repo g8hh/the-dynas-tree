@@ -497,7 +497,7 @@ ul {
 
 #mapbox {
 	width: 500px;
-	height: 449px;
+	height: 455px;
 	border: 2px solid;
 	border-color: rgba(255, 255, 255, 0.125) rgba(0, 0, 0, 0.25) rgba(0, 0, 0, 0.25) rgba(255, 255, 255, 0.125);
 }
@@ -580,4 +580,12 @@ spoiler:hover{
 	border: 2px solid;
 	border-color: rgba(0, 0, 0, 0.25) rgba(255, 255, 255, 0.125) rgba(255, 255, 255, 0.125) rgba(0, 0, 0, 0.25);
 	border-radius: 10px;
+}
+
+pre {
+    white-space: pre-wrap;
+    white-space: -moz-pre-wrap;
+    white-space: -pre-wrap;
+    white-space: -o-pre-wrap;
+    word-wrap: break-word;
 }

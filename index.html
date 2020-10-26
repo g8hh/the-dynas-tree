@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE html>
 <head>
+	<!-- Abandoned Discord server: https://discord.gg/KHsjfZF -->
 	<meta charset="utf-8">
 	<script>
 		const modInfo = {
@@ -59,6 +60,7 @@
 				<li><h3>v0.4.0</h3><li>
 				<li>Added the <spoiler>knowledge</spoiler> layer.</li>
 				<li>Added the <spoiler>World Map</spoiler> with <spoiler>procedural world generation</spoiler> to the <spoiler>territory</spoiler> layer.</li>
+				<li>Added <spoiler>Land and Jobs Management</spoiler> to the <spoiler>manager</spoiler> layer.</li>
 				<li>Added more <spoiler>bankings</spoiler> and <spoiler>spiritual power</spoiler> rebuyables.</li>
 				<li>Added ETAs to <spoiler>buildings</spoiler> and total <spoiler>banking</spoiler> multiplier.</li>
 				<li>Fix the number formatting not working correctly over e1,000 bug.</li>
@@ -104,6 +106,12 @@
 		<div v-if="player.tab=='old-stuff'" class="col right">
 			<button class="back" onclick="showTab('changelog')">&gt;</button><br>
 			<ul>
+				<li><h3>v0.4.0&beta;3</h3><li>
+				<li>Added <spoiler>Land and Jobs Management</spoiler> to the <spoiler>manager</spoiler> layer.</li>
+				<li>The <spoiler>World Map</spoiler> tiles are now bigger.</li>
+				<li>The Discord server links is now in another tab. Well, it's not really a tab, but rather some concepts of a modal.</li>
+				<li>Respec now uses customly made modals instead of that default message box.</li>
+				<br>
 				<li><h3>v0.4.0&beta;2</h3><li>
 				<li>Added the <spoiler>knowledge</spoiler> layer.</li>
 				<li>Adjusted the <spoiler>conquering</spoiler> difficulty.</li>
@@ -132,11 +140,7 @@
 			using The Modding Tree by Acamaeda
 			<br><br>
 			<button class="tabButton" onclick="showTab('changelog')" style="background-color:var(--color)">Game Changelog</button><br>
-			<br>
-			Discord servers:
-			<br>
-			<button class="tabButton" onClick="window.open('https://discord.gg/wwQfgPa','_blank')" style="background-color:var(--color)">Jacorb's Main server<h5>The (original) Prestige Tree, Distance Incremental and more</h5></button><br>
-			<button class="tabButton" onClick="window.open('https://discord.gg/F3xveHV','_blank')" style="background-color:var(--color)">Acamaeda's TMT server<h5>Dedicated to the "The Modding Tree" community and mods</h5></button><br>
+			<button class="tabButton" onclick="showDiscordModal()" style="background-color:var(--color)">Discord servers</button><br>
 			<br><br>
 			You have played this for: {{ formatTimeLong(player.timePlayed) }}<br><br>
 			<h3>Hotkeys</h3><br>
@@ -166,7 +170,7 @@
 			<div id="version" onclick="showTab('changelog')">{{VERSION.withoutName}}</div>
 			<img id="optionWheel" v-if="player.tab!='options'" src="options_wheel.png" onclick="showTab('options')"></img>
 			<div id="info" v-if="player.tab!='info'" onclick="showTab('info')"><br>i</div>
-			<img id="discord" onclick="window.open('https://discord.gg/wwQfgPa','mywindow')" src="discord.png"  target="_blank"></img>
+			<img id="discord" onclick="showDiscordModal()" src="discord.png"  target="_blank"></img>
 			<span v-if="player.devSpeed && player.devSpeed != 1">
 				<br>Dev Speed: {{format(player.devSpeed)}}x<br>
 			</span>
@@ -232,7 +236,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="fullWidth" v-if="modal.showing" style="background-color: #0007; display: flex; z-index: 2147483000">
+		<div class="fullWidth" v-if="modal.showing" style="background-color: #000a; display: flex; z-index: 2147483000">
 			<div class="modal">
 				<h3>{{modal.title}}</h3>
 				<p v-html="modal.content"></p>

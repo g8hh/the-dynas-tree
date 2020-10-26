@@ -14,11 +14,15 @@ addLayer("m", {
 			total: new Decimal(0),
 			autoWorkerReset: false,
 			autoWorkfinderReset: false,
+			allocated: 0,
+			landsAvailable: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			landsAllocated: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 		}
 	},
 
 	layerShown() { return hasUpg("wf", 25) || player[this.layer].unl },
 
+	name: "manager",
 	color: () => "#77FFFF",
 	resource: "managers",
 	row: 4,
@@ -94,10 +98,342 @@ addLayer("m", {
 			effectDesc: () => "Unlocks an another new structure. This one is also important.",
 		},
 		8: {
+			requirementDesc: () => "10 Managers",
+			done() { return player[this.layer].best.gte(10) },
+			effectDesc: () => "Managers now have the ability to manage jobs and lands.",
+		},
+		9: {
 			requirementDesc: () => "Not available yet",
 			done() { return false },
 			effectDesc: () => "To be continued...",
 		},
+	},
+	
+	buyables: {
+		respec() { 
+			player.m.allocated = 0
+			player.m.landsAllocated = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+			resetBuyables(this.layer)
+			doReset(this.layer, true)
+		},
+		respecText:() => "Respec Land & Jobs Allocation",
+		rows: 1,
+		cols: 10,
+		11: {
+			title: () => "Farmlands",
+			cost(x) {
+				return Decimal.add(8, Decimal.pow(1.1, x)).ceil()
+			},
+			effect(x) {
+				return Decimal.pow(x.add(1), 12 * Math.E)
+			},
+			display() { // Everything else displayed in the buyable button after the title
+				let data = tmp.buyables[this.layer][this.id]
+				return "You have " + format(player[this.layer].buyables[this.id], 0) + " farmlands, which are boosting point generation by ×" + format(data.effect) + "." + "\nAllocation cost: " + formatWhole(data.cost) + " grasslands tiles and 1 managing power"
+			},
+			unl() { return true },
+			canAfford() { return (!player.m.landsUndoMode && Decimal.gte(player.m.landsAvailable[1] - player.m.landsAllocated[1], tmp.buyables.m[11].cost) && player.m.points.mul(2).sub(player.m.allocated).gte(1)) || (player.m.landsUndoMode && player.m.buyables[11].gte(1)) },
+			buy() {
+				cost = tmp.buyables[this.layer][this.id].cost.toNumber()
+				player.m.landsAllocated[1] += cost;
+				player.m.allocated++;
+				player.m.buyables[11] = player.m.buyables[11].add(1)
+			},
+			style() {
+				return {
+					"height": "200px",
+				}
+			}
+		},
+		12: {
+			title: () => "Sheep Farm",
+			cost(x) {
+				return Decimal.add(5, Decimal.pow(1.1, x)).ceil()
+			},
+			effect(x) {
+				return Decimal.pow(x.add(1), 15 * Math.E)
+			},
+			display() { // Everything else displayed in the buyable button after the title
+				let data = tmp.buyables[this.layer][this.id]
+				return "You have " + format(player[this.layer].buyables[this.id], 0) + " sheep farms, which are boosting point generation by ×" + format(data.effect) + "." + "\nAllocation cost: " + formatWhole(data.cost) + " tundra tiles and 1 managing power"
+			},
+			unl() { return true },
+			canAfford() { return (!player.m.landsUndoMode && Decimal.gte(player.m.landsAvailable[5] - player.m.landsAllocated[5], tmp.buyables.m[12].cost) && player.m.points.mul(2).sub(player.m.allocated).gte(1)) || (player.m.landsUndoMode && player.m.buyables[12].gte(1)) },
+			buy() {
+				cost = tmp.buyables[this.layer][this.id].cost.toNumber()
+				player.m.landsAllocated[5] += cost;
+				player.m.allocated++;
+				player.m.buyables[12] = player.m.buyables[12].add(1)
+			},
+			style() {
+				return {
+					"height": "200px",
+				}
+			}
+		},
+		13: {
+			title: () => "Mine",
+			cost(x) {
+				return Decimal.add(3, Decimal.pow(1.1, x)).ceil()
+			},
+			effect(x) {
+				return Decimal.pow(x.add(1), 20 * Math.E)
+			},
+			display() { // Everything else displayed in the buyable button after the title
+				let data = tmp.buyables[this.layer][this.id]
+				return "You have " + format(player[this.layer].buyables[this.id], 0) + " mines, which are boosting point generation by ×" + format(data.effect) + "." + "\nAllocation cost: " + formatWhole(data.cost) + " mountain tiles and 1 managing power"
+			},
+			unl() { return true },
+			canAfford() { return (!player.m.landsUndoMode && Decimal.gte(player.m.landsAvailable[2] - player.m.landsAllocated[2], tmp.buyables.m[13].cost) && player.m.points.mul(2).sub(player.m.allocated).gte(1)) || (player.m.landsUndoMode && player.m.buyables[13].gte(1)) },
+			buy() {
+				cost = tmp.buyables[this.layer][this.id].cost.toNumber()
+				player.m.landsAllocated[2] += cost;
+				player.m.allocated++;
+				player.m.buyables[13] = player.m.buyables[13].add(1)
+			},
+			style() {
+				return {
+					"height": "200px",
+				}
+			}
+		},
+		14: {
+			title: () => "Large Mine",
+			cost(x) {
+				return Decimal.add(1, Decimal.pow(1.1, x)).ceil()
+			},
+			effect(x) {
+				return Decimal.pow(x.add(1), 30 * Math.E)
+			},
+			display() { // Everything else displayed in the buyable button after the title
+				let data = tmp.buyables[this.layer][this.id]
+				return "You have " + format(player[this.layer].buyables[this.id], 0) + " large mines, which are boosting point generation by ×" + format(data.effect) + "." + "\nAllocation cost: " + formatWhole(data.cost) + " tall mountain tiles and 1 managing power"
+			},
+			unl() { return true },
+			canAfford() { return (!player.m.landsUndoMode && Decimal.gte(player.m.landsAvailable[3] - player.m.landsAllocated[3], tmp.buyables.m[14].cost) && player.m.points.mul(2).sub(player.m.allocated).gte(1)) || (player.m.landsUndoMode && player.m.buyables[14].gte(1)) },
+			buy() {
+				cost = tmp.buyables[this.layer][this.id].cost.toNumber()
+				player.m.landsAllocated[3] += cost;
+				player.m.allocated++;
+				player.m.buyables[14] = player.m.buyables[14].add(1)
+			},
+			style() {
+				return {
+					"height": "200px",
+				}
+			}
+		},
+		15: {
+			title: () => "Wood Workshop",
+			cost(x) {
+				return Decimal.add(5, Decimal.pow(1.1, x)).ceil()
+			},
+			effect(x) {
+				return Decimal.pow(x.add(1), 16 * Math.E)
+			},
+			display() { // Everything else displayed in the buyable button after the title
+				let data = tmp.buyables[this.layer][this.id]
+				return "You have " + format(player[this.layer].buyables[this.id], 0) + " wood workshops, which are boosting point generation by ×" + format(data.effect) + "." + "\nAllocation cost: " + formatWhole(data.cost) + " forest tiles and 1 managing power"
+			},
+			unl() { return true },
+			canAfford() { return (!player.m.landsUndoMode && Decimal.gte(player.m.landsAvailable[6] - player.m.landsAllocated[6], tmp.buyables.m[15].cost) && player.m.points.mul(2).sub(player.m.allocated).gte(1)) || (player.m.landsUndoMode && player.m.buyables[15].gte(1)) },
+			buy() {
+				cost = tmp.buyables[this.layer][this.id].cost.toNumber()
+				player.m.landsAllocated[6] += cost;
+				player.m.allocated++;
+				player.m.buyables[15] = player.m.buyables[15].add(1)
+			},
+			style() {
+				return {
+					"height": "200px",
+				}
+			}
+		},
+		16: {
+			title: () => "Large Wood Workshop",
+			cost(x) {
+				return Decimal.add(5, Decimal.pow(1.1, x)).ceil()
+			},
+			effect(x) {
+				return Decimal.pow(x.add(1), 18 * Math.E)
+			},
+			display() { // Everything else displayed in the buyable button after the title
+				let data = tmp.buyables[this.layer][this.id]
+				return "You have " + format(player[this.layer].buyables[this.id], 0) + " large wood workshops, which are boosting point generation by ×" + format(data.effect) + "." + "\nAllocation cost: " + formatWhole(data.cost) + " rainforest tiles and 1 managing power"
+			},
+			unl() { return true },
+			canAfford() { return (!player.m.landsUndoMode && Decimal.gte(player.m.landsAvailable[8] - player.m.landsAllocated[8], tmp.buyables.m[16].cost) && player.m.points.mul(2).sub(player.m.allocated).gte(1)) || (player.m.landsUndoMode && player.m.buyables[16].gte(1)) },
+			buy() {
+				cost = tmp.buyables[this.layer][this.id].cost.toNumber()
+				player.m.landsAllocated[8] += cost;
+				player.m.allocated++;
+				player.m.buyables[16] = player.m.buyables[16].add(1)
+			},
+			style() {
+				return {
+					"height": "200px",
+				}
+			}
+		},
+		17: {
+			title: () => "Savanna Transportation",
+			cost(x) {
+				return Decimal.add(5, Decimal.pow(1.1, x)).ceil()
+			},
+			effect(x) {
+				return Decimal.pow(x.add(1), 15 * Math.E)
+			},
+			display() { // Everything else displayed in the buyable button after the title
+				let data = tmp.buyables[this.layer][this.id]
+				return "You have " + format(player[this.layer].buyables[this.id], 0) + " savanna transportations, which are boosting point generation by ×" + format(data.effect) + "." + "\nAllocation cost: " + formatWhole(data.cost) + " savanna tiles and 1 managing power"
+			},
+			unl() { return true },
+			canAfford() { return (!player.m.landsUndoMode && Decimal.gte(player.m.landsAvailable[7] - player.m.landsAllocated[7], tmp.buyables.m[17].cost) && player.m.points.mul(2).sub(player.m.allocated).gte(1)) || (player.m.landsUndoMode && player.m.buyables[17].gte(1)) },
+			buy() {
+				cost = tmp.buyables[this.layer][this.id].cost.toNumber()
+				player.m.landsAllocated[7] += cost;
+				player.m.allocated++;
+				player.m.buyables[17] = player.m.buyables[17].add(1)
+			},
+			style() {
+				return {
+					"height": "200px",
+				}
+			}
+		},
+		18: {
+			title: () => "Desert Transportation",
+			cost(x) {
+				return Decimal.add(5, Decimal.pow(1.1, x)).ceil()
+			},
+			effect(x) {
+				return Decimal.pow(x.add(1), 18 * Math.E)
+			},
+			display() { // Everything else displayed in the buyable button after the title
+				let data = tmp.buyables[this.layer][this.id]
+				return "You have " + format(player[this.layer].buyables[this.id], 0) + " desert transportations, which are boosting point generation by ×" + format(data.effect) + "." + "\nAllocation cost: " + formatWhole(data.cost) + " desert tiles and 1 managing power"
+			},
+			unl() { return true },
+			canAfford() { return (!player.m.landsUndoMode && Decimal.gte(player.m.landsAvailable[4] - player.m.landsAllocated[4], tmp.buyables.m[18].cost) && player.m.points.mul(2).sub(player.m.allocated).gte(1)) || (player.m.landsUndoMode && player.m.buyables[18].gte(1)) },
+			buy() {
+				cost = tmp.buyables[this.layer][this.id].cost.toNumber()
+				player.m.landsAllocated[4] += cost;
+				player.m.allocated++;
+				player.m.buyables[18] = player.m.buyables[18].add(1)
+			},
+			style() {
+				return {
+					"height": "200px",
+				}
+			}
+		},
+		19: {
+			title: () => "Fish Farm",
+			cost(x) {
+				return Decimal.add(1, Decimal.pow(1.1, x)).ceil()
+			},
+			effect(x) {
+				return Decimal.pow(x.add(1), 100 * Math.E)
+			},
+			display() { // Everything else displayed in the buyable button after the title
+				let data = tmp.buyables[this.layer][this.id]
+				return "You have " + format(player[this.layer].buyables[this.id], 0) + " fish farms, which are boosting point generation by ×" + format(data.effect) + "." + "\nAllocation cost: " + formatWhole(data.cost) + " waters tiles and 1 managing power"
+			},
+			unl() { return true },
+			canAfford() { return (!player.m.landsUndoMode && Decimal.gte(player.m.landsAvailable[0] - player.m.landsAllocated[0], tmp.buyables.m[19].cost) && player.m.points.mul(2).sub(player.m.allocated).gte(1)) || (player.m.landsUndoMode && player.m.buyables[19].gte(1)) },
+			buy() {
+				cost = tmp.buyables[this.layer][this.id].cost.toNumber()
+				player.m.landsAllocated[0] += cost;
+				player.m.allocated++;
+				player.m.buyables[19] = player.m.buyables[19].add(1)
+			},
+			style() {
+				return {
+					"height": "200px",
+				}
+			}
+		},
+		20: {
+			title: () => "Ice Farm",
+			cost(x) {
+				return Decimal.add(1, Decimal.pow(1.1, x)).ceil()
+			},
+			effect(x) {
+				return Decimal.pow(x.add(1), 250 * Math.E)
+			},
+			display() { // Everything else displayed in the buyable button after the title
+				let data = tmp.buyables[this.layer][this.id]
+				return "You have " + format(player[this.layer].buyables[this.id], 0) + " ice farms, which are boosting point generation by ×" + format(data.effect) + "." + "\nAllocation cost: " + formatWhole(data.cost) + " iced waters tiles and 1 managing power"
+			},
+			unl() { return true },
+			canAfford() { return (!player.m.landsUndoMode && Decimal.gte(player.m.landsAvailable[9] - player.m.landsAllocated[9], tmp.buyables.m[20].cost) && player.m.points.mul(2).sub(player.m.allocated).gte(1)) || (player.m.landsUndoMode && player.m.buyables[20].gte(1)) },
+			buy() {
+				cost = tmp.buyables[this.layer][this.id].cost.toNumber()
+				player.m.landsAllocated[9] += cost;
+				player.m.allocated++;
+				player.m.buyables[20] = player.m.buyables[20].add(1)
+			},
+			style() {
+				return {
+					"height": "200px",
+				}
+			}
+		},
+	},
+	
+	microtabs: {
+		stuff: {
+			milestones: { title: () => "Milestones", unl: () => hasMilestone("m", 8), content: [
+				"milestones"
+			]},
+			lands: { title: () => "Land & Jobs Management", unl: () => hasMilestone("m", 8), content: [
+				["display-text",
+					function () { return "You have allocated " + format(player.m.allocated, 0) + " / " + format(player.m.points.mul(2), 0) + ` managing power.<h5>Each manager gives 2 managing power.<br/>Total land multiplier to point generation: ×` + format(tmp.landMul) }],
+				["blank", "5px"],
+				"respec-button",
+				["blank", "5px"],
+				["display-text",
+					function () { return "<h3>[<span style='color:#7FFF00'>;;;</span>] Grasslands</h3><h5>" + formatWhole(player.m.landsAllocated[1]) + " / " + formatWhole(player.m.landsAvailable[1]) + " allocated</h5>" + "<br/><p style='color:transparent; font-size:0.001px'>" + format(player.time) + "</p>" }],
+				["row", [["buyable", 11]]],
+				["blank", "5px"],
+				["display-text",
+					function () { return "<h3>[<span style='color:#FFFFFF'>:::</span>] Tundra</h3><h5>" + formatWhole(player.m.landsAllocated[5]) + " / " + formatWhole(player.m.landsAvailable[5]) + " allocated</h5>" + "<br/><p style='color:transparent; font-size:0.001px'>" + format(player.time) + "</p>" }],
+				["row", [["buyable", 12]]],
+				["blank", "5px"],
+				["display-text",
+					function () { return "<h3>[<span style='color:#7FFF00'>^^^</span>] Mountains</h3><h5>" + formatWhole(player.m.landsAllocated[2]) + " / " + formatWhole(player.m.landsAvailable[2]) + " allocated</h5>" + "<br/><p style='color:transparent; font-size:0.001px'>" + format(player.time) + "</p>" }],
+				["row", [["buyable", 13]]],
+				["blank", "5px"],
+				["display-text",
+					function () { return "<h3>[<span style='color:#FFFFFF'>AAA</span>] Tall Mountains</h3><h5>" + formatWhole(player.m.landsAllocated[3]) + " / " + formatWhole(player.m.landsAvailable[3]) + " allocated</h5>" + "<br/><p style='color:transparent; font-size:0.001px'>" + format(player.time) + "</p>" }],
+				["row", [["buyable", 14]]],
+				["blank", "5px"],
+				["display-text",
+					function () { return "<h3>[<span style='color:#00FF00'>TTT</span>] Forest</h3><h5>" + formatWhole(player.m.landsAllocated[6]) + " / " + formatWhole(player.m.landsAvailable[6]) + " allocated</h5>" + "<br/><p style='color:transparent; font-size:0.001px'>" + format(player.time) + "</p>" }],
+				["row", [["buyable", 15]]],
+				["blank", "5px"],
+				["display-text",
+					function () { return "<h3>[<span style='color:#007F00'>♠♠♠</span>] Rainforest</h3><h5>" + formatWhole(player.m.landsAllocated[8]) + " / " + formatWhole(player.m.landsAvailable[8]) + " allocated</h5>" + "<br/><p style='color:transparent; font-size:0.001px'>" + format(player.time) + "</p>" }],
+				["row", [["buyable", 16]]],
+				["blank", "5px"],
+				["display-text",
+					function () { return "<h3>[<span style='color:#FFFF7F'>,,,</span>] Savanna</h3><h5>" + formatWhole(player.m.landsAllocated[7]) + " / " + formatWhole(player.m.landsAvailable[7]) + " allocated</h5>" + "<br/><p style='color:transparent; font-size:0.001px'>" + format(player.time) + "</p>" }],
+				["row", [["buyable", 17]]],
+				["blank", "5px"],
+				["display-text",
+					function () { return "<h3>[<span style='color:#FFFF7F'>...</span>] Desert</h3><h5>" + formatWhole(player.m.landsAllocated[4]) + " / " + formatWhole(player.m.landsAvailable[4]) + " allocated</h5>" + "<br/><p style='color:transparent; font-size:0.001px'>" + format(player.time) + "</p>" }],
+				["row", [["buyable", 18]]],
+				["blank", "5px"],
+				["display-text",
+					function () { return "<h3>[<span style='color:#0000FF'>~~~</span>] Waters</h3><h5>" + formatWhole(player.m.landsAllocated[0]) + " / " + formatWhole(player.m.landsAvailable[0]) + " allocated</h5>" + "<br/><p style='color:transparent; font-size:0.001px'>" + format(player.time) + "</p>" }],
+				["row", [["buyable", 19]]],
+				["blank", "5px"],
+				["display-text",
+					function () { return "<h3>[<span style='color:#7F7FFF'>~~~</span>] Iced Waters</h3><h5>" + formatWhole(player.m.landsAllocated[9]) + " / " + formatWhole(player.m.landsAvailable[9]) + " allocated</h5>" + "<br/><p style='color:transparent; font-size:0.001px'>" + format(player.time) + "</p>" }],
+				["row", [["buyable", 20]]],
+				["blank", "5px"],
+			]},
+		}
 	},
 
 	tabFormat:
@@ -106,8 +442,8 @@ addLayer("m", {
 			["blank", "5px"],
 			["display-text",
 				function () { return "You have at best " + format(player.m.best, 0) + " " + " managers." }],
-			["blank", "5px"],
-			"milestones", "upgrades"],
+			["blank", "5px"], ["microtabs", "stuff"],
+		],
 
 	hotkeys: [
 		{ key: "m", desc: "M: Hire managers", onPress() { doReset(this.layer) } },
@@ -440,6 +776,7 @@ addLayer("t", {
 			autoAutoToggles: false,
 			autoWorkerUpgrade: false,
 			autoFinderUpgrade: false,
+			autoSpells: false,
 		}
 	},
 
@@ -578,6 +915,12 @@ addLayer("t", {
 			requirementDesc: () => "6 Territories",
 			done() { return player[this.layer].best.gte(6) },
 			effectDesc: () => "You can bulk explore territories.",
+		},
+		4: {
+			requirementDesc: () => "15 Territories",
+			done() { return player[this.layer].best.gte(15) },
+			effectDesc: () => "You can automate casting spells.",
+			toggles: [["t", "autoSpells"]],
 		},
 	},
 	
@@ -924,7 +1267,7 @@ addLayer("wi", {
 	
 	
 	upgrades: {
-		rows: 3,
+		rows: 8,
 		cols: 5,
 		11: {
 			desc: () => "Knowledge boosts your first row of coin boost upgrades.",
@@ -965,18 +1308,29 @@ addLayer("wi", {
 			style() { return {"background-color": "var(--background)", "color": "#fff2"} },
 		},
 		14: {
-			desc: () => "Not yet implemented.",
-			cost: () => new Decimal(0),
+			desc: () => "Reduces the “Convert spiritual power into castable magic fountain” cost scaling.",
+			cost: () => new Decimal(25000),
+			currencyLayer: "wi",
+			currencyInternalName: "knowledge",
+			currencyDisplayName: "knowledge",
 			unl() { return player[this.layer].unl },
-			extraReq() { return false },
-			effect() {},
+			extraReq() { return hasUpg("wi", 24) && player.wi.points.gt(player.wi.bought) },
+			onPurchase() { player.wi.spent = Decimal.add(player.wi.spent, tmp.upgrades.wi[14].cost); player.wi.bought = Decimal.add(player.wi.bought, 1) }
 		},
 		15: {
-			desc: () => "Not yet implemented.",
-			cost: () => new Decimal(0),
+			desc: () => "Raise the “Use spiritual power to power magic in advanced spells” upgrade based on schools.",
+			cost: () => new Decimal(50000),
+			currencyLayer: "wi",
+			currencyInternalName: "knowledge",
+			currencyDisplayName: "knowledge",
 			unl() { return player[this.layer].unl },
-			extraReq() { return false },
-			effect() {},
+			extraReq() { return (hasUpg("wi", 14) || hasUpg("wi", 25)) && player.wi.points.gt(player.wi.bought) },
+			effect() {
+				let ret = Decimal.pow(player.bd.buyables[31], 0.5).div(5).add(1)
+				return ret;
+			},
+			effectDisplay(fx) { return "^" + format(fx) },
+			onPurchase() { player.wi.spent = Decimal.add(player.wi.spent, tmp.upgrades.wi[15].cost); player.wi.bought = Decimal.add(player.wi.bought, 1) }
 		},
 		21: {
 			desc: () => "Knowledge boosts your second row of coin boost upgrades.",
@@ -1010,25 +1364,33 @@ addLayer("wi", {
 		},
 		23: {
 			desc: () => "Unlocks a new banking option.",
-			cost: () => new Decimal(7500),
+			cost: () => new Decimal(10000),
 			currencyLayer: "wi",
 			currencyInternalName: "knowledge",
 			currencyDisplayName: "knowledge",
 			unl() { return player[this.layer].unl },
 			extraReq() { return hasUpg("wi", 22) && player.wi.points.gt(player.wi.bought) },
-			onPurchase() { player.wi.spent = Decimal.add(player.wi.spent, tmp.upgrades.wi[22].cost); player.wi.bought = Decimal.add(player.wi.bought, 1) }
+			onPurchase() { player.wi.spent = Decimal.add(player.wi.spent, tmp.upgrades.wi[23].cost); player.wi.bought = Decimal.add(player.wi.bought, 1) }
 		},
 		24: {
-			desc: () => "Not yet implemented.",
-			cost: () => new Decimal(0),
+			desc: () => "You gain 100% of your spiritual power gain on reset every second.",
+			cost: () => new Decimal(25000),
+			currencyLayer: "wi",
+			currencyInternalName: "knowledge",
+			currencyDisplayName: "knowledge",
 			unl() { return player[this.layer].unl },
-			extraReq() { return false },
+			extraReq() { return hasUpg("wi", 23) && player.wi.points.gt(player.wi.bought) },
+			onPurchase() { player.wi.spent = Decimal.add(player.wi.spent, tmp.upgrades.wi[24].cost); player.wi.bought = Decimal.add(player.wi.bought, 1) }
 		},
 		25: {
-			desc: () => "Not yet implemented.",
-			cost: () => new Decimal(0),
+			desc: () => "Reduces the “Extend the fabric of time using spiritual power” cost scaling.",
+			cost: () => new Decimal(25000),
+			currencyLayer: "wi",
+			currencyInternalName: "knowledge",
+			currencyDisplayName: "knowledge",
 			unl() { return player[this.layer].unl },
-			extraReq() { return false },
+			extraReq() { return hasUpg("wi", 24) && player.wi.points.gt(player.wi.bought) },
+			onPurchase() { player.wi.spent = Decimal.add(player.wi.spent, tmp.upgrades.wi[25].cost); player.wi.bought = Decimal.add(player.wi.bought, 1) }
 		},
 		31: {
 			desc: () => "You thought it was a discovery, but it was me, A Brick!",
@@ -1064,6 +1426,172 @@ addLayer("wi", {
 		},
 		35: {
 			desc: () => "Not yet implemented.",
+			cost: () => new Decimal(0),
+			unl() { return player[this.layer].unl },
+			extraReq() { return false },
+		},
+		41: {
+			desc: () => "Not yet implemented.",
+			cost: () => new Decimal(0),
+			unl() { return player[this.layer].unl },
+			extraReq() { return false },
+		},
+		42: {
+			desc: () => "Not yet implemented.",
+			cost: () => new Decimal(0),
+			unl() { return player[this.layer].unl },
+			extraReq() { return false },
+		},
+		43: {
+			desc: () => "Not yet implemented.",
+			cost: () => new Decimal(0),
+			unl() { return player[this.layer].unl },
+			extraReq() { return false },
+		},
+		44: {
+			desc: () => "Not yet implemented.",
+			cost: () => new Decimal(0),
+			unl() { return player[this.layer].unl },
+			extraReq() { return false },
+		},
+		45: {
+			desc: () => "Not yet implemented.",
+			cost: () => new Decimal(0),
+			unl() { return player[this.layer].unl },
+			extraReq() { return false },
+		},
+		51: {
+			desc: () => "Its-a-me, Brick-io!",
+			cost: () => Decimal.dInf,
+			unl() { return player[this.layer].unl },
+			extraReq() { return false },
+			effect() {},
+			style() { return {"background-color": "var(--background)", "color": "#fff2"} },
+		},
+		52: {
+			desc: () => "get bricked lol",
+			cost: () => Decimal.dInf,
+			unl() { return player[this.layer].unl },
+			extraReq() { return false },
+			effect() {},
+			style() { return {"background-color": "var(--background)", "color": "#fff2"} },
+		},
+		53: {
+			desc: () => "Not yet implemented.",
+			cost: () => new Decimal(0),
+			unl() { return player[this.layer].unl },
+			extraReq() { return false },
+		},
+		54: {
+			desc: () => "If you haven't realized it already, you can not discover bricked discoveries.",
+			cost: () => Decimal.dInf,
+			unl() { return player[this.layer].unl },
+			extraReq() { return false },
+			effect() {},
+			style() { return {"background-color": "var(--background)", "color": "#fff2"} },
+		},
+		55: {
+			desc: () => "It's not just a placeholder, it's a brick.",
+			cost: () => Decimal.dInf,
+			unl() { return player[this.layer].unl },
+			extraReq() { return false },
+			effect() {},
+			style() { return {"background-color": "var(--background)", "color": "#fff2"} },
+		},
+		61: {
+			desc: () => "Not yet implemented.",
+			cost: () => new Decimal(0),
+			unl() { return player[this.layer].unl },
+			extraReq() { return false },
+		},
+		62: {
+			desc: () => "Not yet implemented.",
+			cost: () => new Decimal(0),
+			unl() { return player[this.layer].unl },
+			extraReq() { return false },
+		},
+		63: {
+			desc: () => "Not yet implemented.",
+			cost: () => new Decimal(0),
+			unl() { return player[this.layer].unl },
+			extraReq() { return false },
+		},
+		64: {
+			desc: () => "Not yet implemented.",
+			cost: () => new Decimal(0),
+			unl() { return player[this.layer].unl },
+			extraReq() { return false },
+		},
+		65: {
+			desc: () => "Not yet implemented.",
+			cost: () => new Decimal(0),
+			unl() { return player[this.layer].unl },
+			extraReq() { return false },
+		},
+		71: {
+			desc: () => "Not yet implemented.",
+			cost: () => new Decimal(0),
+			unl() { return player[this.layer].unl },
+			extraReq() { return false },
+		},
+		72: {
+			desc: () => "Not yet implemented.",
+			cost: () => new Decimal(0),
+			unl() { return player[this.layer].unl },
+			extraReq() { return false },
+		},
+		73: {
+			desc: () => "This discovery is dimmed out, meaning this discovery it actually a brick and thus can not be discovered.",
+			cost: () => Decimal.dInf,
+			unl() { return player[this.layer].unl },
+			extraReq() { return false },
+			effect() {},
+			style() { return {"background-color": "var(--background)", "color": "#fff2"} },
+		},
+		74: {
+			desc: () => "Not yet implemented.",
+			cost: () => new Decimal(0),
+			unl() { return player[this.layer].unl },
+			extraReq() { return false },
+		},
+		75: {
+			desc: () => "Not yet implemented.",
+			cost: () => new Decimal(0),
+			unl() { return player[this.layer].unl },
+			extraReq() { return false },
+		},
+		81: {
+			desc: () => "This should unlock an another wisdom tree but it's not yet implemented.",
+			cost: () => new Decimal(0),
+			unl() { return player[this.layer].unl },
+			extraReq() { return false },
+		},
+		82: {
+			desc: () => "Unfortunately, we no longer be able to find anymore brick puns so enjoy this line instead.",
+			cost: () => Decimal.dInf,
+			unl() { return player[this.layer].unl },
+			extraReq() { return false },
+			effect() {},
+			style() { return {"background-color": "var(--background)", "color": "#fff2"} },
+		},
+		83: {
+			desc: () => "Yay! You found me! I'm a brick!.",
+			cost: () => Decimal.dInf,
+			unl() { return player[this.layer].unl },
+			extraReq() { return false },
+			effect() {},
+			style() { return {"background-color": "var(--background)", "color": "#fff2"} },
+		},
+		84: {
+			desc: () => "Don't look at me, I'm a brick, you should be looking at this instead ->",
+			cost: () => Decimal.dInf,
+			unl() { return player[this.layer].unl },
+			extraReq() { return false },
+			effect() {},
+			style() { return {"background-color": "var(--background)", "color": "#fff2"} },
+		},
+		85: {
+			desc: () => "This should unlock an another wisdom tree but it's not yet implemented.",
 			cost: () => new Decimal(0),
 			unl() { return player[this.layer].unl },
 			extraReq() { return false },

@@ -230,6 +230,14 @@ function loadVue() {
 		</div>
 		`
 	})
+	Vue.component('respec-button', {
+		props: ['layer', 'data'],
+		template: `
+		<div v-if="layers[layer].buyables" class="upgTable">
+			<button v-if="layers[layer].buyables.respec" v-on:click="respecBuyables(layer)" v-bind:class="{ longUpg: true, can: player[layer].unl, locked: !player[layer].unl }">{{layers[layer].buyables.respecText ? tmp.buyables[layer].respecText : "Respec"}}</button>
+		</div>
+		`
+	})
 
 	// data = id of buyable
 	Vue.component('buyable', {
@@ -342,7 +350,7 @@ function loadVue() {
 	
 	Vue.component('map-box', {
 		template: `
-			<canvas id="mapbox" style="font-stretch:150%" width="500px" height="449px" onmousedown="onMapMouseDown(event)" onmousemove="onMapMouseMove(event)" onmouseup="onMapMouseUp(event)">
+			<canvas id="mapbox" style="font-stretch:150%" width="500px" height="455px" onmousedown="onMapMouseDown(event)" onmousemove="onMapMouseMove(event)" onmouseup="onMapMouseUp(event)">
 			</canvas>
 		`
 	})
@@ -372,7 +380,8 @@ function loadVue() {
 			VERSION,
 			ENDGAME,
 			LAYERS,
-			hotkeys
+			hotkeys,
+			modal
 		},
 	})
 }
