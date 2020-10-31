@@ -483,6 +483,7 @@ addLayer("b", {
 				if (hasUpg("w", 25)) eff = eff.pow(layers.w.upgrades[25].effect())
 				if (hasUpg("wi", 22)) eff = eff.mul(layers.wi.upgrades[22].effect())
 				if (eff.gte(1e45)) eff = eff.mul(1e45).sqrt()
+				if (player.sp.buyables[28].gt(0) && tmp.buyables.sp[28].effect.sqrt) eff = eff.mul(tmp.buyables.sp[28].effect.sqrt())
 				return eff
 			},
 			display() { // Everything else displayed in the buyable button after the title
@@ -518,6 +519,7 @@ addLayer("b", {
 				if (hasUpg("w", 25)) eff = eff.pow(layers.w.upgrades[25].effect())
 				if (hasUpg("wi", 22)) eff = eff.mul(layers.wi.upgrades[22].effect())
 				if (eff.gte(1e45)) eff = eff.mul(1e45).sqrt()
+				if (player.sp.buyables[28].gt(0) && tmp.buyables.sp[28].effect.sqrt) eff = eff.mul(tmp.buyables.sp[28].effect.sqrt())
 				return eff
 			},
 			display() { // Everything else displayed in the buyable button after the title
@@ -553,6 +555,7 @@ addLayer("b", {
 				if (hasUpg("w", 25)) eff = eff.pow(layers.w.upgrades[25].effect())
 				if (hasUpg("wi", 22)) eff = eff.mul(layers.wi.upgrades[22].effect())
 				if (eff.gte(1e45)) eff = eff.mul(1e45).sqrt()
+				if (player.sp.buyables[28].gt(0) && tmp.buyables.sp[28].effect.sqrt) eff = eff.mul(tmp.buyables.sp[28].effect.sqrt())
 				return eff
 			},
 			display() { // Everything else displayed in the buyable button after the title
@@ -583,6 +586,7 @@ addLayer("b", {
 				if (tmp.buyables.b[23]) eff = eff.mul(tmp.buyables.b[23].effect)
 				if (tmp.buyables.b[31]) eff = eff.mul(tmp.buyables.b[31].effect)
 				if (eff.gte(1e15)) eff = eff.mul(1e15).sqrt()
+				if (player.sp.buyables[28].gt(0) && tmp.buyables.sp[28].effect.sqrt) eff = eff.mul(tmp.buyables.sp[28].effect.sqrt())
 				return eff
 			},
 			display() { // Everything else displayed in the buyable button after the title
@@ -612,6 +616,7 @@ addLayer("b", {
 				if (tmp.buyables.b[23]) eff = eff.mul(tmp.buyables.b[23].effect)
 				if (tmp.buyables.b[31]) eff = eff.mul(tmp.buyables.b[31].effect)
 				if (eff.gte(1e15)) eff = eff.mul(1e15).sqrt()
+				if (player.sp.buyables[28].gt(0) && tmp.buyables.sp[28].effect.sqrt) eff = eff.mul(tmp.buyables.sp[28].effect.sqrt())
 				return eff
 			},
 			display() {
@@ -640,6 +645,7 @@ addLayer("b", {
 				var eff = player[this.layer].buyables[this.id].mul(2.5).add(1).pow(0.6)
 				if (tmp.buyables.b[31]) eff = eff.mul(tmp.buyables.b[31].effect)
 				if (eff.gte(1e15)) eff = eff.mul(1e15).sqrt()
+				if (player.sp.buyables[28].gt(0) && tmp.buyables.sp[28].effect.sqrt) eff = eff.mul(tmp.buyables.sp[28].effect.sqrt())
 				return eff
 			},
 			display() {
@@ -668,6 +674,7 @@ addLayer("b", {
 			},	
 			effect(x) { 	
 				var eff = player[this.layer].buyables[this.id].add(1).pow(0.6)	
+				if (player.sp.buyables[28].gt(0) && tmp.buyables.sp[28].effect.sqrt) eff = eff.mul(tmp.buyables.sp[28].effect.sqrt())
 				return eff	
 			},	
 			display() { 	
@@ -757,6 +764,8 @@ addLayer("b", {
 			for (var a = 1; a <= mults.length; a++) {
 				let layer = Math.floor(a / 3 + 1) * 10 + ((a % 3) + 1)
 				let realMult = tmp.buyables.b[33].effect.mul(mults[a-1])
+				if (player.sp.buyables[28].gt(0)) realMult = realMult.mul(tmp.buyables.sp[28].effect)
+				
 				player.b.buyables[curr] = player.b.buyables[curr].add(Decimal.mul(player.b.buyables[layer], diff).mul(realMult))
 				curr = layer
 			}
@@ -825,7 +834,9 @@ addLayer("sp", {
 	},
 
 	gainMult() {
-		return new Decimal(1)
+		let ret = new Decimal(1)
+		if (hasUpg("wi", 45)) ret = ret.mul(tmp.upgrades.wi[45].effect)
+		return ret
 	},
 	gainExp() {
 		return new Decimal(1)
@@ -833,7 +844,7 @@ addLayer("sp", {
 	
 	buyables: {
 		rows: 2,
-		cols: 7,
+		cols: 8,
 		11: {
 			title: () => "Convert spiritual power into castable magic fountain",
 			cost(x) {
@@ -868,7 +879,7 @@ addLayer("sp", {
 		12: {
 			title: () => "Extend the fabric of time using spiritual power",
 			cost(x) {
-				let inc = hasUpg("wi", 14) ? 1.15 : 1.3
+				let inc = hasUpg("wi", 25) ? 1.15 : 1.3
 				let cost = Decimal.pow(1e10, Decimal.pow(inc, x))
 				return cost.floor()
 			},
@@ -977,6 +988,15 @@ addLayer("sp", {
 			buy() { },
 		},
 		17: {
+			title: () => "Placeholder.",
+			cost(x) { return new Decimal("1ee308") },
+			effect(x) { return new Decimal("1") },
+			display() { return "" },
+			unl() { return false },
+			canAfford() { return false },
+			buy() { },
+		},
+		18: {
 			title: () => "Placeholder.",
 			cost(x) { return new Decimal("1ee308") },
 			effect(x) { return new Decimal("1") },
@@ -1258,17 +1278,60 @@ addLayer("sp", {
 				}
 			}
 		},
+		28: {
+			title: () => "Spell of Savings",
+			cost(x) {
+				return new Decimal(18000)
+			},
+			effect(x) { 
+			
+				let sec = new Decimal(0)
+				for (var a = 21; a < 28; a++) {
+					sec = sec.add(player.sp.buyables[a])
+				}
+			
+				let eff = sec.sqrt().mul(2).pow(sec.add(1).log(100).add(1)).add(100).pow(sec.add(1).log(1e100).add(1)).pow(2)
+				return eff
+			},
+			display() { // Everything else displayed in the buyable button after the title
+				let data = tmp.buyables[this.layer][this.id]
+				return (player.sp.buyables[28].lte(0) ? "Duration on cast: " + formatTime(60) : "Time left: " + formatTime(player.sp.buyables[28])) + "\n\
+				Casting cost: " + format(data.cost) + " magic\n\
+				Multiplies all of your first 8 bankings' generation speed by ×" + format(data.effect, 3) + " and boost their effects by ×" + format(data.effect.sqrt(), 3) + " (based on your total amount of time left on normal spells)."
+			},
+			unl() { return hasUpg("wi", 44) },
+			canAfford() {
+				return Decimal.gte(player.sp.magic, tmp.buyables[this.layer][this.id].cost) && player.sp.buyables[28].lte(0)
+			},
+			buy() {
+				player.sp.magic = Decimal.sub(player.sp.magic, tmp.buyables[this.layer][this.id].cost)
+				player[this.layer].buyables[this.id] = new Decimal(60)
+			},
+			style() {
+				if (player.sp.buyables[28].lte(0)) {
+					return {
+						"height": "200px",
+					}
+				} else {
+					return {
+						"height": "200px",
+						"color": "#FFAAFF",
+						"background-color": "#330033"
+					}
+				}
+			}
+		},
 	},
 	
 	
 	update(diff) {
 		player.sp.magic = Decimal.add(player.sp.magic, tmp.buyables.sp[11].effect.mul(diff))
-		for (var a = 21; a <= 27; a++) {
+		for (var a = 21; a <= 28; a++) {
 			player.sp.buyables[a] = Decimal.sub(player.sp.buyables[a], diff).max(0)
-			if (player.t.autoSpells && tmp.buyables.sp[a].canAfford) buyBuyable("sp", a)
+			if (a <= 27 && player.t.autoSpells && tmp.buyables.sp[a].canAfford) buyBuyable("sp", a)
 		}
 		
-		if (hasUpg("wi", 24) && tmp.gainExp !== undefined) {
+		if (hasUpg("wi", 24) && player.sp.unl && tmp.gainExp !== undefined) {
 			let delta = tmp.resetGain["sp"].mul(1).mul(diff)
 			addPoints("sp", delta)
 		}
@@ -1291,6 +1354,8 @@ addLayer("sp", {
 				["row", [["buyable", "21"], ["buyable", "22"], ["buyable", "23"]]],
 				["row", [["buyable", "24"], ["buyable", "25"], ["buyable", "26"]]],
 				["row", [["buyable", "27"]]],
+				["blank", "5px"],
+				["row", [["buyable", "28"]]],
 				["blank", "5px"],
 			] },
         },

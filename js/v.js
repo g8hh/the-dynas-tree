@@ -328,7 +328,7 @@ function loadVue() {
 		template: `
 			<div class="mini-bar">
 				<div class="mini-bar-fill" v-bind:style="[{
-						'width': 'max(calc(' + (readData(data) * 100) + '% - 4px), 7px)'
+						'width': 'max(calc(' + (readData(data) * 100) + '% - 4px), 5px)'
 					}, style]">
 					&nbsp;
 				</div>

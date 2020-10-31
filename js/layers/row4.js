@@ -122,7 +122,7 @@ addLayer("m", {
 		11: {
 			title: () => "Farmlands",
 			cost(x) {
-				return Decimal.add(8, Decimal.pow(1.1, x)).ceil()
+				return Decimal.add(8, Decimal.pow(1.2, x)).ceil()
 			},
 			effect(x) {
 				return Decimal.pow(x.add(1), 12 * Math.E)
@@ -148,7 +148,7 @@ addLayer("m", {
 		12: {
 			title: () => "Sheep Farm",
 			cost(x) {
-				return Decimal.add(5, Decimal.pow(1.1, x)).ceil()
+				return Decimal.add(5, Decimal.pow(1.2, x)).ceil()
 			},
 			effect(x) {
 				return Decimal.pow(x.add(1), 15 * Math.E)
@@ -174,7 +174,7 @@ addLayer("m", {
 		13: {
 			title: () => "Mine",
 			cost(x) {
-				return Decimal.add(3, Decimal.pow(1.1, x)).ceil()
+				return Decimal.add(3, Decimal.pow(1.2, x)).ceil()
 			},
 			effect(x) {
 				return Decimal.pow(x.add(1), 20 * Math.E)
@@ -200,7 +200,7 @@ addLayer("m", {
 		14: {
 			title: () => "Large Mine",
 			cost(x) {
-				return Decimal.add(1, Decimal.pow(1.1, x)).ceil()
+				return Decimal.add(1, Decimal.pow(1.2, x)).ceil()
 			},
 			effect(x) {
 				return Decimal.pow(x.add(1), 30 * Math.E)
@@ -226,7 +226,7 @@ addLayer("m", {
 		15: {
 			title: () => "Wood Workshop",
 			cost(x) {
-				return Decimal.add(5, Decimal.pow(1.1, x)).ceil()
+				return Decimal.add(5, Decimal.pow(1.2, x)).ceil()
 			},
 			effect(x) {
 				return Decimal.pow(x.add(1), 16 * Math.E)
@@ -252,7 +252,7 @@ addLayer("m", {
 		16: {
 			title: () => "Large Wood Workshop",
 			cost(x) {
-				return Decimal.add(5, Decimal.pow(1.1, x)).ceil()
+				return Decimal.add(5, Decimal.pow(1.2, x)).ceil()
 			},
 			effect(x) {
 				return Decimal.pow(x.add(1), 18 * Math.E)
@@ -278,7 +278,7 @@ addLayer("m", {
 		17: {
 			title: () => "Savanna Transportation",
 			cost(x) {
-				return Decimal.add(5, Decimal.pow(1.1, x)).ceil()
+				return Decimal.add(5, Decimal.pow(1.2, x)).ceil()
 			},
 			effect(x) {
 				return Decimal.pow(x.add(1), 15 * Math.E)
@@ -304,7 +304,7 @@ addLayer("m", {
 		18: {
 			title: () => "Desert Transportation",
 			cost(x) {
-				return Decimal.add(5, Decimal.pow(1.1, x)).ceil()
+				return Decimal.add(5, Decimal.pow(1.2, x)).ceil()
 			},
 			effect(x) {
 				return Decimal.pow(x.add(1), 18 * Math.E)
@@ -330,7 +330,7 @@ addLayer("m", {
 		19: {
 			title: () => "Fish Farm",
 			cost(x) {
-				return Decimal.add(1, Decimal.pow(1.1, x)).ceil()
+				return Decimal.add(1, Decimal.pow(1.2, x)).ceil()
 			},
 			effect(x) {
 				return Decimal.pow(x.add(1), 100 * Math.E)
@@ -356,7 +356,7 @@ addLayer("m", {
 		20: {
 			title: () => "Ice Farm",
 			cost(x) {
-				return Decimal.add(1, Decimal.pow(1.1, x)).ceil()
+				return Decimal.add(1, Decimal.pow(1.2, x)).ceil()
 			},
 			effect(x) {
 				return Decimal.pow(x.add(1), 250 * Math.E)
@@ -773,6 +773,7 @@ addLayer("t", {
 			points: new Decimal(0),
 			best: new Decimal(0),
 			total: new Decimal(0),
+			elo: new Decimal(1000),
 			autoAutoToggles: false,
 			autoWorkerUpgrade: false,
 			autoFinderUpgrade: false,
@@ -949,14 +950,16 @@ addLayer("t", {
             map: { title: () => "World Map", unl: () => player.so.buyables[13].gte(1), content: [
 				["blank", "5px"],
 				["display-text", function () { return "You have " + formatWhole(player.t.lands) + " conquered land, which are decreasing the territories' requirements by ÷" + format(tmp.layerEffs.t.territoryRed) + " and soldiers' requirements by ÷" + format(tmp.layerEffs.t.soldierRed) + "." }], 
+				["display-text", function () { return "Your current honor is " + formatWhole(player.t.elo) + "." }], 
 				["blank", "0px"], "map-box", ["blank", "0px"],
 				["info-box", [
 					["display-text", function () { return "Selected Tile: " + mapFocusDesc + "<br/><p style='color:transparent; font-size:0.001px'>" + format(player.time) + "</p>"}],
-					["display-text", function () { return (
-						mapFocusDesc === "Unselected" ? "<h5>Click on a tile on the map to view its details.<br/>Drag the tiles to move the map around.</h5>" :
-						isConquered(mapFocusX, mapFocusY) ? "<h5>This land has already been conquered.<br/>You can not reconquer the land that you already conquered, duh!</h5>" : 
-						!isConquerable(mapFocusX, mapFocusY) ? "<h5>You can not initialize conquering on this tile yet.<br/>Please select the tile that is closer to your land.</h5>" : 
-						"<h5>Difficulty: " + format(getMapDifficulty(mapFocusX, mapFocusY)) + " -> Best Conquer Time: " + formatTime(Decimal.div(getMapDifficulty(mapFocusX, mapFocusY), soldierStats.spd)) + (player.world.conquering && player.world.conquerX == mapFocusX && player.world.conquerY == mapFocusY ? "<br/>You are conquering this tile. Click it again to abort conquering." : "<br/>Click on the tile again to initialize conquering on that tile.")
+					["display-text", function () { 
+						let entCha = mapFocusDesc === "Unselected" ? 0 : getMapEncounterChance(mapFocusX, mapFocusY)
+					return (
+						mapFocusDesc === "Unselected" ? "<h5>Click on a tile on the map to view its details.<br/><br/>Drag the tiles to move the map around.</h5>" :
+						isConquered(mapFocusX, mapFocusY) ? "<h5>This land has already been conquered.<br/><br/>You can not reconquer the land that you already conquered, duh!</h5>" : 
+						"<h5>Difficulty: " + format(getMapDifficulty(mapFocusX, mapFocusY)) + " -> Best Conquer Time: " + formatTime(Decimal.div(getMapDifficulty(mapFocusX, mapFocusY), soldierStats.spd)) + "<br/>Encounter Chance: " + (entCha.eq(0) ? "not present" : "about " + (entCha.lt(1) ? "once every " + formatTime(Decimal.div(1, entCha)) : format(entCha, 3) + " every second")) + (isConquerable(mapFocusX, mapFocusY) ? (player.world.conquering && player.world.conquerX == mapFocusX && player.world.conquerY == mapFocusY ? "<br/>You are conquering this tile. Click it again to abort conquering." : "<br/>Click on the tile again to initialize conquering on that tile.") : "<br/>This tile is too far for you to initialize conquering.")
 					) + "<p style='color:transparent; font-size:0.001px'>" + format(player.time) + "</p>" }]
 					], {"width": "480px"}
 				], 
@@ -966,28 +969,30 @@ addLayer("t", {
 						["mini-bar", function () { return format(Decimal.div(player.world.health, soldierStats.mhp)) }, {"background-color": "#300"}],
 						["display-text", function () { return "<h5>Health: " + formatWhole(player.world.health) + " / " + formatWhole(soldierStats.mhp) + "</h5>" }],
 						["display-text", function () { return "<h5>Power: " + formatWhole(Decimal.div(player.world.health, soldierStats.mhp).mul(soldierStats.atk)) + " / " + formatWhole(soldierStats.atk) + "</h5>" }],
+						["display-text", function () { return "<h5>Honor: " + format(player.t.elo) + "</h5>" }],
 						], {"width": "228px"}
 					], 
 					["info-box", [
-						["display-text", function () { return "Your Encounters<h5 style='font-size:6px'><br/>" }],
-						["mini-bar", function () { return format(Decimal.div(player.world.health, soldierStats.mhp)) }, {"background-color": "#300"}],
-						["display-text", function () { return "<h5>Health: " + formatWhole(player.world.health) + " / " + formatWhole(soldierStats.mhp) + "</h5>" }],
-						["display-text", function () { return "<h5>Power: " + formatWhole(Decimal.div(player.world.health, soldierStats.mhp).mul(soldierStats.atk)) + " / " + formatWhole(soldierStats.atk) + "</h5>" }],
+						["display-text", function () { return (player.world.encounter ? player.world.encounter.name : "No Encounters") + "<h5 style='font-size:6px'><br/>" + "<p style='color:transparent; font-size:0.001px'>" + format(player.time) + "</p>" }],
+						["mini-bar", function () { return format(player.world.encounter ? Decimal.div(player.world.encounter.health, player.world.encounter.maxhealth) : 0) + (player.time * 10 % 1 ? "0" : "") }, {"background-color": "#300"}],
+						["display-text", function () { return "<h5>Health: " + (player.world.encounter ? formatWhole(player.world.encounter.health) + " / " + formatWhole(player.world.encounter.maxhealth) : "----- / -----") + "</h5>" + "<p style='color:transparent; font-size:0.001px'>" + format(player.time) + "</p>" }],
+						["display-text", function () { return "<h5>Power: " + (player.world.encounter ? formatWhole(Decimal.div(player.world.encounter.health, player.world.encounter.maxhealth).mul(player.world.encounter.power)) + " / " + formatWhole(player.world.encounter.power) : "----- / -----") + "</h5>" + "<p style='color:transparent; font-size:0.001px'>" + format(player.time) + "</p>" }],
+						["display-text", function () { return "<h5>Honor: " + (player.world.encounter ? format(player.world.encounter.elo) : "-----") + "</h5>" + "<p style='color:transparent; font-size:0.001px'>" + format(player.time) + "</p>" }],
 						], {"width": "228px"}
 					], 
 				]],
 				["info-box", [
 					["display-text", function () { return (
-						player.world.conquering ? "Conquering " + player.world.conquerTarget + "..." : "Solider Idle."
+						player.world.conquering ? "Conquering " + player.world.conquerTarget + "..." : "Soldiers are Idling."
 						) + "<p style='color:transparent; font-size:0.001px'>" + format(player.time) + "</p>"
 					}],
 					["display-text", function () { return (
-						player.world.conquering ? "<h5>Progress: " + formatWhole(player.world.conquerProgress) + " / " + formatWhole(player.world.conquerGoal) + "</h5>" : "<h5>Please select a land to be conquered</h5>"
-						) + "<p style='color:transparent; font-size:0.001px'>" + format(player.time) + "</p><h5 style='font-size:6px'><br/>"
+						player.world.conquering ? "<h5>Progress: " + formatWhole(player.world.conquerProgress) + " / " + formatWhole(player.world.conquerGoal) + "<br/>" + (player.world.encounter ? "Conquering is paused because soldiers are battling the encounters." : "ETA: " + formatTime(new Decimal(player.world.conquerGoal).sub(player.world.conquerProgress).div(Decimal.div(player.world.health, soldierStats.mhp).mul(soldierStats.spd))) + "</h5>") : "<h5>Please select a land to be conquered.<br/></h5>"
+						) + "<p style='color:transparent; font-size:0.001px'>" + format(player.time) + "</p>"
 					}],
-					["mini-bar", function () { return format(player.world.conquering ? Decimal.div(player.world.conquerProgress, player.world.conquerGoal) : 0) }, {"background-color": "#333"}],
 					], {"width": "480px"}
 				], 
+				["bar", function () { return format(player.world.conquering ? Decimal.div(player.world.conquerProgress, player.world.conquerGoal) : 0) }, {"background-color": "#333"}],
 				["blank", "5px"],
 				] 
 			},
@@ -997,10 +1002,34 @@ addLayer("t", {
 	update(diff) {
 		if (player.world === undefined) player.world = {}
 		if (player.world.conquering) {
-			player.world.conquerProgress = Decimal.add(player.world.conquerProgress, Decimal.mul(soldierStats ? soldierStats.spd : 0, diff))
-			if (player.world.conquerProgress.gte(player.world.conquerGoal)) {
-				player.world.conquerProgress = new Decimal(0)
-				doneConquering()
+			if (!soldierStats) {
+			}
+			else if (player.world.encounter) {
+				let ppow = Decimal.div(player.world.health, soldierStats.mhp).mul(soldierStats.atk)
+				let epow = Decimal.div(player.world.encounter.health, player.world.encounter.maxhealth).mul(player.world.encounter.power)
+				if (ppow.toString() !== "(e^NaN)NaN" && epow.toString() !== "(e^NaN)NaN") {
+					player.world.encounter.health = Decimal.sub(player.world.encounter.health, ppow.mul(diff))
+					player.world.health = Decimal.sub(player.world.health, epow.mul(diff))
+				}
+				
+				if (player.world.encounter.health.lte(0)) {
+					player.t.elo = getNewElo(player.t.elo, player.world.encounter.elo)
+					player.world.encounter = undefined
+				}
+				if (player.world.health.lte(0)) {
+					player.world.health = new Decimal(0)
+					abortConquering()
+				}
+			} else {
+				let delta = Decimal.div(player.world.health, soldierStats.mhp).mul(soldierStats ? soldierStats.spd : 0)
+				player.world.conquerProgress = Decimal.add(player.world.conquerProgress, Decimal.mul(delta, diff))
+				if (player.world.conquerProgress.gte(player.world.conquerGoal)) {
+					player.world.conquerProgress = new Decimal(0)
+					doneConquering()
+				}
+				var prob = Decimal.sub(1, Decimal.sub(1, player.world.encounterChance).pow(diff))
+				if (prob.gte(Math.random()))
+					player.world.encounter = getMapEncounter(player.world.conquerX, player.world.conquerY)
 			}
 		}
 	},
@@ -1250,11 +1279,15 @@ addLayer("wi", {
 	baseAmount() { return player.sp.points },
 	branches: [["w", 3], ["sp", 3]],
 
-	requires: () => new Decimal("e18"),
+	requires: () => {
+		let req = new Decimal("e18")
+		if (hasUpg("wi", 35)) req = req.div(tmp.upgrades.wi[35].effect)
+		return req
+	},
 
 	type: "static",
 	base: "2",
-	exponent: 2.65,
+	exponent: 2.58,
 	canBuyMax: () => true,
 	
 	effect() {
@@ -1373,7 +1406,7 @@ addLayer("wi", {
 			onPurchase() { player.wi.spent = Decimal.add(player.wi.spent, tmp.upgrades.wi[23].cost); player.wi.bought = Decimal.add(player.wi.bought, 1) }
 		},
 		24: {
-			desc: () => "You gain 100% of your spiritual power gain on reset every second.",
+			desc: () => "You gain 100% of your spiritual power gain on reset every second (only when you unlocked the layer).",
 			cost: () => new Decimal(25000),
 			currencyLayer: "wi",
 			currencyInternalName: "knowledge",
@@ -1425,10 +1458,19 @@ addLayer("wi", {
 			style() { return {"background-color": "var(--background)", "color": "#fff2"} },
 		},
 		35: {
-			desc: () => "Not yet implemented.",
-			cost: () => new Decimal(0),
+			desc: () => "Honor reduces the requirements of wisdom.",
+			cost: () => new Decimal(60000),
+			currencyLayer: "wi",
+			currencyInternalName: "knowledge",
+			currencyDisplayName: "knowledge",
 			unl() { return player[this.layer].unl },
-			extraReq() { return false },
+			extraReq() { return hasUpg("wi", 25) && player.wi.points.gt(player.wi.bought) },
+			effect() {
+				let ret = Decimal.sub(player.t.elo, 1000).pow(Decimal.log10(player.t.elo).pow(1.8)).pow(Decimal.log(player.t.elo, 1e10).add(1))
+				return ret;
+			},
+			effectDisplay(fx) { return "÷" + format(fx) },
+			onPurchase() { player.wi.spent = Decimal.add(player.wi.spent, tmp.upgrades.wi[35].cost); player.wi.bought = Decimal.add(player.wi.bought, 1) }
 		},
 		41: {
 			desc: () => "Not yet implemented.",
@@ -1449,18 +1491,37 @@ addLayer("wi", {
 			extraReq() { return false },
 		},
 		44: {
-			desc: () => "Not yet implemented.",
-			cost: () => new Decimal(0),
+			desc: () => "Unlocks a new exotic spell. Exotic spells are not affected by amount of shrines or spiritual power upgrades.",
+			cost: () => new Decimal(150000),
+			currencyLayer: "wi",
+			currencyInternalName: "knowledge",
+			currencyDisplayName: "knowledge",
 			unl() { return player[this.layer].unl },
-			extraReq() { return false },
+			extraReq() { return hasUpg("wi", 45) && player.wi.points.gt(player.wi.bought) },
+			onPurchase() { player.wi.spent = Decimal.add(player.wi.spent, tmp.upgrades.wi[44].cost); player.wi.bought = Decimal.add(player.wi.bought, 1) }
 		},
 		45: {
+			desc: () => "Knowledge boosts spiritual power gain.",
+			cost: () => new Decimal(100000),
+			currencyLayer: "wi",
+			currencyInternalName: "knowledge",
+			currencyDisplayName: "knowledge",
+			unl() { return player[this.layer].unl },
+			extraReq() { return hasUpg("wi", 35) && player.wi.points.gt(player.wi.bought) },
+			effect() {
+				let ret = Decimal.pow(player.wi.knowledge, 0.25).pow(Decimal.add(player.wi.knowledge, 1).log(100)).add(1)
+				return ret;
+			},
+			effectDisplay(fx) { return "÷" + format(fx) },
+			onPurchase() { player.wi.spent = Decimal.add(player.wi.spent, tmp.upgrades.wi[45].cost); player.wi.bought = Decimal.add(player.wi.bought, 1) }
+		},
+		51: {
 			desc: () => "Not yet implemented.",
 			cost: () => new Decimal(0),
 			unl() { return player[this.layer].unl },
 			extraReq() { return false },
 		},
-		51: {
+		52: {
 			desc: () => "Its-a-me, Brick-io!",
 			cost: () => Decimal.dInf,
 			unl() { return player[this.layer].unl },
@@ -1468,27 +1529,19 @@ addLayer("wi", {
 			effect() {},
 			style() { return {"background-color": "var(--background)", "color": "#fff2"} },
 		},
-		52: {
-			desc: () => "get bricked lol",
-			cost: () => Decimal.dInf,
-			unl() { return player[this.layer].unl },
-			extraReq() { return false },
-			effect() {},
-			style() { return {"background-color": "var(--background)", "color": "#fff2"} },
-		},
 		53: {
-			desc: () => "Not yet implemented.",
-			cost: () => new Decimal(0),
-			unl() { return player[this.layer].unl },
-			extraReq() { return false },
-		},
-		54: {
 			desc: () => "If you haven't realized it already, you can not discover bricked discoveries.",
 			cost: () => Decimal.dInf,
 			unl() { return player[this.layer].unl },
 			extraReq() { return false },
 			effect() {},
 			style() { return {"background-color": "var(--background)", "color": "#fff2"} },
+		},
+		54: {
+			desc: () => "Not yet implemented.",
+			cost: () => new Decimal(0),
+			unl() { return player[this.layer].unl },
+			extraReq() { return false },
 		},
 		55: {
 			desc: () => "It's not just a placeholder, it's a brick.",
@@ -1511,10 +1564,12 @@ addLayer("wi", {
 			extraReq() { return false },
 		},
 		63: {
-			desc: () => "Not yet implemented.",
-			cost: () => new Decimal(0),
+			desc: () => "get bricked lol",
+			cost: () => Decimal.dInf,
 			unl() { return player[this.layer].unl },
 			extraReq() { return false },
+			effect() {},
+			style() { return {"background-color": "var(--background)", "color": "#fff2"} },
 		},
 		64: {
 			desc: () => "Not yet implemented.",

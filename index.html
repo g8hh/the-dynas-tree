@@ -11,8 +11,9 @@
 		}
 	</script>
 	<title>The Dynas Tree</title>
+	<link rel="shortcut icon" href="favicon.png" />
 	<link rel="stylesheet" type="text/css" href="style.css" />
-	<link href="https://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Inconsolata:wght@300;700" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css2?family=Inconsolata:wdth@150&display=swap" rel="stylesheet">
 	<script src="https://code.jquery.com/jquery.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>
@@ -65,6 +66,7 @@
 				<li>Added ETAs to <spoiler>buildings</spoiler> and total <spoiler>banking</spoiler> multiplier.</li>
 				<li>Fix the number formatting not working correctly over e1,000 bug.</li>
 				<li>Make more various UI adjustments.</li>
+				<li>You might have noticed the word "World &alpha;" above the point counter. What does it mean?</li>
 				<button class="tabButton" onclick="showTab('old-stuff')" style="background-color:var(--color); padding: 5px 20px 5px 20px"><h4>Experimental Changelog</h4><h5>(Content in experimental build can subject to change.)</h5></button><br>
 				<br>
 				<br>
@@ -106,6 +108,13 @@
 		<div v-if="player.tab=='old-stuff'" class="col right">
 			<button class="back" onclick="showTab('changelog')">&gt;</button><br>
 			<ul>
+				<li><h3>v0.4.0&beta;4</h3><li>
+				<li>Added <spoiler>world map encounters</spoiler>.</li>
+				<li>Added more <spoiler>wisdom discovers</spoiler>.</li>
+				<li>Buffed <spoiler>world map difficulty</spoiler> by... a lot.</li>
+				<li>Added a favicon because why not?</li>
+				<li>Replaced side buttons with a topbar... also because why not?</li>
+				<br>
 				<li><h3>v0.4.0&beta;3</h3><li>
 				<li>Added <spoiler>Land and Jobs Management</spoiler> to the <spoiler>manager</spoiler> layer.</li>
 				<li>The <spoiler>World Map</spoiler> tiles are now bigger.</li>
@@ -167,24 +176,26 @@
 			</table>
 		</div>
 		<div id="treeTab" v-if="player.tab!='gameEnded'" onscroll="resizeCanvas()" v-bind:class="{ fullWidth: player.tab == 'tree', col: player.tab != 'tree', left: player.tab != 'tree'}">
-			<div id="version" onclick="showTab('changelog')">{{VERSION.withoutName}}</div>
-			<img id="optionWheel" v-if="player.tab!='options'" src="options_wheel.png" onclick="showTab('options')"></img>
-			<div id="info" v-if="player.tab!='info'" onclick="showTab('info')"><br>i</div>
-			<img id="discord" onclick="showDiscordModal()" src="discord.png"  target="_blank"></img>
+			<div style="width:100%;background-color:#fff3;position:sticky;top:0px;z-index:2147000000">
+				<button class="topbarButton" style="width:auto" disabled="true"><h5>⚙️⚙️⚙️</h5></button><!--
+				--><button class="topbarButton" onclick="showTab('changelog')"><h5 style="font-weight:700">☀️ {{modInfo.name}} {{VERSION.withoutName}}</h5></button><!--
+				--><button class="topbarButton" onclick="showTab('options')"><h5>⚙️ Options</h5></button><!--
+				--><button class="topbarButton" onclick="showTab('info')"><h5>❓ Information</h5></button><!--
+				--><button class="topbarButton" style="width:auto" disabled="true"><h5>⚙️⚙️⚙️</h5></button>
+			</div>
+			<br/>
+			<h4 v-if="player.points.lt('1e1e6')">World α</h4>
 			<span v-if="player.devSpeed && player.devSpeed != 1">
-				<br>Dev Speed: {{format(player.devSpeed)}}x<br>
+				Dev Speed: {{format(player.devSpeed)}}×<br>
 			</span>
 			<span v-if="player.offTime !== undefined">
-				<br>Offline Time: {{formatTime(player.offTime.remain)}}<br>
-			</span>
-			<span v-if="false && !player.keepGoing">
-				<br>Reach {{formatWhole(ENDGAME)}} to beat the game!<br>
+				Offline Time: {{formatTime(player.offTime.remain)}}<br>
 			</span>
 			<br>
-			<span v-if="player.points.lt('1e1000')">You have </span>
+			<span>You have </span>
 			<h2 id="points">{{format(player.points)}}</h2>
-			<span v-if="player.points.lt('1e1e6')"> {{modInfo.pointsName}}</span>
-			<br><br><br><br><br>
+			<span> {{modInfo.pointsName}}</span>
+			<br><br>
 			<!-- *************************** Modify the tree in the table below! *************************** -->
 			<table>
 				<td><layer-node layer='c' abb='C'></layer-node></td>

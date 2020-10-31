@@ -54,12 +54,26 @@ function formatTimeLong(s) {
 }
 
 function formatTime(s) {
+	if (Decimal.gte(s, 31557600e3)) return formatTimeAlt(s)
 	let str = format(s % 60) + "s"; s /= 60
 	if (s >= 1) str = formatWhole(Math.floor(s) % 60) + "m " + str; s /= 60
 	if (s >= 1) str = formatWhole(Math.floor(s) % 24) + "h " + str; s /= 24
 	if (s >= 1) str = formatWhole(Math.floor(s) % 365) + "d " + str; s /= 365
 	if (s >= 1) str = formatWhole(Math.floor(s)) + "y " + str
 	return str
+}
+function formatTimeAlt(s) {
+	s = new Decimal(s)
+	if (s.gte("31557600e1000")) return format(s.div("31557600e1000")) + " universe lifetimes"
+	if (s.gte(31557600e100)) return format(s.div(31557600e100)) + " black hole eras"
+	if (s.gte(31557600e40)) return format(s.div(31557600e40)) + " degenerate eras"
+	if (s.gte(31557600e9)) return format(s.div(31557600e9)) + " aeons"
+	if (s.gte(31557600e3)) return format(s.div(31557600e3)) + " millenials"
+	if (s.gte(31557600)) return format(s.div(31557600)) + " years"
+	if (s.gte(86400)) return format(s.div(86400)) + " days"
+	if (s.gte(3600)) return format(s.div(3600)) + " hours"
+	if (s.gte(60)) return format(s.div(60)) + " minutes"
+	return format(s) + " seconds"
 }
 
 function toPlaces(x, precision, maxAccepted) {

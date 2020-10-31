@@ -7,7 +7,7 @@ var gameEnded = false;
 let VERSION = {
 	num: "0.4.0",
 	name: "Conquer the World",
-	beta: "3"
+	beta: "4"
 }
 
 // Determines if it should show points/sec
@@ -34,7 +34,7 @@ function getPointGen() {
 	if (tmp.layerEffs.so) gain = gain.mul(tmp.layerEffs.so)
 		
 	var landMul = new Decimal(1)
-	for (var a = 11; a <= 16; a++)
+	for (var a = 11; a <= 20; a++)
 		if (player.m.buyables[a].gt(0)) landMul = landMul.mul(tmp.buyables.m[a].effect)
 	gain = gain.mul(landMul)
 	if (tmp) tmp.landMul = landMul

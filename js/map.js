@@ -107,8 +107,70 @@ function createMap () {
 
 function getMapDifficulty (x, y) {
 	var dist = (x - 123.5) * (x - 123.5) + (y - 98.5) * (y - 98.5)
+	
+	if (dist > 4000) dist = dist * Math.pow(10, dist / 4000 - 1)
+	if (dist > 2000) dist = (dist * dist) / 2000
+	if (dist > 500) dist = (dist * dist) / 500
+	if (dist > 60) dist = (dist * dist) / 60
+	
 	var typeDiff = [1000, 1, 5, 10, 2, 3, 2, 1.5, 2.5, 10000]
 	return Decimal.pow(dist, 1.65).mul(Decimal.log(dist + 2, 2)).mul(5).mul(typeDiff[getTileType(x, y)])
+}
+
+function getMapEncounterChance (x, y) {
+	var dist = (x - 123.5) * (x - 123.5) + (y - 98.5) * (y - 98.5)
+	
+	if (dist > 3000) dist = dist * Math.pow(10, dist / 3000 - 1)
+	if (dist > 1500) dist = (dist * dist) / 1500
+	if (dist > 500) dist = (dist * dist) / 500
+	if (dist > 80) dist = (dist * dist) / 80
+	
+	var typeChance = [0.005, 1, 0.7, 0.4, 0.2, 0.2, 0.3, 0.3, 0.2, 0.0002]
+	if (dist < 10) return new Decimal(0)
+	return Decimal.log(dist / 10, 10).div(100).mul(typeChance[getTileType(x, y)])
+}
+
+function getMapEncounter (x, y) {
+	var dist = (x - 123.5) * (x - 123.5) + (y - 98.5) * (y - 98.5)
+	var ent = {}
+	
+	// Max name length = 28
+	var names = [
+		["Ship of Neighboring Country", "A Cthulhu", "A Shiver of Sharks"],
+		["Army of Neighboring Country", "A Sloth of Bears"],
+		["Army of Neighboring Country"],
+		["Army of Neighboring Country"],
+		["Army of Neighboring Country"],
+		["Army of Neighboring Country"],
+		["Army of Neighboring Country"],
+		["Army of Neighboring Country"],
+		["Army of Neighboring Country"],
+	]
+	
+	var id = getTileType(x, y);
+	
+	ent.name = names[id][Math.floor(Math.random() * names[id].length)]
+	ent.maxhealth = Decimal.pow(dist, 2)
+	ent.health = ent.maxhealth
+	ent.power = Decimal.pow(dist, 1.6)
+	ent.elo = Decimal.add(1000, Decimal.pow(dist, 1.4))
+	return ent
+}
+
+function getNewElo (x, y) {
+	
+	x = new Decimal(x)
+	y = new Decimal(y)
+	
+	function getProbability (a, b) {
+		return Decimal.pow(10, a.sub(b).div(400)).add(1).recip()
+	}
+	
+	let px = getProbability(y, x)
+	
+	let mag = new Decimal(30)
+	
+	return x.add(mag.mul(Decimal.sub(1, px)))
 }
 
 function getTileType(x, y) {
@@ -141,11 +203,13 @@ function initConquering(x, y) {
 		player.world.conquerTarget = mapFocusDesc 
 		player.world.conquerProgress = new Decimal(0)
 		player.world.conquerGoal = getMapDifficulty(x, y)
+		player.world.encounterChance = getMapEncounterChance(x, y)
 	}
 }
 function doneConquering() {
 	if (player.world.conquering) {
 		player.world.conquering = false
+		player.world.encounter = undefined
 		player.t.lands = Decimal.add(player.t.lands, 1)
 		player.m.landsAvailable[getTileType(player.world.conquerX, player.world.conquerY)]++
 		setConquered(player.world.conquerX, player.world.conquerY)
@@ -154,6 +218,7 @@ function doneConquering() {
 function abortConquering() {
 	if (player.world.conquering) {
 		player.world.conquering = false
+		player.world.encounter = undefined
 	}
 }
 
