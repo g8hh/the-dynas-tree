@@ -765,6 +765,7 @@ addLayer("b", {
 				let layer = Math.floor(a / 3 + 1) * 10 + ((a % 3) + 1)
 				let realMult = tmp.buyables.b[33].effect.mul(mults[a-1])
 				if (player.sp.buyables[28].gt(0)) realMult = realMult.mul(tmp.buyables.sp[28].effect)
+				if (tmp.buyables.wi[12]) realMult = realMult.mul(tmp.buyables.wi[12].effect.pow(Math.pow(0.7, a-1)))
 				
 				player.b.buyables[curr] = player.b.buyables[curr].add(Decimal.mul(player.b.buyables[layer], diff).mul(realMult))
 				curr = layer

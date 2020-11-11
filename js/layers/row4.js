@@ -1282,7 +1282,7 @@ addLayer("wi", {
 
 	requires: () => {
 		let req = new Decimal("e18")
-		if (hasUpg("wi", 85)) req = new Decimal("e120")
+		if (hasUpg("wi", 85)) req = new Decimal("e50")
 		if (hasUpg("wi", 35)) req = req.div(tmp.upgrades.wi[35].effect)
 		if (hasUpg("wi", 43)) req = req.div(tmp.upgrades.wi[43].effect)
 		if (hasUpg("wi", 75)) req = req.div(tmp.upgrades.wi[75].effect)
@@ -1290,7 +1290,7 @@ addLayer("wi", {
 	},
 
 	type: "static",
-	base: () => hasUpg("wi", 85) ? 100000 : 2,
+	base: () => hasUpg("wi", 85) ? 1e10 : 2,
 	exponent: () => hasUpg("wi", 85) ? 3.5 : 2.6,
 	canBuyMax: () => true,
 	
@@ -1670,7 +1670,7 @@ addLayer("wi", {
 			onPurchase() { player.wi.spent = Decimal.add(player.wi.spent, tmp.upgrades.wi[64].cost); player.wi.bought = Decimal.add(player.wi.bought, 1) }
 		},
 		65: {
-			desc: () => "School boosts knowledge gain.",
+			desc: () => "Schools boost knowledge gain.",
 			cost: () => new Decimal(1e18),
 			currencyLayer: "wi",
 			currencyInternalName: "knowledge",
@@ -1799,7 +1799,7 @@ addLayer("wi", {
 		respecText:() => "Respec Wisdom Discovers",
 		
 		rows: 1,
-		cols: 1,
+		cols: 2,
 		11: {
 			title: () => "Philosophy",
 			cost(x) {
@@ -1814,6 +1814,31 @@ addLayer("wi", {
 				return "Level " + player[this.layer].buyables[this.id] + "\n\
 				Cost: " + formatWhole(data.cost) + " knowledge\n\
 				Increases base knowledge gain and also multiplies knowledge gain by ×" + formatWhole(data.effect.add(1)) + "."
+			},
+			unl() { return true },
+			canAfford() {
+				return Decimal.gte(player.wi.knowledge, tmp.buyables[this.layer][this.id].cost)
+			},
+			buy() {
+				cost = tmp.buyables[this.layer][this.id].cost
+				player.wi.knowledge = Decimal.sub(player.wi.knowledge, cost)
+				player[this.layer].buyables[this.id] = player[this.layer].buyables[this.id].add(1)
+			},
+		},
+		12: {
+			title: () => "Mathematics",
+			cost(x) {
+				let cost = Decimal.pow(100000, Decimal.pow(1.25, x))
+				return cost.floor()
+			},
+			effect(x) { 
+				return Decimal.pow(1e8, x.mul(tmp.buyables.wi[11].effect.add(1).log(10).add(1).log(10).add(1)).pow(0.75).mul(Math.E).mul(Math.PI))
+			},
+			display() { // Everything else displayed in the buyable button after the title
+				let data = tmp.buyables[this.layer][this.id]
+				return "Level " + player[this.layer].buyables[this.id] + "\n\
+				Cost: " + formatWhole(data.cost) + " knowledge\n\
+				Increases the banking production multiplier by ×" + formatWhole(data.effect.add(1)) + " (based on philosophy level). This equals to the production speed of “Point Banking” and gets raised by ^0.7 per every further banking."
 			},
 			unl() { return true },
 			canAfford() {

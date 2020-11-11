@@ -7,7 +7,7 @@ var gameEnded = false;
 let VERSION = {
 	num: "0.4.0",
 	name: "Conquer the World",
-	beta: "5"
+	beta: "5.1"
 }
 
 // Determines if it should show points/sec
@@ -84,15 +84,18 @@ function convertToDecimal() {
 function getResetGain(layer, useType = null) {
 	let type = useType
 	if (!useType) type = layers[layer].type
+	
+	var base = isFunction(layers[layer].base) ? layers[layer].base() : layers[layer].base
+	var exponent = isFunction(layers[layer].exponent) ? layers[layer].exponent() : layers[layer].exponent
 
 	if (tmp.gainExp[layer].eq(0)) return new Decimal(0)
 	if (type == "static") {
 		if ((!layers[layer].canBuyMax()) || tmp.layerAmt[layer].lt(tmp.layerReqs[layer])) return new Decimal(1)
-		let gain = tmp.layerAmt[layer].div(tmp.layerReqs[layer]).div(tmp.gainMults[layer]).max(1).log(layers[layer].base).times(tmp.gainExp[layer]).pow(Decimal.pow(layers[layer].exponent, -1))
+		let gain = tmp.layerAmt[layer].div(tmp.layerReqs[layer]).div(tmp.gainMults[layer]).max(1).log(base).times(tmp.gainExp[layer]).pow(Decimal.pow(exponent, -1))
 		return gain.floor().sub(player[layer].points).add(1).max(1);
 	} else if (type == "normal") {
 		if (tmp.layerAmt[layer].lt(tmp.layerReqs[layer])) return new Decimal(0)
-		let gain = tmp.layerAmt[layer].div(tmp.layerReqs[layer]).pow(layers[layer].exponent).times(tmp.gainMults[layer]).pow(tmp.gainExp[layer])
+		let gain = tmp.layerAmt[layer].div(tmp.layerReqs[layer]).pow(exponent).times(tmp.gainMults[layer]).pow(tmp.gainExp[layer])
 		if (gain.gte("e1e7")) gain = gain.sqrt().times("e5e6")
 		return gain.floor().max(0);
 	} else if (type == "custom") {
@@ -105,19 +108,22 @@ function getResetGain(layer, useType = null) {
 function getNextAt(layer, canMax = false, useType = null) {
 	let type = useType
 	if (!useType) type = layers[layer].type
+	
+	var base = isFunction(layers[layer].base) ? layers[layer].base() : layers[layer].base
+	var exponent = isFunction(layers[layer].exponent) ? layers[layer].exponent() : layers[layer].exponent
 
 	if (tmp.gainExp[layer].eq(0)) return new Decimal(1 / 0)
 	if (type == "static") {
 		if (!layers[layer].canBuyMax()) canMax = false
 		let amt = player[layer].points.plus((canMax && tmp.layerAmt[layer].gte(tmp.nextAt[layer])) ? tmp.resetGain[layer] : 0)
-		let extraCost = Decimal.pow(layers[layer].base, amt.pow(layers[layer].exponent).div(tmp.gainExp[layer])).times(tmp.gainMults[layer])
+		let extraCost = Decimal.pow(base, amt.pow(exponent).div(tmp.gainExp[layer])).times(tmp.gainMults[layer])
 		let cost = extraCost.times(tmp.layerReqs[layer]).max(tmp.layerReqs[layer])
 		if (layers[layer].resCeil) cost = cost.ceil()
 		return cost;
 	} else if (type == "normal") {
 		let next = tmp.resetGain[layer].add(1)
 		if (next.gte("e1e7")) next = next.div("e5e6").pow(2)
-		next = next.root(tmp.gainExp[layer]).div(tmp.gainMults[layer]).root(layers[layer].exponent).times(tmp.layerReqs[layer]).max(tmp.layerReqs[layer])
+		next = next.root(tmp.gainExp[layer]).div(tmp.gainMults[layer]).root(exponent).times(tmp.layerReqs[layer]).max(tmp.layerReqs[layer])
 		if (layers[layer].resCeil) next = next.ceil()
 		return next;
 	} else if (type == "custom") {

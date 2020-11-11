@@ -5,6 +5,10 @@ function getWorldName () {
 	return str
 }
 
+function isFunction (obj) {
+	return obj && {}.toString.call(obj) === '[object Function]';
+}
+
 var statsResources = [
 	{
 		layer: "·",
