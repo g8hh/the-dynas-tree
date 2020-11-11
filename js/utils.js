@@ -1,3 +1,127 @@
+function getWorldName () {
+	let str = "World α"
+	if (player.b.banking) str += " + " + tmp.buyables.b[[11, 12, 13, 21, 22, 23, 31, 32].find(x => tmp.buyables.b[x].canAfford)].title
+	if (player.bd.building) str += " + " +  tmp.buyables.bd[player.bd.building].title + " Building"
+	return str
+}
+
+var statsResources = [
+	{
+		layer: "·",
+		name: "Points",
+		unl: () => true,
+		points: () => format(player.points, 2),
+	},
+	{
+		layer: "c",
+		name: "Coins",
+		unl: () => player.c.unl,
+		points: () => formatWhole(player.c.points),
+		total: () => formatWhole(player.c.total),
+		best: () => formatWhole(player.c.best),
+	},
+	{
+		layer: "wf",
+		name: "Workfinders",
+		unl: () => player.wf.unl,
+		points: () => formatWhole(player.wf.points),
+		best: () => formatWhole(player.wf.best),
+	},
+	{
+		layer: "wf",
+		name: "├ Finished Work",
+		unl: () => player.wf.unl,
+		points: () => formatWhole(player.wf.workDone),
+	},
+	{
+		layer: "wf",
+		name: "└ Unfinished Work",
+		unl: () => player.wf.unl,
+		points: () => formatWhole(player.wf.workUndone),
+	},
+	{
+		layer: "sp",
+		name: "Spiritual Power",
+		unl: () => player.sp.unl,
+		points: () => formatWhole(player.sp.points),
+		total: () => formatWhole(player.sp.total),
+		best: () => formatWhole(player.sp.best),
+	},
+	{
+		layer: "sp",
+		name: "└ Magic",
+		unl: () => player.sp.unl,
+		points: () => formatWhole(player.sp.magic),
+	},
+	{
+		layer: "b",
+		name: "Banks",
+		unl: () => player.b.unl,
+		points: () => formatWhole(player.b.points),
+		best: () => formatWhole(player.b.best),
+	},
+	{
+		layer: "w",
+		name: "Workers",
+		unl: () => player.w.unl,
+		points: () => formatWhole(player.w.points),
+		best: () => formatWhole(player.w.best),
+	},
+	{
+		layer: "bd",
+		name: "Builders",
+		unl: () => player.bd.unl,
+		points: () => formatWhole(player.bd.points),
+		best: () => formatWhole(player.bd.best),
+	},
+	{
+		layer: "so",
+		name: "Soldiers",
+		unl: () => player.so.unl,
+		points: () => formatWhole(player.so.points),
+		best: () => formatWhole(player.so.best),
+	},
+	{
+		layer: "m",
+		name: "Managers",
+		unl: () => player.m.unl,
+		points: () => formatWhole(player.m.points),
+		best: () => formatWhole(player.m.best),
+	},
+	{
+		layer: "t",
+		name: "Territories",
+		unl: () => player.t.unl,
+		points: () => formatWhole(player.t.points),
+		best: () => formatWhole(player.t.best),
+	},
+	{
+		layer: "t",
+		name: "├ Conquered Land",
+		unl: () => player.so.buyables[13].gte(1),
+		points: () => formatWhole(player.t.lands),
+	},
+	{
+		layer: "t",
+		name: "└ Honor",
+		unl: () => player.so.buyables[13].gte(1),
+		points: () => formatWhole(player.t.elo),
+	},
+	{
+		layer: "wi",
+		name: "Wisdom",
+		unl: () => player.wi.unl,
+		points: () => formatWhole(player.wi.points),
+		best: () => formatWhole(player.wi.best),
+	},
+	{
+		layer: "wi",
+		name: "└ Knowledge",
+		unl: () => player.wi.unl,
+		points: () => formatWhole(player.wi.knowledge),
+	},
+]
+
 // ************ Number formatting ************
 
 function exponentialFormat(num, precision) {
@@ -105,6 +229,7 @@ function startPlayerBase() {
 		keepGoing: false,
 		hasNaN: false,
 		hideChalls: false,
+		optionFlavor: true,
 		points: new Decimal(10),
 		subtabs: {},
 	}

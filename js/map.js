@@ -118,16 +118,21 @@ function getMapDifficulty (x, y) {
 }
 
 function getMapEncounterChance (x, y) {
-	var dist = (x - 123.5) * (x - 123.5) + (y - 98.5) * (y - 98.5)
+	var dist = new Decimal((x - 123.5) * (x - 123.5) + (y - 98.5) * (y - 98.5))
 	
-	if (dist > 3000) dist = dist * Math.pow(10, dist / 3000 - 1)
-	if (dist > 1500) dist = (dist * dist) / 1500
-	if (dist > 500) dist = (dist * dist) / 500
-	if (dist > 80) dist = (dist * dist) / 80
+	if (dist.gte(1000)) dist = dist.mul(dist).div(1000)
+	if (dist.gte(750)) dist = dist.mul(dist).div(750)
+	if (dist.gte(500)) dist = dist.mul(dist).div(500)
+	if (dist.gte(250)) dist = dist.mul(dist).div(250)
+	if (dist.gte(120)) dist = dist.mul(dist).div(120)
+	if (dist.gte(80)) dist = dist.mul(dist).div(80)
+	if (dist.gte(60)) dist = dist.mul(dist).div(60)
+	if (dist.gte(40)) dist = dist.mul(dist).div(40)
+	if (dist.gte(30)) dist = dist.mul(dist).div(30)
 	
 	var typeChance = [0.005, 1, 0.7, 0.4, 0.2, 0.2, 0.3, 0.3, 0.2, 0.0002]
 	if (dist < 10) return new Decimal(0)
-	return Decimal.log(dist / 10, 10).div(100).mul(typeChance[getTileType(x, y)])
+	return Decimal.log(dist.div(10), 10).div(100).mul(typeChance[getTileType(x, y)])
 }
 
 function getMapEncounter (x, y) {

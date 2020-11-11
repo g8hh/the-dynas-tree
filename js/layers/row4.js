@@ -85,7 +85,7 @@ addLayer("m", {
 		5: {
 			requirementDesc: () => "6 Managers",
 			done() { return player[this.layer].best.gte(6) },
-			effectDesc: () => "Each banking produces the banking before it. This will boost your builders' speed by a lot.",
+			effectDesc: () => "Each banking produces the banking before it. This will boost your builders' speed by a lot. You'll still need to manually do bankings sometimes though.",
 		},
 		6: {
 			requirementDesc: () => "7 Managers",
@@ -477,7 +477,8 @@ addLayer("bd", {
 
 	effect() {
 		var eff = {}
-		eff.speed = Decimal.pow(player.bd.allocated, 2).mul(player.c.points.add(1).log(100).add(1))
+		var speedPow = new Decimal(2)
+		eff.speed = Decimal.pow(player.bd.allocated, speedPow).mul(player.c.points.add(1).log(100).add(1))
 		if (hasChall("t", 11)) eff.speed = eff.speed.mul(tmp.challs.t[11].effect)
 		if (tmp.buyables.bd[22].effect) eff.speed = eff.speed.mul(tmp.buyables.bd[22].effect)
 		eff.penalty = Decimal.div(player.bd.allocated, 6).add(1).recip()
@@ -746,7 +747,7 @@ addLayer("bd", {
 			["raw-html",
 				function () {
 					return player.bd.points.gte(2) && player.bd.building == 0 ?
-						'<br/><input id="builderAllocator" type="range" min="1" max="' + player.bd.points.toNumber() + '" value="' + player.bd.allocated + '" style="width:75%" oninput="{player.bd.allocated = new Decimal(document.getElementById(' + "'builderAllocator'" + ').value)}"><br/>' +
+						'<br/><input id="builderAllocator" type="range" min="1" max="' + player.bd.points.toNumber() + '" value="' + player.bd.allocated + '" style="width:75%;background-color:white" list="tickmarks" oninput="{player.bd.allocated = new Decimal(document.getElementById(' + "'builderAllocator'" + ').value)}"><br/>' +
 						"You can adjust the allocated builders using the slider above."
 						: ""
 				}],
@@ -1281,17 +1282,25 @@ addLayer("wi", {
 
 	requires: () => {
 		let req = new Decimal("e18")
+		if (hasUpg("wi", 85)) req = new Decimal("e120")
 		if (hasUpg("wi", 35)) req = req.div(tmp.upgrades.wi[35].effect)
+		if (hasUpg("wi", 43)) req = req.div(tmp.upgrades.wi[43].effect)
+		if (hasUpg("wi", 75)) req = req.div(tmp.upgrades.wi[75].effect)
 		return req
 	},
 
 	type: "static",
-	base: "2",
-	exponent: 2.58,
+	base: () => hasUpg("wi", 85) ? 100000 : 2,
+	exponent: () => hasUpg("wi", 85) ? 3.5 : 2.6,
 	canBuyMax: () => true,
 	
 	effect() {
-		return Decimal.pow(2, Decimal.pow(player.wi.best, 1.05)).sub(1)
+		var ret = Decimal.pow(2, Decimal.pow(player.wi.points, 1.05)).sub(1)
+		if (hasUpg("wi", 85)) ret = ret.add(1)
+		if (tmp.buyables.wi[11].effect.add) ret = ret.add(tmp.buyables.wi[11].effect).mul(tmp.buyables.wi[11].effect.add(1))
+		if (hasUpg("wi", 54)) ret = ret.mul(tmp.upgrades.wi[54].effect)
+		if (hasUpg("wi", 65)) ret = ret.mul(tmp.upgrades.wi[65].effect)
+		return ret
 	},
 	
 	effectDescription() {
@@ -1312,6 +1321,10 @@ addLayer("wi", {
 			extraReq() { return player.wi.points.gt(player.wi.bought) },
 			effect() {
 				let ret = Decimal.pow(player.wi.knowledge, 2.25).add(1)
+				if (ret.gte("1e80")) ret = ret.mul("1e80").sqrt()
+				if (ret.gte("1e160")) ret = ret.mul("1e160").sqrt()
+				if (ret.gte("1e240")) ret = ret.mul("1e240").sqrt()
+				if (ret.gte("1e320")) ret = ret.mul("1e320").sqrt()
 				return ret;
 			},
 			effectDisplay(fx) { return "×" + format(fx) },
@@ -1327,6 +1340,10 @@ addLayer("wi", {
 			extraReq() { return hasUpg("wi", 11) && player.wi.points.gt(player.wi.bought) },
 			effect() {
 				let ret = Decimal.pow(player.wi.knowledge, 0.25).add(1)
+				if (ret.gte("1e10")) ret = ret.mul("1e10").sqrt()
+				if (ret.gte("1e20")) ret = ret.mul("1e20").sqrt()
+				if (ret.gte("1e30")) ret = ret.mul("1e30").sqrt()
+				if (ret.gte("1e40")) ret = ret.mul("1e40").sqrt()
 				return ret;
 			},
 			effectDisplay(fx) { return "×" + format(fx) },
@@ -1375,6 +1392,10 @@ addLayer("wi", {
 			extraReq() { return hasUpg("wi", 11) && player.wi.points.gt(player.wi.bought) },
 			effect() {
 				let ret = Decimal.pow(player.wi.knowledge, 0.5).add(1)
+				if (ret.gte("1e15")) ret = ret.mul("1e15").sqrt()
+				if (ret.gte("1e30")) ret = ret.mul("1e30").sqrt()
+				if (ret.gte("1e45")) ret = ret.mul("1e45").sqrt()
+				if (ret.gte("1e60")) ret = ret.mul("1e60").sqrt()
 				return ret;
 			},
 			effectDisplay(fx) { return "×" + format(fx) },
@@ -1390,6 +1411,10 @@ addLayer("wi", {
 			extraReq() { return (hasUpg("wi", 12) || hasUpg("wi", 21)) && player.wi.points.gt(player.wi.bought) },
 			effect() {
 				let ret = Decimal.pow(player.wi.knowledge, 0.9).add(1)
+				if (ret.gte("1e25")) ret = ret.mul("1e25").sqrt()
+				if (ret.gte("1e50")) ret = ret.mul("1e50").sqrt()
+				if (ret.gte("1e75")) ret = ret.mul("1e75").sqrt()
+				if (ret.gte("1e100")) ret = ret.mul("1e100").sqrt()
 				return ret;
 			},
 			effectDisplay(fx) { return "×" + format(fx) },
@@ -1473,25 +1498,62 @@ addLayer("wi", {
 			onPurchase() { player.wi.spent = Decimal.add(player.wi.spent, tmp.upgrades.wi[35].cost); player.wi.bought = Decimal.add(player.wi.bought, 1) }
 		},
 		41: {
-			desc: () => "Not yet implemented.",
-			cost: () => new Decimal(0),
+			desc: () => "Knowledge adds time to the first exotic spell's effect.",
+			cost: () => new Decimal(1e25),
+			currencyLayer: "wi",
+			currencyInternalName: "knowledge",
+			currencyDisplayName: "knowledge",
 			unl() { return player[this.layer].unl },
-			extraReq() { return false },
+			extraReq() { return hasUpg("wi", 42) && player.wi.points.gt(player.wi.bought) },
+			effect() {
+				let ret = Decimal.pow(player.wi.knowledge, 0.08).mul(Decimal.add(player.wi.knowledge, 1).log(1e10)).pow(0.85)
+				if (ret.gte(600)) ret = ret.mul(600).sqrt()
+				if (ret.gte(3600)) ret = ret.mul(3600).sqrt()
+				if (ret.gte(36000)) ret = ret.mul(36000).sqrt()
+				return ret;
+			},
+			effectDisplay(fx) { return "+" + formatTime(fx) },
+			onPurchase() { player.wi.spent = Decimal.add(player.wi.spent, tmp.upgrades.wi[41].cost); player.wi.bought = Decimal.add(player.wi.bought, 1) }
 		},
 		42: {
-			desc: () => "Not yet implemented.",
-			cost: () => new Decimal(0),
+			desc: () => "Exotic spells are also be able to be casted by the auto spell milestone.",
+			cost: () => new Decimal(1e16),
+			currencyLayer: "wi",
+			currencyInternalName: "knowledge",
+			currencyDisplayName: "knowledge",
 			unl() { return player[this.layer].unl },
-			extraReq() { return false },
+			extraReq() { return hasUpg("wi", 43) && player.wi.points.gt(player.wi.bought) },
+			onPurchase() { player.wi.spent = Decimal.add(player.wi.spent, tmp.upgrades.wi[42].cost); player.wi.bought = Decimal.add(player.wi.bought, 1) }
 		},
 		43: {
-			desc: () => "Not yet implemented.",
-			cost: () => new Decimal(0),
+			desc: () => "Knowledge reduces the requirement of wisdom.",
+			cost: () => new Decimal(1e10),
+			currencyLayer: "wi",
+			currencyInternalName: "knowledge",
+			currencyDisplayName: "knowledge",
 			unl() { return player[this.layer].unl },
-			extraReq() { return false },
+			extraReq() { return hasUpg("wi", 44) && player.wi.points.gt(player.wi.bought) },
+			effect() {
+				let ret = Decimal.pow(player.wi.knowledge, 0.01).pow(Decimal.log(player.wi.knowledge, 2)).pow(Decimal.log(player.wi.knowledge, 10)).pow(Decimal.log(player.wi.knowledge, 1e10))
+				if (ret.gte("1e2000")) ret = ret.mul("1e6000").pow(0.25)
+				if (ret.gte("1e1500")) ret = ret.mul("1e4500").pow(0.25)
+				if (ret.gte("1e1200")) ret = ret.mul("1e2400").cbrt()
+				if (ret.gte("1e1000")) ret = ret.mul("1e2000").cbrt()
+				if (ret.gte("1e800")) ret = ret.mul("1e800").sqrt()
+				if (ret.gte("1e650")) ret = ret.mul("1e650").sqrt()
+				if (ret.gte("1e500")) ret = ret.mul("1e500").sqrt()
+				if (ret.gte("1e400")) ret = ret.mul("1e400").sqrt()
+				if (ret.gte("1e300")) ret = ret.mul("1e300").sqrt()
+				if (ret.gte("1e200")) ret = ret.mul("1e200").sqrt()
+				if (ret.gte("1e150")) ret = ret.mul("1e150").sqrt()
+				if (ret.gte("1e100")) ret = ret.mul("1e100").sqrt()
+				return ret;
+			},
+			effectDisplay(fx) { return "÷" + format(fx) },
+			onPurchase() { player.wi.spent = Decimal.add(player.wi.spent, tmp.upgrades.wi[43].cost); player.wi.bought = Decimal.add(player.wi.bought, 1) }
 		},
 		44: {
-			desc: () => "Unlocks a new exotic spell. Exotic spells are not affected by amount of shrines or spiritual power upgrades.",
+			desc: () => "Unlocks an exotic spell. Exotic spells are not affected by amount of shrines or spiritual power upgrades.",
 			cost: () => new Decimal(150000),
 			currencyLayer: "wi",
 			currencyInternalName: "knowledge",
@@ -1512,7 +1574,7 @@ addLayer("wi", {
 				let ret = Decimal.pow(player.wi.knowledge, 0.25).pow(Decimal.add(player.wi.knowledge, 1).log(100)).add(1)
 				return ret;
 			},
-			effectDisplay(fx) { return "÷" + format(fx) },
+			effectDisplay(fx) { return "×" + format(fx) },
 			onPurchase() { player.wi.spent = Decimal.add(player.wi.spent, tmp.upgrades.wi[45].cost); player.wi.bought = Decimal.add(player.wi.bought, 1) }
 		},
 		51: {
@@ -1538,10 +1600,24 @@ addLayer("wi", {
 			style() { return {"background-color": "var(--background)", "color": "#fff2"} },
 		},
 		54: {
-			desc: () => "Not yet implemented.",
-			cost: () => new Decimal(0),
+			desc: () => "Knowledge boosts knowledge gain. Yes, really.",
+			cost: () => new Decimal(2500000),
+			currencyLayer: "wi",
+			currencyInternalName: "knowledge",
+			currencyDisplayName: "knowledge",
 			unl() { return player[this.layer].unl },
-			extraReq() { return false },
+			extraReq() { return hasUpg("wi", 44) && player.wi.points.gt(player.wi.bought) },
+			effect() {
+				let ret = Decimal.pow(player.wi.knowledge, 0.4).pow(Decimal.add(player.wi.knowledge, 1).log(1e100).add(1))
+				if (hasUpg("wi", 64)) ret = ret.mul(tmp.upgrades.wi[64].effect)
+				if (ret.gte(1e160)) ret = ret.mul(1e320).cbrt()
+				if (ret.gte(1e80)) ret = ret.mul(1e160).cbrt()
+				if (ret.gte(1e40)) ret = ret.mul(1e40).sqrt()
+				if (ret.gte(1e20)) ret = ret.mul(1e20).sqrt()
+				return ret;
+			},
+			effectDisplay(fx) { return "×" + format(fx) },
+			onPurchase() { player.wi.spent = Decimal.add(player.wi.spent, tmp.upgrades.wi[54].cost); player.wi.bought = Decimal.add(player.wi.bought, 1) }
 		},
 		55: {
 			desc: () => "It's not just a placeholder, it's a brick.",
@@ -1572,16 +1648,40 @@ addLayer("wi", {
 			style() { return {"background-color": "var(--background)", "color": "#fff2"} },
 		},
 		64: {
-			desc: () => "Not yet implemented.",
-			cost: () => new Decimal(0),
+			desc: () => "The upgrade above boosts that upgrade. Recursion.",
+			cost: () => new Decimal(1e11),
+			currencyLayer: "wi",
+			currencyInternalName: "knowledge",
+			currencyDisplayName: "knowledge",
 			unl() { return player[this.layer].unl },
-			extraReq() { return false },
+			extraReq() { return hasUpg("wi", 54) && player.wi.points.gt(player.wi.bought) },
+			effect() {
+				let ret = Decimal.pow(tmp.upgrades.wi[54].effect, 0.2).add(1)
+				if (hasUpg("wi", 74)) ret = ret.mul(tmp.upgrades.wi[74].effect)
+				if (ret.gte(1e160)) ret = ret.mul(1e320).cbrt()
+				if (ret.gte(1e80)) ret = ret.mul(1e160).cbrt()
+				if (ret.gte(1e40)) ret = ret.mul(1e40).sqrt()
+				if (ret.gte(1e20)) ret = ret.mul(1e20).sqrt()
+				if (ret.gte(1e10)) ret = ret.mul(1e10).sqrt()
+				if (ret.gte(1e5)) ret = ret.mul(1e5).sqrt()
+				return ret;
+			},
+			effectDisplay(fx) { return "×" + format(fx) },
+			onPurchase() { player.wi.spent = Decimal.add(player.wi.spent, tmp.upgrades.wi[64].cost); player.wi.bought = Decimal.add(player.wi.bought, 1) }
 		},
 		65: {
-			desc: () => "Not yet implemented.",
-			cost: () => new Decimal(0),
+			desc: () => "School boosts knowledge gain.",
+			cost: () => new Decimal(1e18),
+			currencyLayer: "wi",
+			currencyInternalName: "knowledge",
+			currencyDisplayName: "knowledge",
 			unl() { return player[this.layer].unl },
-			extraReq() { return false },
+			extraReq() { return hasUpg("wi", 64) && player.wi.points.gt(player.wi.bought) },
+			effect() {
+				return Decimal.add(player.bd.buyables[31], 1)
+			},
+			effectDisplay(fx) { return "×" + format(fx) },
+			onPurchase() { player.wi.spent = Decimal.add(player.wi.spent, tmp.upgrades.wi[65].cost); player.wi.bought = Decimal.add(player.wi.bought, 1) }
 		},
 		71: {
 			desc: () => "Not yet implemented.",
@@ -1604,20 +1704,47 @@ addLayer("wi", {
 			style() { return {"background-color": "var(--background)", "color": "#fff2"} },
 		},
 		74: {
-			desc: () => "Not yet implemented.",
-			cost: () => new Decimal(0),
+			desc: () => "The upgrade above boosts that upgrade again. Recursive recursion.",
+			cost: () => new Decimal(1e21),
+			currencyLayer: "wi",
+			currencyInternalName: "knowledge",
+			currencyDisplayName: "knowledge",
 			unl() { return player[this.layer].unl },
-			extraReq() { return false },
+			extraReq() { return hasUpg("wi", 64) && player.wi.points.gt(player.wi.bought) },
+			effect() {
+				let ret = Decimal.pow(tmp.upgrades.wi[64].effect, 0.2).add(1)
+				if (ret.gte(1e160)) ret = ret.mul(1e320).cbrt()
+				if (ret.gte(1e80)) ret = ret.mul(1e160).cbrt()
+				if (ret.gte(1e40)) ret = ret.mul(1e40).sqrt()
+				if (ret.gte(1e20)) ret = ret.mul(1e20).sqrt()
+				if (ret.gte(1e10)) ret = ret.mul(1e10).sqrt()
+				if (ret.gte(1e5)) ret = ret.mul(1e5).sqrt()
+				return ret;
+			},
+			effectDisplay(fx) { return "×" + format(fx) },
+			onPurchase() { player.wi.spent = Decimal.add(player.wi.spent, tmp.upgrades.wi[74].cost); player.wi.bought = Decimal.add(player.wi.bought, 1) }
 		},
 		75: {
-			desc: () => "Not yet implemented.",
-			cost: () => new Decimal(0),
+			desc: () => "Spiritual power reduces the requirements of wisdom.",
+			cost: () => new Decimal(1e30),
+			currencyLayer: "wi",
+			currencyInternalName: "knowledge",
+			currencyDisplayName: "knowledge",
 			unl() { return player[this.layer].unl },
-			extraReq() { return false },
+			extraReq() { return (hasUpg("wi", 74) || hasUpg("wi", 65)) && player.wi.points.gt(player.wi.bought) },
+			effect() {
+				let ret = Decimal.add(player.sp.points, 1)
+				for (var a = 1; a <= 30; a++) {
+					if (ret.gte("1e" + a + "00")) ret = ret.mul("1e" + a + "00").sqrt()
+				}
+				return ret;
+			},
+			effectDisplay(fx) { return "÷" + format(fx) },
+			onPurchase() { player.wi.spent = Decimal.add(player.wi.spent, tmp.upgrades.wi[74].cost); player.wi.bought = Decimal.add(player.wi.bought, 1) }
 		},
 		81: {
-			desc: () => "This should unlock an another wisdom tree but it's not yet implemented.",
-			cost: () => new Decimal(0),
+			desc: () => "Your wisdom has exceed this far and you're wanting to seek for more. You unlock a new layer, far higher than this one.",
+			cost: () => new Decimal(25),
 			unl() { return player[this.layer].unl },
 			extraReq() { return false },
 		},
@@ -1646,23 +1773,58 @@ addLayer("wi", {
 			style() { return {"background-color": "var(--background)", "color": "#fff2"} },
 		},
 		85: {
-			desc: () => "This should unlock an another wisdom tree but it's not yet implemented.",
-			cost: () => new Decimal(0),
+			desc: () => "Unlock the Subjects tab. Note that this discovery will reset your wisdom back to 0 and will make them harder to get, so be ready first!",
+			cost: () => new Decimal(21),
 			unl() { return player[this.layer].unl },
-			extraReq() { return false },
+			extraReq() { return hasUpg("wi", 75) },
+			onPurchase() { 
+				layers.wi.buyables.respec()
+				player.wi.knowledge = new Decimal(0) 
+				player.wi.points = new Decimal(0) 
+			}
 		},
 	},
 	
 	buyables: {
 	
 		respec() { 
-			player.wi.upgrades = []
+			var data = []
+			if (hasUpg("wi", 85)) data.push(85)
+			player.wi.upgrades = data
 			player.wi.bought = new Decimal(0)
 			player.wi.knowledge = Decimal.add(player.wi.knowledge, player.wi.spent)
 			player.wi.spent = new Decimal(0)
 			doReset(this.layer, true)
 		},
 		respecText:() => "Respec Wisdom Discovers",
+		
+		rows: 1,
+		cols: 1,
+		11: {
+			title: () => "Philosophy",
+			cost(x) {
+				let cost = Decimal.pow(100, Decimal.pow(1.2, x))
+				return cost.floor()
+			},
+			effect(x) { 
+				return x.pow(2)
+			},
+			display() { // Everything else displayed in the buyable button after the title
+				let data = tmp.buyables[this.layer][this.id]
+				return "Level " + player[this.layer].buyables[this.id] + "\n\
+				Cost: " + formatWhole(data.cost) + " knowledge\n\
+				Increases base knowledge gain and also multiplies knowledge gain by ×" + formatWhole(data.effect.add(1)) + "."
+			},
+			unl() { return true },
+			canAfford() {
+				return Decimal.gte(player.wi.knowledge, tmp.buyables[this.layer][this.id].cost)
+			},
+			buy() {
+				cost = tmp.buyables[this.layer][this.id].cost
+				player.wi.knowledge = Decimal.sub(player.wi.knowledge, cost)
+				player[this.layer].buyables[this.id] = player[this.layer].buyables[this.id].add(1)
+			},
+		},
 	},
 
 	gainMult() {
@@ -1674,6 +1836,13 @@ addLayer("wi", {
 	
 	update(diff) {
 		player.wi.knowledge = Decimal.add(player.wi.knowledge, tmp.layerEffs.wi.mul(diff))
+	},
+	
+	microtabs: {
+        stuff: {
+            discoveries: { title: () => "Discoveries", unl: () => hasUpg("wi", 85), content: ["respec-button", ["blank", "5px"], "upgrades"] },
+			subjects: { title: () => "Subjects", unl: () => hasUpg("wi", 85), content: ["buyables"] },
+        },
 	},
 
 	tabFormat:
@@ -1688,8 +1857,7 @@ addLayer("wi", {
 			["blank", "5px"],
 			["display-text",
 				function () { return "You have " + format(player.wi.points.sub(player.wi.bought), 0) + " undiscovered wisdom.<h5>You have " + formatWhole(player.wi.spent) + " spent knowledge.</h5>" }],
-			"buyables", 
-			"upgrades"
+			["microtabs", "stuff"]
 		],
 
 	hotkeys: [

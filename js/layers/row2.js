@@ -1289,8 +1289,9 @@ addLayer("sp", {
 				for (var a = 21; a < 28; a++) {
 					sec = sec.add(player.sp.buyables[a])
 				}
+				if (hasUpg("wi", 41)) sec = sec.add(tmp.upgrades.wi[41].effect)
 			
-				let eff = sec.sqrt().mul(2).pow(sec.add(1).log(100).add(1)).add(100).pow(sec.add(1).log(1e100).add(1)).pow(2)
+				let eff = sec.sqrt().add(250).mul(2).pow(sec.add(1).log(100).mul(2).add(1)).add(100).pow(sec.add(1).log(1e100).mul(2).add(1)).pow(2)
 				return eff
 			},
 			display() { // Everything else displayed in the buyable button after the title
@@ -1309,14 +1310,21 @@ addLayer("sp", {
 			},
 			style() {
 				if (player.sp.buyables[28].lte(0)) {
-					return {
-						"height": "200px",
+					if (tmp.buyables.sp[28].canAfford) {
+						return {
+							"height": "200px",
+							"background-color": "#FF7700"
+						}
+					} else {
+						return {
+							"height": "200px",
+						}
 					}
 				} else {
 					return {
 						"height": "200px",
-						"color": "#FFAAFF",
-						"background-color": "#330033"
+						"color": "#FFAA77",
+						"background-color": "#331100"
 					}
 				}
 			}
@@ -1328,7 +1336,7 @@ addLayer("sp", {
 		player.sp.magic = Decimal.add(player.sp.magic, tmp.buyables.sp[11].effect.mul(diff))
 		for (var a = 21; a <= 28; a++) {
 			player.sp.buyables[a] = Decimal.sub(player.sp.buyables[a], diff).max(0)
-			if (a <= 27 && player.t.autoSpells && tmp.buyables.sp[a].canAfford) buyBuyable("sp", a)
+			if ((a <= 27 || hasUpg("wi", 42)) && player.t.autoSpells && tmp.buyables.sp[a].canAfford) buyBuyable("sp", a)
 		}
 		
 		if (hasUpg("wi", 24) && player.sp.unl && tmp.gainExp !== undefined) {

@@ -265,6 +265,38 @@ h1, h2, h3, b, input, .tabButton {
 	#discord:hover {
 		transform: scale(1.2, 1.2);
 	}
+	
+#achievements {
+	font-size: 32px;
+	color: white;
+	position: absolute;
+	top: 180px;
+	left: 4px;
+	cursor: pointer;
+	width: 40px;
+	height: 40px;
+}
+
+	#achievements:hover {
+		transform: scale(1.2, 1.2);
+		text-shadow: 5px 0px 10px #02f2f2, -3px 0px 12px #02f2f2;
+	}
+	
+#stats {
+	font-size: 32px;
+	color: white;
+	position: absolute;
+	top: 240px;
+	left: 4px;
+	cursor: pointer;
+	width: 40px;
+	height: 40px;
+}
+
+	#stats:hover {
+		transform: scale(1.2, 1.2);
+		text-shadow: 5px 0px 10px #02f2f2, -3px 0px 12px #02f2f2;
+	}
 
 #version {
 	position: absolute;
@@ -316,8 +348,18 @@ a {
 	color: rgba(0, 0, 0, 0.5);
 	cursor: pointer;
 }
+	
+.option {
+	height: 100px;
+	width: 20%;
+	border: 4px solid;
+	background-color: var(--color);
+	border-color: rgba(255, 255, 255, 0.125) rgba(0, 0, 0, 0.25) rgba(0, 0, 0, 0.25) rgba(255, 255, 255, 0.125);
+	color: rgba(0, 0, 0, 0.5);
+	cursor: pointer;
+}
 
-	.opt:hover {
+	.opt:hover, .option:hover {
 		background-color: #439ea3;
 	}
 
