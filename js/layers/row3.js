@@ -36,6 +36,7 @@ addLayer("w", {
 		if (hasMilestone("w", 10)) eff = eff.pow(3)
 		if (hasMilestone("w", 11)) eff = eff.pow(3)
 		if (player.b.banking & 1) eff = eff.pow(0.5)
+		eff = eff.pow(tmp.buyables.wi[14].effect.second)
 		return eff
 	},
 	effectDescription() {

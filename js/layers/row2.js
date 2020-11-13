@@ -384,6 +384,7 @@ addLayer("wf", {
 			if (hasUpg("wf", 21)) wde = wde.mul(layers.wf.upgrades[21].effect())
 			if (player.sp.buyables[25].gt(0)) wde = wde.mul(tmp.buyables.sp[25].effect)
 			if (hasUpg("wi", 12)) wde = wde.mul(tmp.upgrades.wi[12].effect)
+			wde = wde.mul(tmp.buyables.wi[14].effect.first)
 			if (player.b.banking & 1) wde = wde.pow(0.5)
 			player[this.layer].workDoneEffect = wde
 		}
@@ -837,6 +838,7 @@ addLayer("sp", {
 	gainMult() {
 		let ret = new Decimal(1)
 		if (hasUpg("wi", 45)) ret = ret.mul(tmp.upgrades.wi[45].effect)
+		ret = ret.mul(tmp.buyables.wi[13].effect)
 		return ret
 	},
 	gainExp() {

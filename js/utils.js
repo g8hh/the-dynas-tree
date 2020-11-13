@@ -1,7 +1,8 @@
 function getWorldName () {
 	let str = "World α"
-	if (player.b.banking) str += " + " + tmp.buyables.b[[11, 12, 13, 21, 22, 23, 31, 32].find(x => tmp.buyables.b[x].canAfford)].title
+	if (player.b.banking && player.b.unl) str += " + " + tmp.buyables.b[[11, 12, 13, 21, 22, 23, 31, 32].find(x => tmp.buyables.b[x].canAfford)].title
 	if (player.bd.building) str += " + " +  tmp.buyables.bd[player.bd.building].title + " Building"
+	if (player.t.active) str += " + " + tmp.challs.t[player.t.active].name
 	return str
 }
 
