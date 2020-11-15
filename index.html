@@ -28,6 +28,7 @@
 	<script type="text/javascript" src="js/layers/row2.js"></script>
 	<script type="text/javascript" src="js/layers/row3.js"></script>
 	<script type="text/javascript" src="js/layers/row4.js"></script>
+	<script type="text/javascript" src="js/layers/row5.js"></script>
 
 	<script type="text/javascript" src="js/temp.js"></script>
 	<script type="text/javascript" src="js/game.js"></script>
@@ -40,25 +41,21 @@
 		<div v-if="player.tab=='gameEnded'" class="fullWidth">
 			<br>
 			<h2>{{modInfo.name}} {{VERSION.withoutName}}</h2><br><br>
-			<h3>Congratulations! You have reached the end and beaten this game, but for now...</h3><br>
-			<h3>Please check the Discord to see there are new content updates!</h3><br><br>
-			<div v-if="!player.timePlayedReset">It took you {{formatTimeLong(player.timePlayed)}} to beat the game.</div>
-			<div v-if="player.timePlayedReset">Make sure that you record the time in your stream or else your speedrun won't count!</div>
+			<h3>Congratulations! You have reached the point of singularity and beaten this game, but for now...</h3><br>
+			In case you haven't noticed, there will be more content after this. You can keep continuing. but the game has been paused, since singularity was meant to be a forced prestige layer.<br>
+			<div v-if="!player.timePlayedReset">It took you {{formatTimeLong(player.timePlayed)}} to reach the singularity point.</div>
 			<br>
 			<button class="longUpg can" onclick="hardReset(true)">Play Again</button>&nbsp;&nbsp;&nbsp;&nbsp;<button class="longUpg can" onclick="keepGoing()">Keep Going</button>
 			<br><br><br>
-			<a class="link" href="http://discord.gg/wwQfgPa" target="_blank">Main Prestige Tree Discord</a><br>
-			<br><br>
-			If you would like to speedrun this, press Play Again and record your attempt, then submit on the Discord Server in the channel #speedrun-submissions.
-			<br><br><br>
-			<h1>Oh, you are still reading this?</h1>
 			<br>
+			<br><br><br>
 		</div>
 		<div v-if="player.tab=='changelog'" class="col right">
 			<button class="back" onclick="showTab('tree')">&gt;</button><br>
 			<ul>
 				<h5><i>“Conquer the World”</i></h5>
 				<li><h3>v0.4.0</h3><li>
+				<li>Added the <spoiler>point of singularity</spoiler>. Any civilization go past this point did not make it through.</li>
 				<li>Added the <spoiler>knowledge</spoiler> layer.</li>
 				<li>Added the <spoiler>World Map</spoiler> with <spoiler>procedural world generation</spoiler> to the <spoiler>territory</spoiler> layer.</li>
 				<li>Added <spoiler>Land and Jobs Management</spoiler> to the <spoiler>manager</spoiler> layer.</li>
@@ -109,6 +106,10 @@
 		<div v-if="player.tab=='old-stuff'" class="col right">
 			<button class="back" onclick="showTab('changelog')">&gt;</button><br>
 			<ul>
+				<li><h3>v0.4.0&beta;6</h3><li>
+				<li>Added the <spoiler>point of singularity</spoiler>. Any civilization go past this point did not make it through.</li>
+				<li>Added a few more <spoiler>subjects</spoiler> and <spoiler>wisdom discoveries</spoiler>.</li>
+				<br>
 				<li><h3>v0.4.0&beta;5.2</h3><li>
 				<li>Added and rebalanced some <spoiler>subjects</spoiler>.</li>
 				<li>Fixed the world title.</li>
@@ -178,7 +179,7 @@
 			<h3>Achievements</h3><br/>
 			<br/>Unfortunately, this world does not have any achievements.
 			<br/>
-			<br/>Current endgame: <spoiler>The Subjects Wisdom Discovery</spoiler>
+			<br/>Current endgame: <spoiler>The Singularity</spoiler>
 		</div>
 		<div v-if="player.tab=='statistics'" class="col right">
 			<button class="back" onclick="showTab('tree')">&gt;</button>
@@ -281,27 +282,41 @@
 			<span> {{modInfo.pointsName}}</span>
 			<br><br>
 			<!-- *************************** Modify the tree in the table below! *************************** -->
-			<table>
-				<td><layer-node layer='c' abb='C'></layer-node></td>
-			</table><table>
-				<td><button class="treeNode hidden"></button></td>
-			</table><table>
-				<td><layer-node layer='wf' abb='WF'></layer-node></td>
-				<td><layer-node layer='sp' abb='SP'></layer-node></td>
-				<td><layer-node layer='b' abb='B'></layer-node></td>
-			</table><table>
-				<td><button class="treeNode hidden"></button></td>
-			</table><table>
-				<td><layer-node layer='w' abb='W'></layer-node></td>
-			</table><table>
-				<td><button class="treeNode hidden"></button></td>
-			</table><table>
-				<td><layer-node layer='bd' abb='BD'></layer-node></td>
-				<td><layer-node layer='so' abb='SO'></layer-node></td>
-				<td><layer-node layer='m' abb='M'></layer-node></td>
-				<td><layer-node layer='t' abb='T'></layer-node></td>
-				<td><layer-node layer='wi' abb='WI'></layer-node></td>
-			</table>
+			<div v-if="player.points.lt(ENDGAME)">
+				<table>
+					<td><layer-node layer='c' abb='C'></layer-node></td>
+				</table><table>
+					<td><button class="treeNode hidden"></button></td>
+				</table><table>
+					<td><layer-node layer='wf' abb='WF'></layer-node></td>
+					<td><layer-node layer='sp' abb='SP'></layer-node></td>
+					<td><layer-node layer='b' abb='B'></layer-node></td>
+				</table><table>
+					<td><button class="treeNode hidden"></button></td>
+				</table><table>
+					<td><layer-node layer='w' abb='W'></layer-node></td>
+				</table><table>
+					<td><button class="treeNode hidden"></button></td>
+				</table><table>
+					<td><layer-node layer='bd' abb='BD'></layer-node></td>
+					<td><layer-node layer='so' abb='SO'></layer-node></td>
+					<td><layer-node layer='m' abb='M'></layer-node></td>
+					<td><layer-node layer='t' abb='T'></layer-node></td>
+					<td><layer-node layer='wi' abb='WI'></layer-node></td>
+				</table>
+				</table><table>
+					<td><button class="treeNode hidden"></button></td>
+				</table><table>
+					<td><layer-node layer='s' abb='S'></layer-node></td>
+				</table>
+			</div>
+			<div v-if="player.points.gte(ENDGAME)">
+				<h5>The point of singularity has been reached. Your civilization did not make it through.</h5>
+				<br/><br/>
+				<table>
+					<td><layer-node layer='s' abb='S'></layer-node></td>
+				</table>
+			</div>
 			<canvas id="treeCanvas" class="canvas"></canvas>
 			<br><br>
 		</div>

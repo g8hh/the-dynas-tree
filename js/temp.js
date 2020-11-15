@@ -304,7 +304,7 @@ function setupBuyableTemp(layer) {
 			let id = row * 10 + col
 			let amt = player[layer].buyables[id]
 			tmp.buyables[layer][id] = {}
-			// console.log(layer + " " + id)
+			//console.log(layer + " " + id)
 			if (data2[id].effect) tmp.buyables[layer][id].effect = {}
 			tmp.buyables[layer][id].cost = {}
 			if (data2[id].style) tmp.buyables[layer][id].style = {}

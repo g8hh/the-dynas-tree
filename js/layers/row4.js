@@ -4,7 +4,7 @@ var expansionDetails = [
 	["display-text", () => "<h5>Click on a tile in the map to see its details. Drag the tiles on the map to see more of it.</h5>"]
 ]
 
-// ----- Fifth row -----
+// ----- Fourth row -----
 addLayer("m", {
 	startData() {
 		return {
@@ -37,7 +37,8 @@ addLayer("m", {
 	base: 1.22727,
 	exponent: 1.01,
 	canBuyMax: () => false,
-
+	resetsNothing: () => hasMilestone("t", 6),
+	
 	effect() {
 		var eff = Decimal.pow(64, player.m.points).pow(2)
 		eff = eff.pow(tmp.buyables.wi[14].effect.second)
@@ -783,6 +784,7 @@ addLayer("t", {
 			autoWorkerUpgrade: false,
 			autoFinderUpgrade: false,
 			autoSpells: false,
+			autoSpellRebuyables: false,
 		}
 	},
 
@@ -802,6 +804,7 @@ addLayer("t", {
 		return {
 			territoryRed: Decimal.pow(100, Decimal.pow(player.t.lands, 0.9)),
 			soldierRed: Decimal.pow(10, Decimal.pow(player.t.lands, 0.6)),
+			queueLength: player.t.points.div(10).add(player.bd.buyables[23].add(1).pow(0.5).sub(1)).floor().toNumber(),
 		}
 	},
 
@@ -809,6 +812,7 @@ addLayer("t", {
 	base: "1e30",
 	exponent: 1.5,
 	canBuyMax: () => hasMilestone("t", 3),
+	resetsNothing: () => hasMilestone("t", 6),
 
 	gainMult() {
 		return new Decimal(1)
@@ -928,6 +932,53 @@ addLayer("t", {
 			effectDesc: () => "You can automate casting spells.",
 			toggles: [["t", "autoSpells"]],
 		},
+		5: {
+			requirementDesc: () => "40 Territories",
+			done() { return player[this.layer].best.gte(40) },
+			effectDesc: () => "You can automate buying spell rebuyables.",
+			toggles: [["t", "autoSpellRebuyables"]],
+		},
+		6: {
+			requirementDesc: () => "80 Territories",
+			unl() { return player.so.buyables[13].gte(1) },
+			done() { return player[this.layer].best.gte(80) },
+			effectDesc: () => "Unlock The Queue, which lets you plan out which tiles for soldiers to conquer them automaically. Also recruiting soldiers, hiring managers, and exploring territories no longer resets anything.",
+		},
+	},
+	
+	buyables: {
+		rows: 1,
+		cols: 2,
+		11: {
+			title: () => "Update the queue",
+			display: () => "Queue strategy:<br/> " + ["Least difficulty", "Most encounter chance", "Least diff. × (chance+1) score", "Least diff. × chance score", "Least diff. / (chance+1) score"][player.world.strategy ? player.world.strategy : 0],
+			cost: () => new Decimal(0),
+			unl() { return player[this.layer].unl },
+			canAfford() { return true },
+			buy() {
+				updateQueue()
+			},
+			style() {
+				return {
+					"height": "80px"
+				}
+			}
+		},
+		12: {
+			title: () => "Change strategy",
+			display: () => "You can get more strategies by geting more honor.",
+			cost: () => new Decimal(0),
+			unl() { return player[this.layer].unl },
+			canAfford() { return true },
+			buy() {
+				player.world.strategy = player.world.strategy ? (player.world.strategy + 1) % Math.min(Math.floor(new Decimal(player.t.elo).toNumber() / 1000) + 1, 5) : 1
+			},
+			style() {
+				return {
+					"height": "80px"
+				}
+			}
+		}
 	},
 	
 	automate() {
@@ -939,6 +990,11 @@ addLayer("t", {
 		
 		if (player.tab == "t" && player.subtabs.t.stuff == "map") {
 			updateMapCanvas()
+		}
+		
+		if (!player.world.conquering && player.world.queue && player.world.queue.length > 0) {
+			initConquering(player.world.queue[0][0], player.world.queue[0][1]), 100
+			player.world.queue.shift()
 		}
 	},
 	
@@ -999,8 +1055,14 @@ addLayer("t", {
 				], 
 				["bar", function () { return format(player.world.conquering ? Decimal.div(player.world.conquerProgress, player.world.conquerGoal) : 0) }, {"background-color": "#333"}],
 				["blank", "5px"],
-				] 
-			},
+			]},
+            queue: { title: () => "The Queue", unl: () => hasMilestone("t", 6), content: [
+				["blank", "5px"],
+				["display-text", function () { return "Your queue length is " + formatWhole(player.world.queue ? player.world.queue.length : 0) + " / " + formatWhole(tmp.layerEffs.t.queueLength) + "." }],
+				["display-text", function () { return "You can increase the maximum queue length by getting more territories or military bases." }],
+				["blank", "5px"],
+				["buyable", 11], ["buyable", 12],
+			]},
         },
 	},
 	
@@ -1083,6 +1145,7 @@ addLayer("so", {
 	base: "1e30",
 	exponent: 0.9,
 	canBuyMax: () => true,
+	resetsNothing: () => hasMilestone("t", 6),
 	
 	effect() {
 		var actualRat = Decimal.add(player.so.rating, 1)
@@ -1290,7 +1353,7 @@ addLayer("wi", {
 		if (hasUpg("wi", 35)) req = req.div(tmp.upgrades.wi[35].effect)
 		if (hasUpg("wi", 43)) req = req.div(tmp.upgrades.wi[43].effect)
 		if (hasUpg("wi", 75)) req = req.div(tmp.upgrades.wi[75].effect)
-		req = req.div(tmp.buyables.wi[13].effect.add ? tmp.buyables.wi[13].effect.pow(tmp.buyables.wi[13].effect.add(1).log(1e10).add(1)).pow(tmp.buyables.wi[13].effect.add(1).log(1e25).add(1)) : 1)
+		req = req.div(tmp.buyables.wi[13].effect.add ? tmp.buyables.wi[13].effect.pow(tmp.buyables.wi[13].effect.add(1).log(1e10).add(1).add(player.wi.points.add(1).pow(0.5).sub(1))).pow(tmp.buyables.wi[13].effect.add(1).log(1e20).add(1)) : 1)
 		return req
 	},
 
@@ -1497,6 +1560,7 @@ addLayer("wi", {
 			extraReq() { return hasUpg("wi", 25) && player.wi.points.gt(player.wi.bought) },
 			effect() {
 				let ret = Decimal.sub(player.t.elo, 1000).pow(Decimal.log10(player.t.elo).pow(1.8)).pow(Decimal.log(player.t.elo, 1e10).add(1))
+				if (hasUpg("wi", 85)) ret = ret.tetrate(1.001).pow(12)
 				return ret;
 			},
 			effectDisplay(fx) { return "÷" + format(fx) },
@@ -1531,7 +1595,7 @@ addLayer("wi", {
 			onPurchase() { player.wi.spent = Decimal.add(player.wi.spent, tmp.upgrades.wi[42].cost); player.wi.bought = Decimal.add(player.wi.bought, 1) }
 		},
 		43: {
-			desc: () => "Knowledge reduces the requirement of wisdom.",
+			desc: () => "Knowledge " + (hasUpg("wi", 85) ? "and wisdom " : "") + "reduces the requirement of wisdom.",
 			cost: () => new Decimal(1e10),
 			currencyLayer: "wi",
 			currencyInternalName: "knowledge",
@@ -1540,6 +1604,7 @@ addLayer("wi", {
 			extraReq() { return hasUpg("wi", 44) && player.wi.points.gt(player.wi.bought) },
 			effect() {
 				let ret = Decimal.pow(player.wi.knowledge, 0.01).pow(Decimal.log(player.wi.knowledge, 2)).pow(Decimal.log(player.wi.knowledge, 10)).pow(Decimal.log(player.wi.knowledge, 1e10))
+				if (hasUpg("wi", 85)) ret = ret.pow(player.wi.points.pow(player.wi.points.div(10).min(1.2).add(1)).add(1))
 				if (ret.gte("1e2000")) ret = ret.mul("1e6000").pow(0.25)
 				if (ret.gte("1e1500")) ret = ret.mul("1e4500").pow(0.25)
 				if (ret.gte("1e1200")) ret = ret.mul("1e2400").cbrt()
@@ -1577,16 +1642,21 @@ addLayer("wi", {
 			extraReq() { return hasUpg("wi", 35) && player.wi.points.gt(player.wi.bought) },
 			effect() {
 				let ret = Decimal.pow(player.wi.knowledge, 0.25).pow(Decimal.add(player.wi.knowledge, 1).log(100)).add(1)
+				if (hasUpg("wi", 85)) ret = ret.pow(0.35)
 				return ret;
 			},
 			effectDisplay(fx) { return "×" + format(fx) },
 			onPurchase() { player.wi.spent = Decimal.add(player.wi.spent, tmp.upgrades.wi[45].cost); player.wi.bought = Decimal.add(player.wi.bought, 1) }
 		},
 		51: {
-			desc: () => "Not yet implemented.",
-			cost: () => new Decimal(0),
+			desc: () => "Unlocks a second exotic spell.",
+			cost: () => new Decimal(1e80),
+			currencyLayer: "wi",
+			currencyInternalName: "knowledge",
+			currencyDisplayName: "knowledge",
 			unl() { return player[this.layer].unl },
-			extraReq() { return false },
+			extraReq() { return hasUpg("wi", 41) && player.wi.points.gt(player.wi.bought) },
+			onPurchase() { player.wi.spent = Decimal.add(player.wi.spent, tmp.upgrades.wi[51].cost); player.wi.bought = Decimal.add(player.wi.bought, 1) }
 		},
 		52: {
 			desc: () => "Its-a-me, Brick-io!",
@@ -1615,6 +1685,7 @@ addLayer("wi", {
 			effect() {
 				let ret = Decimal.pow(player.wi.knowledge, 0.4).pow(Decimal.add(player.wi.knowledge, 1).log(1e100).add(1))
 				if (hasUpg("wi", 64)) ret = ret.mul(tmp.upgrades.wi[64].effect)
+				if (hasUpg("wi", 85)) ret = ret.pow(0.2)
 				if (ret.gte(1e160)) ret = ret.mul(1e320).cbrt()
 				if (ret.gte(1e80)) ret = ret.mul(1e160).cbrt()
 				if (ret.gte(1e40)) ret = ret.mul(1e40).sqrt()
@@ -1633,10 +1704,14 @@ addLayer("wi", {
 			style() { return {"background-color": "var(--background)", "color": "#fff2"} },
 		},
 		61: {
-			desc: () => "Not yet implemented.",
-			cost: () => new Decimal(0),
+			desc: () => "Unlocks a third exotic spell.",
+			cost: () => new Decimal(1e116),
+			currencyLayer: "wi",
+			currencyInternalName: "knowledge",
+			currencyDisplayName: "knowledge",
 			unl() { return player[this.layer].unl },
-			extraReq() { return false },
+			extraReq() { return hasUpg("wi", 51) && player.wi.points.gt(player.wi.bought) },
+			onPurchase() { player.wi.spent = Decimal.add(player.wi.spent, tmp.upgrades.wi[61].cost); player.wi.bought = Decimal.add(player.wi.bought, 1) }
 		},
 		62: {
 			desc: () => "Not yet implemented.",
@@ -1742,6 +1817,7 @@ addLayer("wi", {
 				for (var a = 1; a <= 30; a++) {
 					if (ret.gte("1e" + a + "00")) ret = ret.mul("1e" + a + "00").sqrt()
 				}
+				if (hasUpg("wi", 85)) ret = ret.pow(10)
 				return ret;
 			},
 			effectDisplay(fx) { return "÷" + format(fx) },
@@ -1804,17 +1880,21 @@ addLayer("wi", {
 		respecText:() => "Respec Wisdom Discovers",
 		
 		rows: 1,
-		cols: 4,
+		cols: 8,
 		11: {
 			title: () => "Philosophy",
 			cost(x) {
+				if (x.gte(25)) x = x.pow(2).div(25)
 				let cost = Decimal.pow(100, Decimal.pow(1.2, x))
 				return cost.floor()
 			},
 			effect(x) { 
 				x = x.add(player[this.layer].buyables[12])
 				x = x.add(player[this.layer].buyables[13])
-				return x.pow(Decimal.add(2, player[this.layer].buyables[this.id].div(5)))
+				x = x.add(player[this.layer].buyables[14])
+				x = x.add(tmp.buyables.wi[16].effect)
+				x = x.add(tmp.buyables.wi[18].effect)
+				return x.pow(Decimal.add(2, player.wi.buyables[13].div(5)).add(tmp.buyables.wi[15].effect).add(tmp.buyables.wi[17].effect).add(tmp.buyables.wi[18].effect))
 			},
 			display() { // Everything else displayed in the buyable button after the title
 				let data = tmp.buyables[this.layer][this.id]
@@ -1835,10 +1915,13 @@ addLayer("wi", {
 		12: {
 			title: () => "Mathematics",
 			cost(x) {
+				if (x.gte(15)) x = x.pow(2).div(15)
+				x = x.add(tmp.buyables.wi[18].effect)
 				let cost = Decimal.pow(100, Decimal.pow(1.225, x)).mul(1000)
 				return cost.floor()
 			},
 			effect(x) { 
+				x = x.add(tmp.buyables.wi[16].effect)
 				return Decimal.pow(1e8, x.mul(tmp.buyables.wi[11].effect.add(1).log(10).add(1).log(10).add(1)).pow(0.75).mul(Math.E).mul(Math.PI))
 			},
 			display() { // Everything else displayed in the buyable button after the title
@@ -1860,17 +1943,23 @@ addLayer("wi", {
 		13: {
 			title: () => "Psychology",
 			cost(x) {
+				x = x.add(tmp.buyables.wi[17].effect)
+				x = x.add(tmp.buyables.wi[18].effect)
+				if (x.gte(15)) x = x.pow(2).div(15)
 				let cost = Decimal.pow(100, Decimal.pow(1.225, x)).mul(200000)
 				return cost.floor()
 			},
 			effect(x) { 
-				return Decimal.pow(1e3, x.mul(Decimal.add(player.wi.knowledge, 1).log(10).add(1)).pow(0.35).mul(Math.E))
+				x = x.add(tmp.buyables.wi[15].effect)
+				var eff = Decimal.pow(1e3, x.mul(Decimal.add(player.wi.knowledge, 1).log(10).add(1)).pow(0.35).mul(Math.E)).pow(player.wi.points.add(1).pow(0.02))
+				if (eff.gte(1e200)) eff = eff.mul(1e120).sqrt()
+				return eff
 			},
 			display() { // Everything else displayed in the buyable button after the title
 				let data = tmp.buyables[this.layer][this.id]
 				return "Level " + player[this.layer].buyables[this.id] + "\n\
 				Cost: " + formatWhole(data.cost) + " knowledge\n\
-				Muliplies spiritual power gain by ×" + format(data.effect) + " and reduces spiritual power needed for wisdom gaining by ÷" + format(data.effect.pow(data.effect.add(1).log(1e10).add(1)).pow(data.effect.add(1).log(1e25).add(1))) + " (based on knowledge). Also adds +" + formatWhole(player[this.layer].buyables[this.id]) + " to base “Philosophy” level and +" + format(player[this.layer].buyables[this.id].div(5)) + " to “Philosophy” effect's exponent."
+				Muliplies spiritual power gain by ×" + format(data.effect) + " and reduces spiritual power needed for wisdom gaining by ÷" + format(data.effect.pow(data.effect.add(1).log(1e10).add(1).add(player.wi.points.add(1).pow(0.5).sub(1))).pow(data.effect.add(1).log(1e20).add(1))) + " (based on knowledge and wisdom). Also adds +" + formatWhole(player[this.layer].buyables[this.id]) + " to base “Philosophy” level and +" + format(player[this.layer].buyables[this.id].div(5)) + " to “Philosophy” effect's exponent."
 			},
 			unl() { return true },
 			canAfford() {
@@ -1885,6 +1974,7 @@ addLayer("wi", {
 		14: {
 			title: () => "Physical Education",
 			cost(x) {
+				if (x.gte(6)) x = x.pow(2).div(6)
 				let cost = Decimal.pow(10000, Decimal.pow(1.225, x)).mul(2e11)
 				return cost.floor()
 			},
@@ -1899,6 +1989,115 @@ addLayer("wi", {
 				return "Level " + player[this.layer].buyables[this.id] + "\n\
 				Cost: " + formatWhole(data.cost) + " knowledge\n\
 				Muliplies finished work's effect and building speed by ×" + format(data.effect.first) + " and raises workers and managers' effect by ^" + format(data.effect.second) + " (based on wisdom). Also adds +" + formatWhole(player[this.layer].buyables[this.id]) + " to base “Philosophy” level."
+			},
+			unl() { return true },
+			canAfford() {
+				return Decimal.gte(player.wi.knowledge, tmp.buyables[this.layer][this.id].cost)
+			},
+			buy() {
+				cost = tmp.buyables[this.layer][this.id].cost
+				player.wi.knowledge = Decimal.sub(player.wi.knowledge, cost)
+				player[this.layer].buyables[this.id] = player[this.layer].buyables[this.id].add(1)
+			},
+		},
+		15: {
+			title: () => "Structural Engineering",
+			cost(x) {
+				if (x.gte(6)) x = x.pow(2).div(6)
+				let cost = Decimal.pow(1000000, Decimal.pow(x.mul(0.05).add(1.25), x)).mul(5e10)
+				return cost.floor()
+			},
+			effect(x) { 
+				x = x.add(tmp.buyables.wi[16].effect)
+				x = x.add(tmp.buyables.wi[17].effect)
+				x = x.add(tmp.buyables.wi[18].effect)
+				if (x.gte(10)) x = x.mul(10).sqrt()
+				return x
+			},
+			display() { // Everything else displayed in the buyable button after the title
+				let data = tmp.buyables[this.layer][this.id]
+				return "Level " + player[this.layer].buyables[this.id] + "\n\
+				Cost: " + formatWhole(data.cost) + " knowledge\n\
+				Adds +" + format(data.effect) + " to “Philosophy” effect's exponent and base “Psychology” level."
+			},
+			unl() { return true },
+			canAfford() {
+				return Decimal.gte(player.wi.knowledge, tmp.buyables[this.layer][this.id].cost)
+			},
+			buy() {
+				cost = tmp.buyables[this.layer][this.id].cost
+				player.wi.knowledge = Decimal.sub(player.wi.knowledge, cost)
+				player[this.layer].buyables[this.id] = player[this.layer].buyables[this.id].add(1)
+			},
+		},
+		16: {
+			title: () => "Calculus",
+			cost(x) {
+				x = x.add(tmp.buyables.wi[18].effect)
+				if (x.gte(6)) x = x.pow(2).div(6)
+				let cost = Decimal.pow(1e11, Decimal.pow(x.mul(0.1).add(1.3), x)).mul(1e21)
+				return cost.floor()
+			},
+			effect(x) { 
+				return x.pow(0.9)
+			},
+			display() { // Everything else displayed in the buyable button after the title
+				let data = tmp.buyables[this.layer][this.id]
+				return "Level " + player[this.layer].buyables[this.id] + "\n\
+				Cost: " + formatWhole(data.cost) + " knowledge\n\
+				Adds +" + format(data.effect) + " to base “Philosophy”, “Mathematics” and “Structural Engineering” level."
+			},
+			unl() { return true },
+			canAfford() {
+				return Decimal.gte(player.wi.knowledge, tmp.buyables[this.layer][this.id].cost)
+			},
+			buy() {
+				cost = tmp.buyables[this.layer][this.id].cost
+				player.wi.knowledge = Decimal.sub(player.wi.knowledge, cost)
+				player[this.layer].buyables[this.id] = player[this.layer].buyables[this.id].add(1)
+			},
+		},
+		17: {
+			title: () => "Literature",
+			cost(x) {
+				if (x.gte(4)) x = x.pow(2).div(4)
+				let cost = Decimal.pow(1e20, Decimal.pow(x.mul(0.1).add(1.3), x).add(x.div(3))).mul(1e40)
+				return cost.floor()
+			},
+			effect(x) { 
+				return x.mul(2.5).pow(0.9)
+			},
+			display() { // Everything else displayed in the buyable button after the title
+				let data = tmp.buyables[this.layer][this.id]
+				return "Level " + player[this.layer].buyables[this.id] + "\n\
+				Cost: " + formatWhole(data.cost) + " knowledge\n\
+				Adds +" + format(data.effect) + " to “Philosophy” effect's exponent, base “Psychology” level and base “Structural Engineering” level."
+			},
+			unl() { return true },
+			canAfford() {
+				return Decimal.gte(player.wi.knowledge, tmp.buyables[this.layer][this.id].cost)
+			},
+			buy() {
+				cost = tmp.buyables[this.layer][this.id].cost
+				player.wi.knowledge = Decimal.sub(player.wi.knowledge, cost)
+				player[this.layer].buyables[this.id] = player[this.layer].buyables[this.id].add(1)
+			},
+		},
+		18: {
+			title: () => "Algebra",
+			cost(x) {
+				if (x.gte(4)) x = x.pow(2).div(4)
+				let cost = Decimal.pow(1e50, Decimal.pow(x.mul(0.1).add(1.5), x).add(x.div(3))).mul(1e66)
+				return cost.floor()
+			},
+			effect(x) { 
+				return x.mul(2).pow(0.9)
+			},
+			display() { // Everything else displayed in the buyable button after the title
+				let data = tmp.buyables[this.layer][this.id]
+				return "Level " + player[this.layer].buyables[this.id] + "\n\
+				Cost: " + formatWhole(data.cost) + " knowledge\n\
+				Adds +" + format(data.effect) + " to “Philosophy” effect's exponent, base “Philosophy”, “Psychology”, “Mathematics”, “Structural Engineering” and “Calculus” level."
 			},
 			unl() { return true },
 			canAfford() {

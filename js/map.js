@@ -33,6 +33,13 @@ function updateMapCanvas () {
 		else if (type === 8) { mapctx.fillStyle = "rgb(0, 127, 0)"; }
 		else if (type === 9) { mapctx.fillStyle = "rgb(127, 127, 255)"; }
 		if (isConquerable(x+Math.floor(mapX), y+Math.floor(mapY))) { glyph = "▒" }
+		var queueFind = player.world.queue.find(e => e[0] == x+Math.floor(mapX) && e[1] == y+Math.floor(mapY))
+		if (queueFind) {
+			var index = player.world.queue.indexOf(queueFind)
+			var str = "123456789"
+			if (index < str.length) glyph = str[index]
+			else glyph = "/-\\|"[Math.floor(Date.now() / 100) % 4]
+		}
 		if (player.world.conquering && player.world.conquerX == x+Math.floor(mapX) && player.world.conquerY == y+Math.floor(mapY)) { 
 			glyph = ["░", "▒", "▓", "█", "▓", "▒", "░", " "][Math.floor(Date.now() / 100) % 8]
 		}
@@ -261,4 +268,27 @@ function onMapMouseMove (e) {
 }
 function onMapMouseUp (e) {
 	mapMouse = false
+}
+
+function updateQueue () {
+	player.world.queue = []
+	let x = 0; let y = 1; let rank = 2;
+	for (var a = 0; a < 200; a++) for (var b = 0; b < 250; b++) {
+		if (!isConquered(a, b) && isConquerable(a, b)) {
+			var data = [a, b, getMapDifficulty(a, b)]
+			switch (player.world.strategy) {
+				case 1: data[2] = getMapEncounterChance(a, b).mul(-1); break
+				case 2: data[2] = getMapDifficulty(a, b).mul(getMapEncounterChance(a, b).add(1)); break
+				case 3: data[2] = getMapDifficulty(a, b).mul(getMapEncounterChance(a, b)); break
+				case 4: data[2] = getMapDifficulty(a, b).div(getMapEncounterChance(a, b).add(1)); break
+				default:
+			}
+			var index = player.world.queue.length
+			while (index > 0 && data[rank].lt(player.world.queue[index - 1][rank])) index--
+			data[2] = data[2].toString();
+			player.world.queue.splice(index, 0, data)
+		}
+	}
+	let max = tmp.layerEffs.t.queueLength
+	player.world.queue.splice(max)
 }

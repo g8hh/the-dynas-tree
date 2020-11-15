@@ -7,7 +7,7 @@ var gameEnded = false;
 let VERSION = {
 	num: "0.4.0",
 	name: "Conquer the World",
-	beta: "5.2"
+	beta: "6"
 }
 
 // Determines if it should show points/sec
@@ -431,7 +431,7 @@ VERSION.withoutName = "v" + VERSION.num + (VERSION.pre ? " Pre-Release " + VERSI
 VERSION.withName = VERSION.withoutName + (VERSION.name ? ": " + VERSION.name : "")
 
 
-const ENDGAME = new Decimal("e280000000");
+const ENDGAME = Decimal.pow(2, 262144);
 
 function gameLoop(diff) {
 	if (player.points.gte(ENDGAME) || gameEnded) gameEnded = 1
@@ -480,7 +480,7 @@ var ticking = false
 var interval = setInterval(function () {
 	if (player === undefined || tmp === undefined) return;
 	if (ticking) return;
-	if (gameEnded && !player.keepGoing) return;
+	if (gameEnded) return;
 	ticking = true
 	let now = Date.now()
 	let diff = (now - player.time) / 1e3

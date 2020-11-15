@@ -355,7 +355,7 @@ addLayer("c", {
 			player[this.layer].best = kickstart
 			player[this.layer].total = kickstart
 		}
-		if (hasUpg("c", 11)) player.points = player.points.add(tmp.pointGen.times(diff)).max(0)
+		if (hasUpg("c", 11)) player.points = player.points.add(tmp.pointGen.times(diff)).max(0).min(ENDGAME)
 		if (hasUpg("w", 21) && tmp.gainExp !== undefined) {
 			let delta = tmp.resetGain["c"].mul(0.1).mul(diff)
 			addPoints("c", delta)
