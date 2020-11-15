@@ -33,12 +33,14 @@ function updateMapCanvas () {
 		else if (type === 8) { mapctx.fillStyle = "rgb(0, 127, 0)"; }
 		else if (type === 9) { mapctx.fillStyle = "rgb(127, 127, 255)"; }
 		if (isConquerable(x+Math.floor(mapX), y+Math.floor(mapY))) { glyph = "▒" }
-		var queueFind = player.world.queue.find(e => e[0] == x+Math.floor(mapX) && e[1] == y+Math.floor(mapY))
-		if (queueFind) {
-			var index = player.world.queue.indexOf(queueFind)
-			var str = "123456789"
-			if (index < str.length) glyph = str[index]
-			else glyph = "/-\\|"[Math.floor(Date.now() / 100) % 4]
+		if (player.world.queue) {
+			var queueFind = player.world.queue.find(e => e[0] == x+Math.floor(mapX) && e[1] == y+Math.floor(mapY))
+			if (queueFind) {
+				var index = player.world.queue.indexOf(queueFind)
+				var str = "123456789"
+				if (index < str.length) glyph = str[index]
+				else glyph = "/-\\|"[Math.floor(Date.now() / 100) % 4]
+			}
 		}
 		if (player.world.conquering && player.world.conquerX == x+Math.floor(mapX) && player.world.conquerY == y+Math.floor(mapY)) { 
 			glyph = ["░", "▒", "▓", "█", "▓", "▒", "░", " "][Math.floor(Date.now() / 100) % 8]
