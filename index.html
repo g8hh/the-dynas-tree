@@ -65,7 +65,6 @@
 				<li>Added the achievements tab. It's just a placeholder for now. Or there won't be any achievements in the game at all. We'll see...</li>
 				<li>Make more various UI adjustments.</li>
 				<li>You might have noticed the word "World &alpha;" above the point counter. What does it mean?</li>
-				<button class="tabButton" onclick="showTab('old-stuff')" style="background-color:var(--color); padding: 5px 20px 5px 20px"><h4>Experimental Changelog</h4><h5>(Content in experimental build can subject to change.)</h5></button><br>
 				<br>
 				<br>
 				<h5><i>“Expanding Civilization”</i></h5>
@@ -106,55 +105,6 @@
 		<div v-if="player.tab=='old-stuff'" class="col right">
 			<button class="back" onclick="showTab('changelog')">&gt;</button><br>
 			<ul>
-				<li><h3>v0.4.0&beta;6.2</h3><li>
-				<li>Fixed one another single game-breaking bug.</li>
-				<li>NaNs should be handled better now. The game should show the error stack when it found a NaN.</li>
-				<li><h3>v0.4.0&beta;6.1</h3><li>
-				<li>Fixed one single game-breaking bug.</li>
-				<li><h3>v0.4.0&beta;6</h3><li>
-				<li>Added the <spoiler>point of singularity</spoiler>. Any civilization go past this point did not make it through.</li>
-				<li>Added a few more <spoiler>subjects</spoiler> and <spoiler>wisdom discoveries</spoiler>.</li>
-				<br>
-				<li><h3>v0.4.0&beta;5.2</h3><li>
-				<li>Added and rebalanced some <spoiler>subjects</spoiler>.</li>
-				<li>Fixed the world title.</li>
-				<li><h3>v0.4.0&beta;5.1</h3><li>
-				<li>Fixed a bug.</li>
-				<li>Added one more <spoiler>subject</spoiler>.</li>
-				<li><h3>v0.4.0&beta;5</h3><li>
-				<li>Added <spoiler>subjects</spoiler>.</li>
-				<li>Added more <spoiler>wisdom discovers</spoiler>.</li>
-				<li>Added statistics. Needs to add more stuff into it.</li>
-				<li>Added the achievements tab. It's just a placeholder for now. Or there won't be any achievements in the game at all. We'll see...</li>
-				<li>Redesigned the topbar. It's now an optional thing now. You can switch it in the options tab. The classic menu is a little bit funky though...
-				</li>
-				<li>Rearranged the option tab. That is also an optional thing.</li>
-				<li>Redesigned the favicon because why not?</li>
-				<br>
-				<li><h3>v0.4.0&beta;4</h3><li>
-				<li>Added <spoiler>world map encounters</spoiler>.</li>
-				<li>Added more <spoiler>wisdom discovers</spoiler>.</li>
-				<li>Buffed <spoiler>world map difficulty</spoiler> by... a lot.</li>
-				<li>Added a favicon because why not?</li>
-				<li>Replaced side buttons with a topbar... also because why not?</li>
-				<br>
-				<li><h3>v0.4.0&beta;3</h3><li>
-				<li>Added <spoiler>Land and Jobs Management</spoiler> to the <spoiler>manager</spoiler> layer.</li>
-				<li>The <spoiler>World Map</spoiler> tiles are now bigger.</li>
-				<li>The Discord server links is now in another tab. Well, it's not really a tab, but rather some concepts of a modal.</li>
-				<li>Respec now uses customly made modals instead of that default message box.</li>
-				<br>
-				<li><h3>v0.4.0&beta;2</h3><li>
-				<li>Added the <spoiler>knowledge</spoiler> layer.</li>
-				<li>Adjusted the <spoiler>conquering</spoiler> difficulty.</li>
-				<li>Redesigned link buttons.</li>
-				<li>Made jQuery HTTPS.</li>
-				<br>
-				<li><h3>v0.4.0&beta;1</h3><li>
-				<li>Added the <spoiler>World Map</spoiler> with <spoiler>procedural world generation</spoiler> to the <spoiler>territory</spoiler> layer.</li>
-				<li>Added more <spoiler>bankings</spoiler> and <spoiler>spiritual power</spoiler> rebuyables.</li>
-				<li>Added ETAs to <spoiler>buildings</spoiler> and total <spoiler>banking</spoiler> multiplier.</li>
-				<li>Fix the number formatting not working correctly over e1,000 bug.</li>
 			</ul>
 		</div>
 		<div v-if="player.tab=='info'" class="col right">

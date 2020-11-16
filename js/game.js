@@ -7,7 +7,6 @@ var gameEnded = false;
 let VERSION = {
 	num: "0.4.0",
 	name: "Conquer the World",
-	beta: "6.2"
 }
 
 // Determines if it should show points/sec
