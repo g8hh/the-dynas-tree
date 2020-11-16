@@ -942,7 +942,7 @@ addLayer("t", {
 			requirementDesc: () => "80 Territories",
 			unl() { return player.so.buyables[13].gte(1) },
 			done() { return player[this.layer].best.gte(80) },
-			effectDesc: () => "Unlock The Queue, which lets you plan out which tiles for soldiers to conquer them automaically. Also recruiting soldiers, hiring managers, and exploring territories no longer resets anything.",
+			effectDesc: () => "Unlock The Queue, which lets you plan out which tiles for soldiers to conquer them automatically. Also recruiting soldiers, hiring managers, and exploring territories no longer resets anything.",
 		},
 	},
 	
