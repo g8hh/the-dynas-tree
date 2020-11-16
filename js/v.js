@@ -1,4 +1,5 @@
 var app;
+var soldierStats;
 
 function loadVue() {
 	// data = a function returning the content (actually HTML)
@@ -229,6 +230,14 @@ function loadVue() {
 		</div>
 		`
 	})
+	Vue.component('respec-button', {
+		props: ['layer', 'data'],
+		template: `
+		<div v-if="layers[layer].buyables" class="upgTable">
+			<button v-if="layers[layer].buyables.respec" v-on:click="respecBuyables(layer)" v-bind:class="{ longUpg: true, can: player[layer].unl, locked: !player[layer].unl }">{{layers[layer].buyables.respecText ? tmp.buyables[layer].respecText : "Respec"}}</button>
+		</div>
+		`
+	})
 
 	// data = id of buyable
 	Vue.component('buyable', {
@@ -301,17 +310,77 @@ function loadVue() {
 		</button>
 		`
 	})
+	
+	Vue.component('bar', {
+		props: ['data', 'style'],
+		template: `
+			<div class="bar">
+				<div class="bar-fill" v-bind:style="[{
+						'width': 'max(calc(' + (readData(data) * 100) + '% - 4px), 14px)'
+					}, style]">
+					&nbsp;
+				</div>
+			</div>
+		`
+	})
+	Vue.component('mini-bar', {
+		props: ['data', 'style'],
+		template: `
+			<div class="mini-bar">
+				<div class="mini-bar-fill" v-bind:style="[{
+						'width': 'max(calc(' + (readData(data) * 100) + '% - 4px), 5px)'
+					}, style]">
+					&nbsp;
+				</div>
+			</div>
+		`
+	})
+	
+	Vue.component('info-box', {
+		props: ['data', 'style'],
+		template: `
+			<div class="info-box" v-bind:style="[style]">
+				<div v-for="item in data">
+				<div v-if="!Array.isArray(item)" v-bind:is="item" :layer= "layer" v-bind:style="tmp.componentStyles[layer][item]"></div>
+				<div v-else-if="item.length==3" v-bind:style="[tmp.componentStyles[layer][item], (item[2] ? item[2] : {})]" v-bind:is="item[0]" :layer= "layer" :data= "item[1]"></div>
+				<div v-else-if="item.length==2" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" v-bind:style="tmp.componentStyles[layer][item]"></div>
+			</div>
+		`
+	})
+	
+	Vue.component('map-box', {
+		template: `
+			<canvas id="mapbox" style="font-stretch:150%" width="500px" height="455px" onmousedown="onMapMouseDown(event)" onmousemove="onMapMouseMove(event)" onmouseup="onMapMouseUp(event)">
+			</canvas>
+		`
+	})
+	
+	Vue.component('if-box', {
+		props: ['name', 'data'],
+		template: `
+			<div v-if="name">
+				<div v-for="item in data">
+				<div v-if="!Array.isArray(item)" v-bind:is="item" :layer= "layer" v-bind:style="tmp.componentStyles[layer][item]"></div>
+				<div v-else-if="item.length==3" v-bind:style="[tmp.componentStyles[layer][item], (item[2] ? item[2] : {})]" v-bind:is="item[0]" :layer= "layer" :data= "item[1]"></div>
+				<div v-else-if="item.length==2" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" v-bind:style="tmp.componentStyles[layer][item]"></div>
+			</div>
+		`
+	})
 
 
 	app = new Vue({
 		el: "#app",
 		data: {
 			player,
+			soldierStats,
+			mapFocusDesc,
+			isConquered,
 			tmp,
 			Decimal,
 			format,
 			formatWhole,
 			formatTime,
+			formatTimeLong,
 			focused,
 			getThemeName,
 			layerUnl,
@@ -323,7 +392,8 @@ function loadVue() {
 			VERSION,
 			ENDGAME,
 			LAYERS,
-			hotkeys
+			hotkeys,
+			modal
 		},
 	})
 }

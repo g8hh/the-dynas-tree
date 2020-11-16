@@ -1,3 +1,139 @@
+function getWorldName () {
+	let str = "World α"
+	if (player.b.banking && player.b.unl) str += " + " + tmp.buyables.b[[11, 12, 13, 21, 22, 23, 31, 32].find(x => tmp.buyables.b[x].canAfford)].title
+	if (player.bd.building) str += " + " +  tmp.buyables.bd[player.bd.building].title + " Building"
+	if (player.t.active) str += " + " + tmp.challs.t[player.t.active].name
+	return str
+}
+
+function isFunction (obj) {
+	return obj && {}.toString.call(obj) === '[object Function]';
+}
+
+class SaveCorruptedError extends Error {
+  constructor(message) {
+    super(message)
+    this.name = "SaveCorruptedError"
+  }
+}
+
+var statsResources = [
+	{
+		layer: "·",
+		name: "Points",
+		unl: () => true,
+		points: () => format(player.points, 2),
+	},
+	{
+		layer: "c",
+		name: "Coins",
+		unl: () => player.c.unl,
+		points: () => formatWhole(player.c.points),
+		total: () => formatWhole(player.c.total),
+		best: () => formatWhole(player.c.best),
+	},
+	{
+		layer: "wf",
+		name: "Workfinders",
+		unl: () => player.wf.unl,
+		points: () => formatWhole(player.wf.points),
+		best: () => formatWhole(player.wf.best),
+	},
+	{
+		layer: "wf",
+		name: "├ Finished Work",
+		unl: () => player.wf.unl,
+		points: () => formatWhole(player.wf.workDone),
+	},
+	{
+		layer: "wf",
+		name: "└ Unfinished Work",
+		unl: () => player.wf.unl,
+		points: () => formatWhole(player.wf.workUndone),
+	},
+	{
+		layer: "sp",
+		name: "Spiritual Power",
+		unl: () => player.sp.unl,
+		points: () => formatWhole(player.sp.points),
+		total: () => formatWhole(player.sp.total),
+		best: () => formatWhole(player.sp.best),
+	},
+	{
+		layer: "sp",
+		name: "└ Magic",
+		unl: () => player.sp.unl,
+		points: () => formatWhole(player.sp.magic),
+	},
+	{
+		layer: "b",
+		name: "Banks",
+		unl: () => player.b.unl,
+		points: () => formatWhole(player.b.points),
+		best: () => formatWhole(player.b.best),
+	},
+	{
+		layer: "w",
+		name: "Workers",
+		unl: () => player.w.unl,
+		points: () => formatWhole(player.w.points),
+		best: () => formatWhole(player.w.best),
+	},
+	{
+		layer: "bd",
+		name: "Builders",
+		unl: () => player.bd.unl,
+		points: () => formatWhole(player.bd.points),
+		best: () => formatWhole(player.bd.best),
+	},
+	{
+		layer: "so",
+		name: "Soldiers",
+		unl: () => player.so.unl,
+		points: () => formatWhole(player.so.points),
+		best: () => formatWhole(player.so.best),
+	},
+	{
+		layer: "m",
+		name: "Managers",
+		unl: () => player.m.unl,
+		points: () => formatWhole(player.m.points),
+		best: () => formatWhole(player.m.best),
+	},
+	{
+		layer: "t",
+		name: "Territories",
+		unl: () => player.t.unl,
+		points: () => formatWhole(player.t.points),
+		best: () => formatWhole(player.t.best),
+	},
+	{
+		layer: "t",
+		name: "├ Conquered Land",
+		unl: () => player.so.buyables[13].gte(1),
+		points: () => formatWhole(player.t.lands),
+	},
+	{
+		layer: "t",
+		name: "└ Honor",
+		unl: () => player.so.buyables[13].gte(1),
+		points: () => formatWhole(player.t.elo),
+	},
+	{
+		layer: "wi",
+		name: "Wisdom",
+		unl: () => player.wi.unl,
+		points: () => formatWhole(player.wi.points),
+		best: () => formatWhole(player.wi.best),
+	},
+	{
+		layer: "wi",
+		name: "└ Knowledge",
+		unl: () => player.wi.unl,
+		points: () => formatWhole(player.wi.knowledge),
+	},
+]
+
 // ************ Number formatting ************
 
 function exponentialFormat(num, precision) {
@@ -26,6 +162,7 @@ function format(decimal, precision = 2) {
 	decimal = new Decimal(decimal)
 	if (isNaN(decimal.sign) || isNaN(decimal.layer) || isNaN(decimal.mag)) {
 		player.hasNaN = true;
+		NaNerror = new SaveCorruptedError("The game has detected NaN in your save. If you can see this please contact the mod developer.")
 		return "NaN"
 	}
 	if (decimal.sign < 0) return "-" + format(decimal.neg(), precision)
@@ -34,7 +171,7 @@ function format(decimal, precision = 2) {
 		var slog = decimal.slog()
 		if (slog.gte(1e6)) return "F" + format(slog.floor())
 		else return Decimal.pow(10, slog.sub(slog.floor())).toStringWithDecimalPlaces(3) + "F" + commaFormat(slog.floor(), 0)
-	} else if (decimal.gte("1e1000")) return (Math.floor(decimal.mantissa + 0.01) + ("e" + formatWhole(decimal.log10())))
+	} else if (decimal.gte("1e1000")) return (Math.floor(decimal.mantissa + 0.01) + ("e" + formatWhole(decimal.log10().floor())))
 	else if (decimal.gte(1e9)) return exponentialFormat(decimal, precision)
 	else if (decimal.gte(1e3)) return commaFormat(decimal, 0)
 	else return commaFormat(decimal, precision)
@@ -44,10 +181,36 @@ function formatWhole(decimal) {
 	return format(decimal, 0)
 }
 
+function formatTimeLong(s) {
+	let str = format(s % 60) + " seconds"; s /= 60
+	if (s >= 1) str = formatWhole(Math.floor(s) % 60) + " minutes and " + str; s /= 60
+	if (s >= 1) str = formatWhole(Math.floor(s) % 24) + " hours, " + str; s /= 24
+	if (s >= 1) str = formatWhole(Math.floor(s) % 365) + " days, " + str; s /= 365
+	if (s >= 1) str = formatWhole(Math.floor(s)) + " years, " + str
+	return str
+}
+
 function formatTime(s) {
-	if (s < 60) return format(s) + "s"
-	else if (s < 3600) return formatWhole(Math.floor(s / 60)) + "m " + format(s % 60) + "s"
-	else return formatWhole(Math.floor(s / 3600)) + "h " + formatWhole(Math.floor(s / 60) % 60) + "m " + format(s % 60) + "s"
+	if (Decimal.gte(s, 31557600e3)) return formatTimeAlt(s)
+	let str = format(s % 60) + "s"; s /= 60
+	if (s >= 1) str = formatWhole(Math.floor(s) % 60) + "m " + str; s /= 60
+	if (s >= 1) str = formatWhole(Math.floor(s) % 24) + "h " + str; s /= 24
+	if (s >= 1) str = formatWhole(Math.floor(s) % 365) + "d " + str; s /= 365
+	if (s >= 1) str = formatWhole(Math.floor(s)) + "y " + str
+	return str
+}
+function formatTimeAlt(s) {
+	s = new Decimal(s)
+	if (s.gte("31557600e1000")) return format(s.div("31557600e1000")) + " universe lifetimes"
+	if (s.gte(31557600e100)) return format(s.div(31557600e100)) + " black hole eras"
+	if (s.gte(31557600e40)) return format(s.div(31557600e40)) + " degenerate eras"
+	if (s.gte(31557600e9)) return format(s.div(31557600e9)) + " aeons"
+	if (s.gte(31557600e3)) return format(s.div(31557600e3)) + " millenials"
+	if (s.gte(31557600)) return format(s.div(31557600)) + " years"
+	if (s.gte(86400)) return format(s.div(86400)) + " days"
+	if (s.gte(3600)) return format(s.div(3600)) + " hours"
+	if (s.gte(60)) return format(s.div(60)) + " minutes"
+	return format(s) + " seconds"
 }
 
 function toPlaces(x, precision, maxAccepted) {
@@ -79,6 +242,7 @@ function startPlayerBase() {
 		keepGoing: false,
 		hasNaN: false,
 		hideChalls: false,
+		optionFlavor: true,
 		points: new Decimal(10),
 		subtabs: {},
 	}
