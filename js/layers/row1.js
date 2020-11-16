@@ -10,6 +10,7 @@ addLayer("c", {
 
 	layerShown() { return true },
 
+	name: "coins",
 	color: () => "#FFFF00",
 	resource: "coins",
 	row: 0,
@@ -64,6 +65,7 @@ addLayer("c", {
 				if (hasUpg(this.layer, 41)) ret = ret.times(layers.c.upgrades[41].effect())
 				if (hasUpg(this.layer, 51)) ret = ret.mul(layers.c.upgrades[51].effect())
 				if (tmp.buyables.bd[12].effect) ret = ret.mul(tmp.buyables.bd[12].effect)
+				if (hasUpg("wi", 11)) ret = ret.mul(layers.wi.upgrades[11].effect())
 				if (hasUpg("w", 12)) ret = ret.pow(layers.w.upgrades[12].effect())
 				return ret;
 			},
@@ -81,6 +83,7 @@ addLayer("c", {
 				if (hasUpg(this.layer, 31)) ret = ret.times(layers.c.upgrades[31].effect())
 				if (hasUpg(this.layer, 41)) ret = ret.times(layers.c.upgrades[41].effect())
 				if (hasUpg(this.layer, 51)) ret = ret.mul(layers.c.upgrades[51].effect())
+				if (hasUpg("wi", 11)) ret = ret.mul(layers.wi.upgrades[11].effect())
 				if (tmp.buyables.bd[12].effect) ret = ret.mul(tmp.buyables.bd[12].effect)
 				return ret;
 			},
@@ -97,6 +100,7 @@ addLayer("c", {
 				if (hasUpg(this.layer, 31)) ret = ret.times(layers.c.upgrades[31].effect())
 				if (hasUpg(this.layer, 41)) ret = ret.times(layers.c.upgrades[41].effect())
 				if (hasUpg(this.layer, 51)) ret = ret.mul(layers.c.upgrades[51].effect())
+				if (hasUpg("wi", 11)) ret = ret.mul(layers.wi.upgrades[11].effect())
 				if (tmp.buyables.bd[12].effect) ret = ret.mul(tmp.buyables.bd[12].effect)
 				return ret;
 			},
@@ -114,6 +118,7 @@ addLayer("c", {
 				if (hasUpg(this.layer, 41)) ret = ret.times(layers.c.upgrades[41].effect())
 				if (hasUpg(this.layer, 51)) ret = ret.mul(layers.c.upgrades[51].effect())
 				if (tmp.buyables.bd[12].effect) ret = ret.mul(tmp.buyables.bd[12].effect)
+				if (hasUpg("wi", 21)) ret = ret.mul(layers.wi.upgrades[21].effect())
 				if (hasUpg("w", 11)) ret = ret.pow(layers.w.upgrades[11].effect())
 				if (player.b.banking & 1) ret = ret.pow(0.5)
 				return ret;
@@ -133,6 +138,7 @@ addLayer("c", {
 				if (hasUpg(this.layer, 41)) ret = ret.times(layers.c.upgrades[41].effect())
 				if (hasUpg(this.layer, 51)) ret = ret.mul(layers.c.upgrades[51].effect())
 				if (tmp.buyables.bd[12].effect) ret = ret.mul(tmp.buyables.bd[12].effect)
+				if (hasUpg("wi", 21)) ret = ret.mul(layers.wi.upgrades[21].effect())
 				return ret;
 			},
 			effectDisplay(fx) { return "×" + format(fx) },
@@ -151,6 +157,7 @@ addLayer("c", {
 				ret = ret.times(player.wf.workDoneEffect)
 				if (hasUpg(this.layer, 34)) ret = ret.times(layers.c.upgrades[34].effect())
 				if (tmp.buyables.bd[12].effect) ret = ret.mul(tmp.buyables.bd[12].effect)
+				if (hasUpg("wi", 21)) ret = ret.mul(layers.wi.upgrades[21].effect())
 				return ret;
 			},
 			effectDisplay(fx) { return "×" + format(fx) },
@@ -348,7 +355,7 @@ addLayer("c", {
 			player[this.layer].best = kickstart
 			player[this.layer].total = kickstart
 		}
-		if (hasUpg("c", 11)) player.points = player.points.add(tmp.pointGen.times(diff)).max(0)
+		if (hasUpg("c", 11)) player.points = player.points.add(tmp.pointGen.times(diff)).max(0).min(ENDGAME)
 		if (hasUpg("w", 21) && tmp.gainExp !== undefined) {
 			let delta = tmp.resetGain["c"].mul(0.1).mul(diff)
 			addPoints("c", delta)
@@ -365,7 +372,6 @@ addLayer("c", {
 				var z = x + y
 				if (!hasUpg("c", z) && canAffordUpg("c", z) && tmp.upgrades.c[z].unl) {
 					buyUpg("c", z)
-					console.log(z)
 					player.wf.workUndone = player.wf.workUndone.add(penalty)
 				}
 			}

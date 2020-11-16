@@ -5,8 +5,8 @@ var NaNalert = false;
 var gameEnded = false;
 
 let VERSION = {
-	num: "0.3.1",
-	name: "Expanding Civilization"
+	num: "0.4.0",
+	name: "Conquer the World",
 }
 
 // Determines if it should show points/sec
@@ -31,6 +31,14 @@ function getPointGen() {
 	if (tmp.layerEffs.sp) gain = gain.mul(tmp.layerEffs.sp)
 	if (player.sp.buyables[21].gt(0)) gain = gain.mul(tmp.buyables.sp[21].effect)
 	if (tmp.layerEffs.so) gain = gain.mul(tmp.layerEffs.so)
+		
+	var landMul = new Decimal(1)
+	for (var a = 11; a <= 20; a++)
+		if (player.m.buyables[a].gt(0)) landMul = landMul.mul(tmp.buyables.m[a].effect)
+	gain = gain.mul(landMul)
+	if (tmp) tmp.landMul = landMul
+	
+		
 	if (player.b.banking & 1) gain = gain.pow(0.5)
 	if (player.b.banking & 2) gain = gain.pow(0.3333333)
 	if (player.b.banking & 4) gain = gain.pow(0.1)
@@ -75,15 +83,18 @@ function convertToDecimal() {
 function getResetGain(layer, useType = null) {
 	let type = useType
 	if (!useType) type = layers[layer].type
+	
+	var base = isFunction(layers[layer].base) ? layers[layer].base() : layers[layer].base
+	var exponent = isFunction(layers[layer].exponent) ? layers[layer].exponent() : layers[layer].exponent
 
 	if (tmp.gainExp[layer].eq(0)) return new Decimal(0)
 	if (type == "static") {
 		if ((!layers[layer].canBuyMax()) || tmp.layerAmt[layer].lt(tmp.layerReqs[layer])) return new Decimal(1)
-		let gain = tmp.layerAmt[layer].div(tmp.layerReqs[layer]).div(tmp.gainMults[layer]).max(1).log(layers[layer].base).times(tmp.gainExp[layer]).pow(Decimal.pow(layers[layer].exponent, -1))
+		let gain = tmp.layerAmt[layer].div(tmp.layerReqs[layer]).div(tmp.gainMults[layer]).max(1).log(base).times(tmp.gainExp[layer]).pow(Decimal.pow(exponent, -1))
 		return gain.floor().sub(player[layer].points).add(1).max(1);
 	} else if (type == "normal") {
 		if (tmp.layerAmt[layer].lt(tmp.layerReqs[layer])) return new Decimal(0)
-		let gain = tmp.layerAmt[layer].div(tmp.layerReqs[layer]).pow(layers[layer].exponent).times(tmp.gainMults[layer]).pow(tmp.gainExp[layer])
+		let gain = tmp.layerAmt[layer].div(tmp.layerReqs[layer]).pow(exponent).times(tmp.gainMults[layer]).pow(tmp.gainExp[layer])
 		if (gain.gte("e1e7")) gain = gain.sqrt().times("e5e6")
 		return gain.floor().max(0);
 	} else if (type == "custom") {
@@ -96,19 +107,22 @@ function getResetGain(layer, useType = null) {
 function getNextAt(layer, canMax = false, useType = null) {
 	let type = useType
 	if (!useType) type = layers[layer].type
+	
+	var base = isFunction(layers[layer].base) ? layers[layer].base() : layers[layer].base
+	var exponent = isFunction(layers[layer].exponent) ? layers[layer].exponent() : layers[layer].exponent
 
 	if (tmp.gainExp[layer].eq(0)) return new Decimal(1 / 0)
 	if (type == "static") {
 		if (!layers[layer].canBuyMax()) canMax = false
 		let amt = player[layer].points.plus((canMax && tmp.layerAmt[layer].gte(tmp.nextAt[layer])) ? tmp.resetGain[layer] : 0)
-		let extraCost = Decimal.pow(layers[layer].base, amt.pow(layers[layer].exponent).div(tmp.gainExp[layer])).times(tmp.gainMults[layer])
+		let extraCost = Decimal.pow(base, amt.pow(exponent).div(tmp.gainExp[layer])).times(tmp.gainMults[layer])
 		let cost = extraCost.times(tmp.layerReqs[layer]).max(tmp.layerReqs[layer])
 		if (layers[layer].resCeil) cost = cost.ceil()
 		return cost;
 	} else if (type == "normal") {
 		let next = tmp.resetGain[layer].add(1)
 		if (next.gte("e1e7")) next = next.div("e5e6").pow(2)
-		next = next.root(tmp.gainExp[layer]).div(tmp.gainMults[layer]).root(layers[layer].exponent).times(tmp.layerReqs[layer]).max(tmp.layerReqs[layer])
+		next = next.root(tmp.gainExp[layer]).div(tmp.gainMults[layer]).root(exponent).times(tmp.layerReqs[layer]).max(tmp.layerReqs[layer])
 		if (layers[layer].resCeil) next = next.ceil()
 		return next;
 	} else if (type == "custom") {
@@ -246,14 +260,16 @@ function doReset(layer, force = false) {
 function respecBuyables(layer) {
 	if (!layers[layer].buyables) return
 	if (!layers[layer].buyables.respec) return
-	if (!confirm("Are you sure you want to respec? This will force you to do a \"" + (layers[layer].name ? layers[layer].name : layer) + "\" reset as well!")) return
-	layers[layer].buyables.respec()
-	updateBuyableTemp(layer)
+	
+	modal.title = "Are you sure you want to respec?"
+	modal.content = `Doing this will also force you to do a "${(layers[layer].name ? layers[layer].name : layer)}" reset as well!<br/><button class="tabButton" style="background-color: var(--color); padding: 5px 20px 5px 20px" onclick="{layers['${layer}'].buyables.respec(); updateBuyableTemp('${layer}'); modal.showing = false}"><p>Do it!</p></button>`
+	modal.showing = true
 }
 
 function canAffordUpg(layer, id) {
 	let upg = layers[layer].upgrades[id]
 	let cost = tmp.upgrades[layer][id].cost
+	if (upg.extraReq && !upg.extraReq()) return false
 	return canAffordPurchase(layer, upg, cost)
 }
 
@@ -286,10 +302,10 @@ function canAffordPurchase(layer, thing, cost) {
 		let name = thing.currencyInternalName
 		if (thing.currencyLayer) {
 			let lr = thing.currencyLayer
-			return !(player[lr][name].lt(cost))
+			return !Decimal.lt(player[lr][name], cost)
 		}
 		else {
-			return !(player[name].lt(cost))
+			return !Decimal.lt(player[name], cost)
 		}
 	}
 	else {
@@ -303,6 +319,7 @@ function buyUpg(layer, id) {
 	if (player[layer].upgrades.includes(id)) return
 	let upg = layers[layer].upgrades[id]
 	let cost = tmp.upgrades[layer][id].cost
+	if (upg.extraReq && !upg.extraReq()) return
 
 	if (upg.currencyInternalName) {
 		let name = upg.currencyInternalName
@@ -409,11 +426,11 @@ function completeChall(layer, x) {
 	updateChallTemp(layer)
 }
 
-VERSION.withoutName = "v" + VERSION.num + (VERSION.pre ? " Pre-Release " + VERSION.pre : VERSION.pre ? " Beta " + VERSION.beta : "")
+VERSION.withoutName = "v" + VERSION.num + (VERSION.pre ? " Pre-Release " + VERSION.pre : VERSION.beta ? "β" + VERSION.beta : "")
 VERSION.withName = VERSION.withoutName + (VERSION.name ? ": " + VERSION.name : "")
 
 
-const ENDGAME = new Decimal("e280000000");
+const ENDGAME = Decimal.pow(2, 262144);
 
 function gameLoop(diff) {
 	if (player.points.gte(ENDGAME) || gameEnded) gameEnded = 1
@@ -445,15 +462,16 @@ function gameLoop(diff) {
 		player.autosave = false;
 		NaNalert = true;
 
-		alert("We have detected a corruption in your save. Please visit https://discord.gg/wwQfgPa for help.")
+		modal.title = "An error has occured."
+		modal.content = `<br/>Details of error:<h5><pre>` + NaNerror.stack + `</pre></h5><br/>If you can see this, please visit https://discord.gg/wwQfgPa for help.<br/><button class="tabButton" style="background-color: var(--color); padding: 5px 20px 5px 20px" onclick="exportSave()"><p>Export save to clipboard</p></button>`
+		modal.showing = true
 	}
 }
 
 function hardReset() {
-	if (!confirm("Are you sure you want to do this? You will lose all your progress!")) return
-	player = getStartPlayer()
-	save();
-	window.location.reload();
+	modal.title = "Are you sure you want to hard reset?"
+	modal.content = `This is a dangerous process! You'll lose all of your progress if you continue doing this!<br/><button class="tabButton" style="background-color: var(--color); padding: 5px 20px 5px 20px" onclick="{player = getStartPlayer(); save(); window.location.reload()}"><p>I understand the consequences, do it!</p></button>`
+	modal.showing = true
 }
 
 var ticking = false
@@ -461,7 +479,7 @@ var ticking = false
 var interval = setInterval(function () {
 	if (player === undefined || tmp === undefined) return;
 	if (ticking) return;
-	if (gameEnded && !player.keepGoing) return;
+	if (gameEnded) return;
 	ticking = true
 	let now = Date.now()
 	let diff = (now - player.time) / 1e3
