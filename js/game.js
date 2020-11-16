@@ -7,7 +7,7 @@ var gameEnded = false;
 let VERSION = {
 	num: "0.4.0",
 	name: "Conquer the World",
-	beta: "6.1"
+	beta: "6.2"
 }
 
 // Determines if it should show points/sec
@@ -464,7 +464,7 @@ function gameLoop(diff) {
 		NaNalert = true;
 
 		modal.title = "An error has occured."
-		modal.content = `<br/>Details of error:<h5>The game has detected NaN in your save. If you can see this please contact the mod developer.</h5><br/>If you can see this, please visit https://discord.gg/wwQfgPa for help.<br/><button class="tabButton" style="background-color: var(--color); padding: 5px 20px 5px 20px" onclick="exportSave()"><p>Export save to clipboard</p></button>`
+		modal.content = `<br/>Details of error:<h5><pre>` + NaNerror.stack + `</pre></h5><br/>If you can see this, please visit https://discord.gg/wwQfgPa for help.<br/><button class="tabButton" style="background-color: var(--color); padding: 5px 20px 5px 20px" onclick="exportSave()"><p>Export save to clipboard</p></button>`
 		modal.showing = true
 	}
 }

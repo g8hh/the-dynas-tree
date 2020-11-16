@@ -951,7 +951,7 @@ addLayer("t", {
 		cols: 2,
 		11: {
 			title: () => "Update the queue",
-			display: () => "Queue strategy:<br/> " + ["Least difficulty", "Most encounter chance", "Least diff. × (chance+1) score", "Least diff. × chance score", "Least diff. / (chance+1) score"][player.world.strategy ? player.world.strategy : 0],
+			display: () => "Queue strategy:<br/> " + ["Least difficulty", "Most encounter chance", "Least diff. × (chance+1) score", "Least diff. × chance score", "Least diff. / (chance+1) score"][player.world && player.world.strategy ? player.world.strategy : 0],
 			cost: () => new Decimal(0),
 			unl() { return player[this.layer].unl },
 			canAfford() { return true },

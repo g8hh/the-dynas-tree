@@ -10,6 +10,13 @@ function isFunction (obj) {
 	return obj && {}.toString.call(obj) === '[object Function]';
 }
 
+class SaveCorruptedError extends Error {
+  constructor(message) {
+    super(message)
+    this.name = "SaveCorruptedError"
+  }
+}
+
 var statsResources = [
 	{
 		layer: "·",
@@ -155,6 +162,7 @@ function format(decimal, precision = 2) {
 	decimal = new Decimal(decimal)
 	if (isNaN(decimal.sign) || isNaN(decimal.layer) || isNaN(decimal.mag)) {
 		player.hasNaN = true;
+		NaNerror = new SaveCorruptedError("The game has detected NaN in your save. If you can see this please contact the mod developer.")
 		return "NaN"
 	}
 	if (decimal.sign < 0) return "-" + format(decimal.neg(), precision)
