@@ -1,0 +1,323 @@
+﻿<!DOCTYPE html>
+<head>
+	<!-- Abandoned Discord server: https://discord.gg/KHsjfZF -->
+	<meta charset="utf-8">
+	<script>
+		const modInfo = {
+			name: "The Dynas Tree",
+			id: "dyntree",
+			pointsName: "points",
+			offlineLimit: 1  // In hours
+		}
+	</script>
+	<title>The Dynas Tree</title>
+	<link rel="shortcut icon" href="favicon.png" />
+	<link rel="stylesheet" type="text/css" href="style.css" />
+	<link href="https://fonts.googleapis.com/css?family=Inconsolata:wght@300;700" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Inconsolata:wdth@150&display=swap" rel="stylesheet">
+	<script src="https://code.jquery.com/jquery.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>
+	<script type="text/javascript" src="js/modal.js"></script>
+	<script type="text/javascript" src="js/break_eternity.js"></script>
+	<script type="text/javascript" src="js/layerSupport.js"></script>
+	<script type="text/javascript" src="js/utils.js"></script>
+	<script type="text/javascript" src="js/saves.js"></script>
+	<script type="text/javascript" src="js/map.js"></script>
+
+	<script type="text/javascript" src="js/layers/row1.js"></script>
+	<script type="text/javascript" src="js/layers/row2.js"></script>
+	<script type="text/javascript" src="js/layers/row3.js"></script>
+	<script type="text/javascript" src="js/layers/row4.js"></script>
+	<script type="text/javascript" src="js/layers/row5.js"></script>
+
+	<script type="text/javascript" src="js/temp.js"></script>
+	<script type="text/javascript" src="js/game.js"></script>
+	<script type="text/javascript" src="js/v.js"></script>
+	<script type="text/javascript" src="js/canvas.js"></script>
+</head>
+<body onload="load()">
+	<div id="app">
+		<div class="vl" v-if="player.tab!='tree'&&player.tab!='gameEnded'"></div>
+		<div v-if="player.tab=='gameEnded'" class="fullWidth">
+			<br>
+			<h2>{{modInfo.name}} {{VERSION.withoutName}}</h2><br><br>
+			<h3>Congratulations! You have reached the point of singularity and beaten this game, but for now...</h3><br>
+			In case you haven't noticed, there will be more content after this. You can keep continuing. but the game has been paused, since singularity was meant to be a forced prestige layer.<br>
+			<div v-if="!player.timePlayedReset">It took you {{formatTimeLong(player.timePlayed)}} to reach the singularity point.</div>
+			<br>
+			<button class="longUpg can" onclick="hardReset(true)">Play Again</button>&nbsp;&nbsp;&nbsp;&nbsp;<button class="longUpg can" onclick="keepGoing()">Keep Going</button>
+			<br><br><br>
+			<br>
+			<br><br><br>
+		</div>
+		<div v-if="player.tab=='changelog'" class="col right">
+			<button class="back" onclick="showTab('tree')">&gt;</button><br>
+			<ul>
+				<h5><i>“Conquer the World”</i></h5>
+				<li><h3>v0.4.0</h3><li>
+				<li>Added the <spoiler>point of singularity</spoiler>. Any civilization go past this point did not make it through.</li>
+				<li>Added the <spoiler>knowledge</spoiler> layer.</li>
+				<li>Added the <spoiler>World Map</spoiler> with <spoiler>procedural world generation</spoiler> to the <spoiler>territory</spoiler> layer.</li>
+				<li>Added <spoiler>Land and Jobs Management</spoiler> to the <spoiler>manager</spoiler> layer.</li>
+				<li>Added more <spoiler>bankings</spoiler> and <spoiler>spiritual power</spoiler> rebuyables.</li>
+				<li>Added ETAs to <spoiler>buildings</spoiler> and total <spoiler>banking</spoiler> multiplier.</li>
+				<li>Fix the number formatting not working correctly over e1,000 bug.</li>
+				<li>Added the achievements tab. It's just a placeholder for now. Or there won't be any achievements in the game at all. We'll see...</li>
+				<li>Make more various UI adjustments.</li>
+				<li>You might have noticed the word "World &alpha;" above the point counter. What does it mean?</li>
+				<br>
+				<br>
+				<h5><i>“Expanding Civilization”</i></h5>
+				<li><h3>v0.3.1</h3><li>
+				<li>Fixed the <spoiler>“Market Crash” obstacle</spoiler> not functioning as intended.</li>
+				<br>
+				<li><h3>v0.3.0</h3><li>
+				<li>Added the <spoiler>territory</spoiler> and the <spoiler>solider</spoiler> layer.</li>
+				<li>Added more <spoiler>buildings</spoiler>, <spoiler>magic spells</spoiler> and <spoiler>manager</spoiler> milestones.</li>
+				<li>Hotkeys should work even if you don't unlock that layer yet.</li>
+				<li>Added a concept of a modal. It should appear if you have an error along with details of it for easier reporting.</li>
+				<br>
+				<h5><i>“A New Age”</i></h5>
+				<li><h3>v0.2.0</h3><li>
+				<li>Added the <spoiler>builder</spoiler> and the <spoiler>spiritual power</spoiler> layer.</li>
+				<li>Added more mechanics to the <spoiler>manager</spoiler> layer.</li>
+				<li>Replaced two of the last <spoiler>bankings</spoiler> and renamed the <spoiler>banking</spoiler> before that.</li>
+				<li>Migrated to The Modding Tree v1.3.4.</li>
+				<li>Added spoiler boxes to the changelog, which should be looking like <spoiler>this one over here</spoiler>.</li>
+				<li>Made various UI adjustments.</li>
+				<br>
+				<br>
+				<h5><i>“The Beginning”</i></h5>
+				<li><h3>v0.1.0</h3><li>
+				<li>Added the <spoiler>manager</spoiler> layer (didn't have anything for now).</li>
+				<li>Added some new things to the layers before that.</li>
+				<li>Fixed some bugs related to progressing and save importing.</li>
+				<br>
+				<br>
+				<h5><i>“Before Life”</i></h5>
+				<li><h3>v0.0.1</h3><li>
+				<li>Made some rebalancing to the early game.</li>
+				<br>
+				<li><h3>v0.0.0</h3><li>
+				<li>This exists. Posibly buggy. Very unbalanced. Need suggestions.</li>
+			</ul>
+		</div>
+		<div v-if="player.tab=='old-stuff'" class="col right">
+			<button class="back" onclick="showTab('changelog')">&gt;</button><br>
+			<ul>
+			</ul>
+		</div>
+		<div v-if="player.tab=='info'" class="col right">
+			<button class="back" onclick="showTab('tree')">&gt;</button><br>
+			<br>
+			<h2>{{modInfo.name}}</h2>
+			<br>
+			<h3>{{VERSION.withName}}</h3>
+			<br>
+			<br>
+			Made by ducdat0507
+			<br>
+			a mod of The Prestige Tree made by Jacorb and Aarex
+			<br>
+			using The Modding Tree by Acamaeda
+			<br><br>
+			<button class="tabButton" onclick="showTab('changelog')" style="background-color:var(--color)">Game Changelog</button><br>
+			<button class="tabButton" onclick="showDiscordModal()" style="background-color:var(--color)">Discord servers</button><br>
+			<br><br>
+			You have played this for: {{ formatTimeLong(player.timePlayed) }}<br><br>
+			<h3>Hotkeys</h3><br>
+			<span v-for="key in hotkeys" v-if="player[key.layer].unl"><br>{{key.desc}}</span>
+		</div>
+		<div v-if="player.tab=='achievements'" class="col right">
+			<button class="back" onclick="showTab('tree')">&gt;</button>
+			<br/><br/>
+			<h3>Achievements</h3><br/>
+			<br/>Unfortunately, this world does not have any achievements.
+			<br/>
+			<br/>Current endgame: <spoiler>The Singularity</spoiler>
+		</div>
+		<div v-if="player.tab=='statistics'" class="col right">
+			<button class="back" onclick="showTab('tree')">&gt;</button>
+			<br/><br/>
+			<h3>Statistics</h3>
+			<br/>You have played this game for {{ formatTimeLong(player.timePlayed) }}.
+			<br/><br/>
+			<h3>Layer Breakdown</h3>
+			<table>
+				<tbody>
+					<tr>
+						<th style="width:240px" colspan="3">Layer / Resource</th>
+						<th style="width:100px">Amount</th>
+						<th style="width:100px">Best</th>
+						<th style="width:100px">Total</th>
+					</tr>
+					<tr v-for="res in statsResources" v-bind:style="{'opacity' : res.unl() ? 1 : 0.3, 'font-size': res.name.startsWith('└') || res.name.startsWith('├') ? '14px' : '16px', 'height': res.name.startsWith('└') || res.name.startsWith('├') ? '12px' : '20px'}">
+						<td style="width:40px;text-align:right">{{res.name.startsWith("└") || res.name.startsWith("├") ? "" : (res.unl() ? res.layer.toUpperCase() : "??")}}</td>
+						<td>&nbsp;</td>
+						<td style="text-align:left">{{res.unl() ? res.name : "??????????"}}</td>
+						<td>{{res.unl() ? res.points() : "??????"}}</td>
+						<td>{{res.unl() ? (res.best ? res.best() : "") : "??????"}}</td>
+						<td>{{res.unl() ? (res.total ? res.total() : "") : "??????"}}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div v-if="player.tab=='options'" class="col right">
+			<button class="back" onclick="showTab('tree')">&gt;</button><br>
+			<div v-if="!player.optionFlavor">
+				<br/><h3>Saving</h3><br/><br/>
+				<div style="display:flex">
+					<button class="option" onclick="save()">Instant save</button>
+					<button class="option" onclick="toggleOpt('autosave')">Autosave: {{ player.autosave?"ENABLED":"DISABLED" }}</button>
+					<button class="option" onclick="exportSave()">Export save to clipboard</button>
+					<button class="option" onclick="importSave()">Import save</button>
+					<button class="option" onclick="hardReset()">HARD RESET THE GAME</button>
+				</div>
+				<br/><h3>Gameplay</h3><br/><br/>
+				<div style="display:flex">
+					<button class="option" onclick="toggleOpt('offlineProd')">Offline Production: {{ player.offlineProd?"ENABLED":"DISABLED" }}</td>
+				</div>
+				<br/><h3>Display</h3><br/><br/>
+				<div style="display:flex">
+					<button class="option" onclick="switchTheme()">Theme: {{ getThemeName().toUpperCase() }}</button>
+					<button class="option" onclick="adjustMSDisp()">Show Milestones: {{ player.msDisplay.toUpperCase() }}</button>
+					<button class="option" onclick="toggleOpt('hqTree')">Tree Quality: {{ player.hqTree?"QUALITY":"PERFORMANCE" }}</button>
+					<button class="option" onclick="toggleOpt('optionFlavor')">Option Tab Flavor: {{ player.optionFlavor?"CLASSIC":"REMADE" }}</button>
+					<button class="option" onclick="toggleOpt('menuFlavor')">Tree Menu Flavor: {{ player.menuFlavor?"CLASSIC":"TOPBAR" }}</button>
+				</div>
+			</div>
+			<table v-if="player.optionFlavor">
+				<tr>
+					<td><button class="opt" onclick="save()">Save</button></td>
+					<td><button class="opt" onclick="toggleOpt('autosave')">Autosave: {{ player.autosave?"ON":"OFF" }}</button></td>
+					<td><button class="opt" onclick="hardReset()">HARD RESET</button></td>
+				</tr>
+				<tr>
+					<td><button class="opt" onclick="exportSave()">Export to clipboard</button></td>
+					<td><button class="opt" onclick="importSave()">Import</button></td>
+					<td><button class="opt" onclick="toggleOpt('offlineProd')">Offline Prod: {{ player.offlineProd?"ON":"OFF" }}</button></td>
+				</tr>
+				<tr>
+					<td><button class="opt" onclick="switchTheme()">Theme: {{ getThemeName() }}</button></td>
+					<td><button class="opt" onclick="adjustMSDisp()">Show Milestones: {{ player.msDisplay.toUpperCase() }}</button></td>
+					<td><button class="opt" onclick="toggleOpt('hqTree')">High-Quality Tree: {{ player.hqTree?"ON":"OFF" }}</button></td>
+				</tr>
+				<tr>
+					<td><button class="opt" onclick="toggleOpt('optionFlavor')">Option Tab Flavor: {{ player.optionFlavor?"CLASSIC":"REMADE" }}</button></td>
+					<td><button class="opt" onclick="toggleOpt('menuFlavor')">Tree Menu Flavor: {{ player.menuFlavor?"CLASSIC":"TOPBAR" }}</button></td>
+				</tr> 
+			</table>
+		</div>
+		<div id="treeTab" v-if="player.tab!='gameEnded'" onscroll="resizeCanvas()" v-bind:class="{ fullWidth: player.tab == 'tree', col: player.tab != 'tree', left: player.tab != 'tree'}">
+			<div v-if="player.menuFlavor">
+				<div id="version" class="overlayThing" style="margin-right: 13px">{{VERSION.withoutName}}</div>
+				<img id="optionWheel"  class="overlayThing" v-if="player.tab!='options'" src="options_wheel.png" onclick="showTab('options')"></img>
+				<div id="info" v-if="player.tab!='info'"  class="overlayThing" onclick="showTab('info')"><br>i</div>
+				<img id="discord" onclick="showDiscordModal()" src="discord.png"  target="_blank"></img>
+				<div id="achievements" class="overlayThing" v-if="player.tab!='achievements'" onclick="showTab('achievements')">🏆</div>
+				<div id="stats" class="overlayThing" v-if="player.tab!='statistics'" onclick="showTab('statistics')">📊</div>
+			</div>
+			<div v-if="!player.menuFlavor" style="width:100%;background-color:#fff3;position:sticky;top:0px;z-index:2147000000;display: flex">
+				<button class="topbarButton" style="width:40%" onclick="showTab('info')"><h5 style="font-weight:700">☀️ {{modInfo.name}} {{VERSION.withoutName}}</h5></button><!--
+				--><button class="topbarButton" style="width:20%" onclick="showTab('achievements')"><h5>🏆 Achievements</h5></button><!--
+				--><button class="topbarButton" style="width:20%" onclick="showTab('statistics')"><h5>📊 Statistics</h5></button><!--
+				--><button class="topbarButton" style="width:20%" onclick="showTab('options')"><h5>⚙️ Options</h5></button>
+			</div>
+			<br/>
+			<h5>{{getWorldName()}}</h5>
+			<h5 v-if="player.devSpeed && player.devSpeed != 1">
+				Dev Speed: {{format(player.devSpeed)}}×<br>
+			</h5>
+			<h5 v-if="player.offTime !== undefined">
+				Offline Time: {{formatTime(player.offTime.remain)}}<br>
+			</h5>
+			<br>
+			<span>You have </span>
+			<h2 id="points">{{format(player.points)}}</h2>
+			<span> {{modInfo.pointsName}}</span>
+			<br><br>
+			<!-- *************************** Modify the tree in the table below! *************************** -->
+			<div v-if="player.points.lt(ENDGAME)">
+				<table>
+					<td><layer-node layer='c' abb='C'></layer-node></td>
+				</table><table>
+					<td><button class="treeNode hidden"></button></td>
+				</table><table>
+					<td><layer-node layer='wf' abb='WF'></layer-node></td>
+					<td><layer-node layer='sp' abb='SP'></layer-node></td>
+					<td><layer-node layer='b' abb='B'></layer-node></td>
+				</table><table>
+					<td><button class="treeNode hidden"></button></td>
+				</table><table>
+					<td><layer-node layer='w' abb='W'></layer-node></td>
+				</table><table>
+					<td><button class="treeNode hidden"></button></td>
+				</table><table>
+					<td><layer-node layer='bd' abb='BD'></layer-node></td>
+					<td><layer-node layer='so' abb='SO'></layer-node></td>
+					<td><layer-node layer='m' abb='M'></layer-node></td>
+					<td><layer-node layer='t' abb='T'></layer-node></td>
+					<td><layer-node layer='wi' abb='WI'></layer-node></td>
+				</table>
+				</table><table>
+					<td><button class="treeNode hidden"></button></td>
+				</table><table>
+					<td><layer-node layer='s' abb='S'></layer-node></td>
+				</table>
+			</div>
+			<div v-if="player.points.gte(ENDGAME)">
+				<h5>The point of singularity has been reached. Your civilization did not make it through.</h5>
+				<br/><br/>
+				<table>
+					<td><layer-node layer='s' abb='S'></layer-node></td>
+				</table>
+			</div>
+			<canvas id="treeCanvas" class="canvas"></canvas>
+			<br><br>
+		</div>
+		<div v-for="layer in LAYERS">
+			<div v-if="player.tab==layer" v-bind:class="'col right'" v-bind:style="tmp.style[layer] ? tmp.style[layer] : {}" style="background-color: var(--background)">
+				<button class="back" onclick="showTab('tree')">&gt;</button><br><br><br>
+				<div v-if="!layers[layer].tabFormat">
+					<main-display :layer="layer"></main-display>
+					<prestige-button :layer="layer"></prestige-button>
+					<span v-if="layers[layer].type=='normal' && tmp.resetGain[layer].lt(100) && player[layer].points.lt(1e3)"><br>You have {{formatWhole(tmp.layerAmt[layer])}} {{layers[layer].baseResource}}.</span>
+					<br><br>
+					<span v-if="player[layer].best != undefined">You have at best {{formatWhole(player[layer].best)}} {{layers[layer].resource}}.<br></span>
+					<span v-if="player[layer].total != undefined">You have made a total of {{formatWhole(player[layer].total)}} {{layers[layer].resource}}.<br></span>
+					<milestones :layer="layer"></milestones>
+					<buyables :layer="layer"></buyables>
+					<upgrades :layer="layer"></upgrades>
+					<challs :layer="layer"></challs>
+					<br><br>
+				</div>
+				<div v-if="layers[layer].tabFormat">
+					<div v-for="data in layers[layer].tabFormat">
+						<div v-if="!Array.isArray(data)" v-bind:is="data" :layer="layer"></div>
+						<div v-else-if="data.length==3" v-bind:style="(data[2] ? data[2] : {})" v-bind:is="data[0]" :layer="layer" :data="data[1]"></div>
+						<div v-else-if="data.length==2" v-bind:is="data[0]" :layer="layer" :data="data[1]">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="fullWidth" v-if="modal.showing" style="background-color: #000a; display: flex; z-index: 2147483000">
+			<div class="modal">
+				<h3>{{modal.title}}</h3>
+				<p v-html="modal.content"></p>
+				<button class="tabButton" style="background-color: var(--color); padding: 5px 20px 5px 20px" onclick="{modal.showing = false}"><p>Close</p></button>
+			<div>
+		</div>
+	</div>
+	<datalist id="tickmarks" style="color:white">
+	  <option value="0"></option>
+	  <option value="1"></option>
+	  <option value="2"></option>
+	  <option value="3"></option>
+	  <option value="4"></option>
+	  <option value="5"></option>
+	  <option value="6"></option>
+	  <option value="7"></option>
+	  <option value="8"></option>
+	</datalist>
+</body>
