@@ -1,7 +1,7 @@
 function getWorldName () {
-	let str = "World α"
+	let str = "世界 α"
 	if (player.b.banking && player.b.unl) str += " + " + tmp.buyables.b[[11, 12, 13, 21, 22, 23, 31, 32].find(x => tmp.buyables.b[x].canAfford)].title
-	if (player.bd.building) str += " + " +  tmp.buyables.bd[player.bd.building].title + " Building"
+	if (player.bd.building) str += " + " +  tmp.buyables.bd[player.bd.building].title + " 建筑"
 	if (player.t.active) str += " + " + tmp.challs.t[player.t.active].name
 	return str
 }
@@ -20,13 +20,13 @@ class SaveCorruptedError extends Error {
 var statsResources = [
 	{
 		layer: "·",
-		name: "Points",
+		name: "点数",
 		unl: () => true,
 		points: () => format(player.points, 2),
 	},
 	{
 		layer: "c",
-		name: "Coins",
+		name: "金币",
 		unl: () => player.c.unl,
 		points: () => formatWhole(player.c.points),
 		total: () => formatWhole(player.c.total),
@@ -34,26 +34,26 @@ var statsResources = [
 	},
 	{
 		layer: "wf",
-		name: "Workfinders",
+		name: "工作中介",
 		unl: () => player.wf.unl,
 		points: () => formatWhole(player.wf.points),
 		best: () => formatWhole(player.wf.best),
 	},
 	{
 		layer: "wf",
-		name: "├ Finished Work",
+		name: "├ 已完成的工作",
 		unl: () => player.wf.unl,
 		points: () => formatWhole(player.wf.workDone),
 	},
 	{
 		layer: "wf",
-		name: "└ Unfinished Work",
+		name: "└ 未完成的工作",
 		unl: () => player.wf.unl,
 		points: () => formatWhole(player.wf.workUndone),
 	},
 	{
 		layer: "sp",
-		name: "Spiritual Power",
+		name: "魂灵能量",
 		unl: () => player.sp.unl,
 		points: () => formatWhole(player.sp.points),
 		total: () => formatWhole(player.sp.total),
@@ -61,74 +61,74 @@ var statsResources = [
 	},
 	{
 		layer: "sp",
-		name: "└ Magic",
+		name: "└ 魔法",
 		unl: () => player.sp.unl,
 		points: () => formatWhole(player.sp.magic),
 	},
 	{
 		layer: "b",
-		name: "Banks",
+		name: "银行",
 		unl: () => player.b.unl,
 		points: () => formatWhole(player.b.points),
 		best: () => formatWhole(player.b.best),
 	},
 	{
 		layer: "w",
-		name: "Workers",
+		name: "工人",
 		unl: () => player.w.unl,
 		points: () => formatWhole(player.w.points),
 		best: () => formatWhole(player.w.best),
 	},
 	{
 		layer: "bd",
-		name: "Builders",
+		name: "建造者",
 		unl: () => player.bd.unl,
 		points: () => formatWhole(player.bd.points),
 		best: () => formatWhole(player.bd.best),
 	},
 	{
 		layer: "so",
-		name: "Soldiers",
+		name: "士兵",
 		unl: () => player.so.unl,
 		points: () => formatWhole(player.so.points),
 		best: () => formatWhole(player.so.best),
 	},
 	{
 		layer: "m",
-		name: "Managers",
+		name: "经理",
 		unl: () => player.m.unl,
 		points: () => formatWhole(player.m.points),
 		best: () => formatWhole(player.m.best),
 	},
 	{
 		layer: "t",
-		name: "Territories",
+		name: "领土",
 		unl: () => player.t.unl,
 		points: () => formatWhole(player.t.points),
 		best: () => formatWhole(player.t.best),
 	},
 	{
 		layer: "t",
-		name: "├ Conquered Land",
+		name: "├ 已征服的土地",
 		unl: () => player.so.buyables[13].gte(1),
 		points: () => formatWhole(player.t.lands),
 	},
 	{
 		layer: "t",
-		name: "└ Honor",
+		name: "└ 荣誉值",
 		unl: () => player.so.buyables[13].gte(1),
 		points: () => formatWhole(player.t.elo),
 	},
 	{
 		layer: "wi",
-		name: "Wisdom",
+		name: "智慧",
 		unl: () => player.wi.unl,
 		points: () => formatWhole(player.wi.points),
 		best: () => formatWhole(player.wi.best),
 	},
 	{
 		layer: "wi",
-		name: "└ Knowledge",
+		name: "└ 知识",
 		unl: () => player.wi.unl,
 		points: () => formatWhole(player.wi.knowledge),
 	},
@@ -166,7 +166,7 @@ function format(decimal, precision = 2) {
 		return "NaN"
 	}
 	if (decimal.sign < 0) return "-" + format(decimal.neg(), precision)
-	if (decimal.mag == Number.POSITIVE_INFINITY) return "Infinity"
+	if (decimal.mag == Number.POSITIVE_INFINITY) return "无限"
 	if (decimal.gte("eeee1000")) {
 		var slog = decimal.slog()
 		if (slog.gte(1e6)) return "F" + format(slog.floor())
@@ -182,35 +182,35 @@ function formatWhole(decimal) {
 }
 
 function formatTimeLong(s) {
-	let str = format(s % 60) + " seconds"; s /= 60
-	if (s >= 1) str = formatWhole(Math.floor(s) % 60) + " minutes and " + str; s /= 60
-	if (s >= 1) str = formatWhole(Math.floor(s) % 24) + " hours, " + str; s /= 24
-	if (s >= 1) str = formatWhole(Math.floor(s) % 365) + " days, " + str; s /= 365
-	if (s >= 1) str = formatWhole(Math.floor(s)) + " years, " + str
+	let str = format(s % 60) + " 秒"; s /= 60
+	if (s >= 1) str = formatWhole(Math.floor(s) % 60) + " 分 " + str; s /= 60
+	if (s >= 1) str = formatWhole(Math.floor(s) % 24) + " 小时 " + str; s /= 24
+	if (s >= 1) str = formatWhole(Math.floor(s) % 365) + " 日 " + str; s /= 365
+	if (s >= 1) str = formatWhole(Math.floor(s)) + " 年 " + str
 	return str
 }
 
 function formatTime(s) {
 	if (Decimal.gte(s, 31557600e3)) return formatTimeAlt(s)
-	let str = format(s % 60) + "s"; s /= 60
-	if (s >= 1) str = formatWhole(Math.floor(s) % 60) + "m " + str; s /= 60
-	if (s >= 1) str = formatWhole(Math.floor(s) % 24) + "h " + str; s /= 24
-	if (s >= 1) str = formatWhole(Math.floor(s) % 365) + "d " + str; s /= 365
-	if (s >= 1) str = formatWhole(Math.floor(s)) + "y " + str
+	let str = format(s % 60) + "秒"; s /= 60
+	if (s >= 1) str = formatWhole(Math.floor(s) % 60) + "分 " + str; s /= 60
+	if (s >= 1) str = formatWhole(Math.floor(s) % 24) + "时 " + str; s /= 24
+	if (s >= 1) str = formatWhole(Math.floor(s) % 365) + "日 " + str; s /= 365
+	if (s >= 1) str = formatWhole(Math.floor(s)) + "年 " + str
 	return str
 }
 function formatTimeAlt(s) {
 	s = new Decimal(s)
-	if (s.gte("31557600e1000")) return format(s.div("31557600e1000")) + " universe lifetimes"
-	if (s.gte(31557600e100)) return format(s.div(31557600e100)) + " black hole eras"
-	if (s.gte(31557600e40)) return format(s.div(31557600e40)) + " degenerate eras"
-	if (s.gte(31557600e9)) return format(s.div(31557600e9)) + " aeons"
-	if (s.gte(31557600e3)) return format(s.div(31557600e3)) + " millenials"
-	if (s.gte(31557600)) return format(s.div(31557600)) + " years"
-	if (s.gte(86400)) return format(s.div(86400)) + " days"
-	if (s.gte(3600)) return format(s.div(3600)) + " hours"
-	if (s.gte(60)) return format(s.div(60)) + " minutes"
-	return format(s) + " seconds"
+	if (s.gte("31557600e1000")) return format(s.div("31557600e1000")) + " 宇宙寿命"
+	if (s.gte(31557600e100)) return format(s.div(31557600e100)) + " 黑洞纪"
+	if (s.gte(31557600e40)) return format(s.div(31557600e40)) + " 简并纪"
+	if (s.gte(31557600e9)) return format(s.div(31557600e9)) + " 世代"
+	if (s.gte(31557600e3)) return format(s.div(31557600e3)) + " 千年"
+	if (s.gte(31557600)) return format(s.div(31557600)) + " 年"
+	if (s.gte(86400)) return format(s.div(86400)) + " 日"
+	if (s.gte(3600)) return format(s.div(3600)) + " 小时"
+	if (s.gte(60)) return format(s.div(60)) + " 分钟"
+	return format(s) + " 秒"
 }
 
 function toPlaces(x, precision, maxAccepted) {
@@ -353,10 +353,10 @@ function exportSave() {
 }
 
 function importSave(imported = undefined, forced = false) {
-	if (imported === undefined) imported = prompt("Paste your save here")
+	if (imported === undefined) imported = prompt("此处粘贴存档")
 	try {
 		tempPlr = Object.assign(getStartPlayer(), JSON.parse(atob(imported)))
-		if (tempPlr.versionType != modInfo.id && !forced && !confirm("This save appears to be for a different mod! Are you sure you want to import?")) // Wrong save (use "Forced" to force it to accept.)
+		if (tempPlr.versionType != modInfo.id && !forced && !confirm("存档似乎是来自于其他模组，您确定要导入吗？")) // Wrong save (use "Forced" to force it to accept.)
 			return
 		player = tempPlr;
 		player.versionType = modInfo.id

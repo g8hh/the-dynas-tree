@@ -184,8 +184,8 @@
 				</div>
 				<br/><h3>Display</h3><br/><br/>
 				<div style="display:flex">
-					<button class="option" onclick="switchTheme()">主题：{{ getThemeName().toUpperCase() }}</button>
-					<button class="option" onclick="adjustMSDisp()">显示里程碑：{{ player.msDisplay.toUpperCase() }}</button>
+					<button class="option" onclick="switchTheme()">Theme: {{ getThemeName().toUpperCase() }}</button>
+					<button class="option" onclick="adjustMSDisp()">Show Milestones: {{ player.msDisplay.toUpperCase() }}</button>
 					<button class="option" onclick="toggleOpt('hqTree')">Tree Quality: {{ player.hqTree?"QUALITY":"PERFORMANCE" }}</button>
 					<button class="option" onclick="toggleOpt('optionFlavor')">Option Tab Flavor: {{ player.optionFlavor?"CLASSIC":"REMADE" }}</button>
 					<button class="option" onclick="toggleOpt('menuFlavor')">Tree Menu Flavor: {{ player.menuFlavor?"CLASSIC":"TOPBAR" }}</button>
@@ -203,8 +203,8 @@
 					<td><button class="opt" onclick="toggleOpt('offlineProd')">Offline Prod: {{ player.offlineProd?"ON":"OFF" }}</button></td>
 				</tr>
 				<tr>
-					<td><button class="opt" onclick="switchTheme()">主题：{{ getThemeName() }}</button></td>
-					<td><button class="opt" onclick="adjustMSDisp()">显示里程碑：{{ player.msDisplay.toUpperCase() }}</button></td>
+					<td><button class="opt" onclick="switchTheme()">Theme: {{ getThemeName() }}</button></td>
+					<td><button class="opt" onclick="adjustMSDisp()">Show Milestones: {{ player.msDisplay.toUpperCase() }}</button></td>
 					<td><button class="opt" onclick="toggleOpt('hqTree')">High-Quality Tree: {{ player.hqTree?"ON":"OFF" }}</button></td>
 				</tr>
 				<tr>

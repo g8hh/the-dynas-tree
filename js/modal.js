@@ -15,8 +15,8 @@ if (console.everything === undefined)
     }
     console.defaultError = console.error.bind(console);
     console.error = function(){
-		modal.title = "An error has occured."
-		modal.content = `<br/>Details of error:<h5><pre>` + arguments[0].stack + `</pre></h5><br/>If you can see this, please visit https://discord.gg/wwQfgPa for help.<br/><button class="tabButton" style="background-color: var(--color); padding: 5px 20px 5px 20px" onclick="exportSave()"><p>Export save to clipboard</p></button>`
+		modal.title = "出错了。"
+		modal.content = `<br/>错误细节：<h5><pre>` + arguments[0].stack + `</pre></h5><br/>如果您看到了这条消息，请加入 https://discord.gg/wwQfgPa 以获取帮助。<br/><button class="tabButton" style="background-color: var(--color); padding: 5px 20px 5px 20px" onclick="exportSave()"><p>导出存档到剪贴板</p></button>`
 		modal.showing = true
         console.defaultError.apply(console, arguments);
     }
@@ -35,9 +35,9 @@ if (console.everything === undefined)
 function showDiscordModal () {
 	modal.title = "Discord servers"
 	modal.content = `
-		...where you can go chit chating and stuff<br/><br/>
-		<button class="tabButton" onClick="window.open('https://discord.gg/wwQfgPa','_blank')" style="background-color:var(--color)">Jacorb's Main server<h5>The (original) Prestige Tree, Distance Incremental and more</h5></button><br>
-		<button class="tabButton" onClick="window.open('https://discord.gg/F3xveHV','_blank')" style="background-color:var(--color)">Acamaeda's TMT server<h5>Dedicated to the "The Modding Tree" community and mods</h5></button><br>
+		……闲聊和讨论都欢迎<br/><br/>
+		<button class="tabButton" onClick="window.open('https://discord.gg/wwQfgPa','_blank')" style="background-color:var(--color)">Jacorb的主频道<h5>可以在这里讨论原版的The Prestige Tree，以及其他东西</h5></button><br>
+		<button class="tabButton" onClick="window.open('https://discord.gg/F3xveHV','_blank')" style="background-color:var(--color)">Acamaeda的TMT频道<h5>致力于 "The Modding Tree" 研究的社区及相关模组</h5></button><br>
 	`
 	modal.showing = true
 }

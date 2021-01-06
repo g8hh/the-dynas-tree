@@ -6,7 +6,7 @@ var gameEnded = false;
 
 let VERSION = {
 	num: "0.4.0",
-	name: "Conquer the World",
+	name: "征服世界",
 }
 
 // Determines if it should show points/sec
@@ -261,8 +261,8 @@ function respecBuyables(layer) {
 	if (!layers[layer].buyables) return
 	if (!layers[layer].buyables.respec) return
 	
-	modal.title = "Are you sure you want to respec?"
-	modal.content = `Doing this will also force you to do a "${(layers[layer].name ? layers[layer].name : layer)}" reset as well!<br/><button class="tabButton" style="background-color: var(--color); padding: 5px 20px 5px 20px" onclick="{layers['${layer}'].buyables.respec(); updateBuyableTemp('${layer}'); modal.showing = false}"><p>Do it!</p></button>`
+	modal.title = "您确定要洗点吗？"
+	modal.content = `这将同时强制进行一次 "${(layers[layer].name ? layers[layer].name : layer)}" 重置！<br/><button class="tabButton" style="background-color: var(--color); padding: 5px 20px 5px 20px" onclick="{layers['${layer}'].buyables.respec(); updateBuyableTemp('${layer}'); modal.showing = false}"><p>我确定！</p></button>`
 	modal.showing = true
 }
 
@@ -362,7 +362,7 @@ function buyBuyable(layer, id) {
 }
 
 function resetRow(row) {
-	if (prompt('Are you sure you want to reset this row? It is highly recommended that you wait until the end of your current run before doing this! Type "I WANT TO RESET THIS" to confirm') != "I WANT TO RESET THIS") return
+	if (prompt('您确定要重置这一行吗？建议您只在到达该阶段末尾时才这么做！输入 "I WANT TO RESET THIS" 以进行确认') != "I WANT TO RESET THIS") return
 	let pre_layers = ROW_LAYERS[row - 1]
 	let layers = ROW_LAYERS[row]
 	let post_layers = ROW_LAYERS[row + 1]
@@ -462,15 +462,15 @@ function gameLoop(diff) {
 		player.autosave = false;
 		NaNalert = true;
 
-		modal.title = "An error has occured."
-		modal.content = `<br/>Details of error:<h5><pre>` + NaNerror.stack + `</pre></h5><br/>If you can see this, please visit https://discord.gg/wwQfgPa for help.<br/><button class="tabButton" style="background-color: var(--color); padding: 5px 20px 5px 20px" onclick="exportSave()"><p>Export save to clipboard</p></button>`
+		modal.title = "出错了。"
+		modal.content = `<br/>错误细节：<h5><pre>` + NaNerror.stack + `</pre></h5><br/>如果您看到了这条消息，请加入 https://discord.gg/wwQfgPa 以获取帮助。<br/><button class="tabButton" style="background-color: var(--color); padding: 5px 20px 5px 20px" onclick="exportSave()"><p>导出存档到剪贴板</p></button>`
 		modal.showing = true
 	}
 }
 
 function hardReset() {
-	modal.title = "Are you sure you want to hard reset?"
-	modal.content = `This is a dangerous process! You'll lose all of your progress if you continue doing this!<br/><button class="tabButton" style="background-color: var(--color); padding: 5px 20px 5px 20px" onclick="{player = getStartPlayer(); save(); window.location.reload()}"><p>I understand the consequences, do it!</p></button>`
+	modal.title = "您确定要进行硬重置吗？"
+	modal.content = `请再次确认，您真的想要抹除目前所有的游戏进度，再这么做！<br/><button class="tabButton" style="background-color: var(--color); padding: 5px 20px 5px 20px" onclick="{player = getStartPlayer(); save(); window.location.reload()}"><p>我知道后果，继续吧！</p></button>`
 	modal.showing = true
 }
 

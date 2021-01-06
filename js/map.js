@@ -150,15 +150,15 @@ function getMapEncounter (x, y) {
 	
 	// Max name length = 28
 	var names = [
-		["Ship of Neighboring Country", "A Cthulhu", "A Shiver of Sharks"],
-		["Army of Neighboring Country", "A Sloth of Bears"],
-		["Army of Neighboring Country"],
-		["Army of Neighboring Country"],
-		["Army of Neighboring Country"],
-		["Army of Neighboring Country"],
-		["Army of Neighboring Country"],
-		["Army of Neighboring Country"],
-		["Army of Neighboring Country"],
+		["邻国的船只", "一只克总", "一群鲨鱼"],
+		["邻国的军队", "一群熊"],
+		["邻国的军队"],
+		["邻国的军队"],
+		["邻国的军队"],
+		["邻国的军队"],
+		["邻国的军队"],
+		["邻国的军队"],
+		["邻国的军队"],
 	]
 	
 	var id = getTileType(x, y);
@@ -256,8 +256,8 @@ function onMapMouseDown (e) {
 	
 	var id = player.world.map[mapFocusY].charCodeAt(mapFocusX)
 	var type = id & 15
-	mapFocusDesc = ["Waters", "Grasslands", "Mountains", "Tall Mountains", "Desert", "Tundra", "Forest", "Savanna", "Rainforest", "Iced Waters"][type]
-	if (id & 16) mapFocusDesc += ", Conquered"
+	mapFocusDesc = ["水域", "草地", "山脉", "高山", "沙漠", "苔原", "森林", "荒原", "雨林", "浮冰"][type]
+	if (id & 16) mapFocusDesc += "，已征服"
 }
 
 function onMapMouseMove (e) {
