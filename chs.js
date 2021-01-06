@@ -140,6 +140,47 @@ var cnItems = {
     //层级2结束
 
 
+    //层级3
+    ' workers': ' 工人',
+    '1 Worker': '1名工人',
+    '2 Workers': '2名工人',
+    '3 Workers': '3名工人',
+    '4 Workers': '4名工人',
+    '5 Workers': '5名工人',
+    '6 Workers': '6名工人',
+    '7 Workers': '7名工人',
+    '8 Workers': '8名工人',
+    '9 Workers': '9名工人',
+    '12 Workers': '12名工人',
+    '13 Workers': '13名工人',
+    '16 Workers': '16名工人',
+    'The “Promote workfinders to part-time workers” rebuyable upgrade is 5× stronger.': '让工作中介也来兼职”的重复购买项升级效果变为5倍。',
+    'Unlocks workfinders and working, where workers can do their work. They are reseted on worker reset.': '解锁工作中介和工作，工人们可以进行工作。这些在工人重置时进度重置。',
+    'Unlocks more worker upgrades, may or may not related to the workfinder layer.': '解锁更多的工人升级，有些跟工作中介层级有关，有些跟工作中介层级无关。',
+    'Hiring workfinders no longer resets anything.': '雇佣工作中介不再重置任何东西。',
+    'Unlocks banks, which you can manage bankings. They are reseted on worker reset too.': '解锁银行，可以在那里管理业务。这些也在工人重置时进度重置。',
+    'Unlocks more worker upgrades. And you can bulk hire workers now. Why didn\'t I think of this earlier...': '解锁更多的工人升级。现在您可以批量雇佣工人了。怎么到现在才想起来这个……',
+    'The first three banking buffs are 25× stronger.': '前三个银行业务效果变为25倍。',
+    'You can bulk build banks.': '您可以批量建造银行了。',
+    'Unlocks new banking options. Also the workers\' effect gets cubed.': '解锁新的银行业务选项。另外，工人的效果变为原来的立方。',
+    'The workers\' effect gets cubed again. Yay!': '工人的效果再度变为原来的立方。耶！',
+    'Raises all of the first three coin layer\'s “all previous boost upgrades” upgrades based on your best worker count.': '根据工人最高值，使金币层级前三个“使之前的‘增加’升级效果更好”的升级效果变得更好。',
+    'The previous upgrade also affect the first coin layer\'s boost upgrade but with reduced effect.': '前一个升级对金币层级第一个“增加”升级的效果也生效，但效果减弱。',
+    'Remember that upgrade that applies something again to the point prodution? Why not keep doing that again, shall we?': '还记得某个可以再对点数产量生效一次的金币升级吗？我们再把那个升级来一次吧。',
+    'The current worker count also contibutes to the first upgrade\'s formula.': '目前的工人数量也能影响第一个升级的公式。',
+    'Unlock more coin upgrades. Yay.': '解锁更多的金币升级。耶。',
+    'Worker\'s effect is scaled better. ((x+1)^2 => (x+2)^': '工人的效果成长得更快。(从 (x+1)^2 变为 (x+2)^',
+    'You gain 10% of your current coins gain on coin reset per second.': '每秒获得金币重置时的金币获取量10%的金币。',
+    'Boosts finished work and unfinished work gain based on current coin count.': '根据目前的金币数量，增加已完成和未完成的工作获取量。',
+    'Find and finish work 2× faster.': '找到和完成工作的速度变为2倍。',
+    'Unlocks the ability to bulk hire workfinders.': '解锁批量雇佣工作中介的功能。',
+    'Boosts finished work and unfinished work gain based on current point count.': '根据目前的点数，增加已完成和未完成的工作获取量。',
+    'The first three banking buffs are stronger based on workers.': '根据工人数量，前三个银行业务的效果变得更好。',
+    'Milestones': '里程碑',
+    'W: Hire workers': '快捷键W：雇佣工人',
+    //层级3结束
+
+
     //选项
     'Saving': '保存',
     'Instant save': '立刻保存',

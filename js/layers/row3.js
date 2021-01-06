@@ -15,10 +15,10 @@ addLayer("w", {
 	layerShown() { return (hasUpg("c", 21) || player[this.layer].unl || player.m.unl) && !inChallenge("t", 22) },
 
 	color: () => "#FFFFFF",
-	resource: "workers",
+	resource: "工人",
 	row: 2,
 
-	baseResource: "coins",
+	baseResource: "金币",
 	baseAmount() { return player["c"].points },
 	branches: [["c", 1], ["b", 1], ["wf", 1]],
 
@@ -41,7 +41,7 @@ addLayer("w", {
 	},
 	effectDescription() {
 		eff = tmp.layerEffs.w;
-		return "which are boosting your point gains by ×" + format(eff)
+		return "使点数获取量变为 " + format(eff) + " 倍"
 	},
 
 	gainMult() {
@@ -55,17 +55,17 @@ addLayer("w", {
 		0: {
 			requirementDesc: () => "1 Worker",
 			done() { return player[this.layer].best.gte(1) },
-			effectDesc: () => "Unlocks a new row of coin upgrades. Also you kickstart your worker resets and below (not coins) with " + format(80) + " coins."
+			effectDesc: () => "解锁一行新的金币升级。工人重置及更低层级的重置(不包含金币重置)后初始拥有 " + format(80) + " 金币。"
 		},
 		1: {
 			requirementDesc: () => "2 Workers",
 			done() { return player[this.layer].best.gte(2) },
-			effectDesc: () => "Unlocks an another new row of coin upgrades. Also you kickstart with " + format(250) + " coins."
+			effectDesc: () => "再度解锁一行新的金币升级。初始拥有 " + format(250) + " 金币。"
 		},
 		2: {
 			requirementDesc: () => "3 Workers",
 			done() { return player[this.layer].best.gte(3) },
-			effectDesc: () => "Unlocks worker upgrades. They're on an another tab! Also you kickstart with " + format(10000) + " coins.",
+			effectDesc: () => "解锁工人升级。在另一个选项卡下！另外，初始拥有 " + format(10000) + " 金币。",
 		},
 		3: {
 			requirementDesc: () => "4 Workers",
@@ -76,7 +76,7 @@ addLayer("w", {
 		4: {
 			requirementDesc: () => "5 Workers",
 			done() { return player[this.layer].best.gte(5) },
-			effectDesc: () => "Automates buying coin upgrades, but each upgrade bought by the autobuyer will give you " + format(player[this.layer].points.add(1).mul(5).pow(1.05)) + " unfinished work (based on current worker count).",
+			effectDesc: () => "自动购买金币升级，但每个自动购买的金币升级会使未完成的工作数量增加 " + format(player[this.layer].points.add(1).mul(5).pow(1.05)) + " (基于目前的工人数量)。",
 			toggles: [["w", "autoCoinUpgrade"]]
 		},
 		5: {
@@ -92,7 +92,7 @@ addLayer("w", {
 		7: {
 			requirementDesc: () => "8 Workers",
 			done() { return player[this.layer].best.gte(8) },
-			effectDesc: () => "Automates buying workfinder rebuyable upgrades, but each rebuyable upgrade bought by the autobuyer will give you " + format(player[this.layer].points.add(1).mul(600).pow(1.25)) + " unfinished work (based on current worker count).",
+			effectDesc: () => "自动购买工作中介重复购买项升级，但每个自动购买的重复购买项升级会使未完成的工作数量增加 " + format(player[this.layer].points.add(1).mul(600).pow(1.25)) + " (基于目前的工人数量)。",
 			toggles: [["w", "autoFinderUpgrade"]]
 		},
 		8: {
@@ -223,7 +223,7 @@ addLayer("w", {
 			["prestige-button", function () { return "Hire " }],
 			["blank", "5px"],
 			["display-text",
-				function () { return "You have at best " + format(player.w.best, 0) + " " + " workers." }],
+				function () { return "您最高拥有 " + format(player.w.best, 0) + " " + " 工人。" }],
 			["blank", "5px"],
 			["microtabs", "stuff"]],
 
