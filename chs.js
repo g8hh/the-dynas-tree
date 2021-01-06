@@ -282,6 +282,7 @@ var cnRegReplace = new Map([
     [/^你累计玩了 (.+) hours, (.+) minutes and (.+) seconds.\n(.+)$/, '你累计玩了 $1小时 $2分 $3秒 的游戏。'],
     [/^Next at (.+) points$/, '接下来在$1点'],
     [/^你有 (.+) points.$/, '你有 $1 点。'],
+    [/^Reach (.+) coins to unlock (You have (.+) coins)$/, '达到$1个硬币即可解锁（您有$2个硬币）'],
     [/^你的最佳是 (.+) coins.$/, '你的最佳是 $1 个硬币。'],
     [/^Cost: (.+) coins\n(.+)$/, '费用：$1个硬币'],
     [/^Generates (.+) points every second.$/, '每秒产生$1点。'],
