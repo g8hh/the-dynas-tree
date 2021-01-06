@@ -469,7 +469,7 @@ addLayer("b", {
 		rows: 3,
 		cols: 3,
 		11: {
-			title: () => "Coin Banking",
+			title: () => "金币业务",
 			cost(x) {
 				return new Decimal(0)
 			},
@@ -507,7 +507,7 @@ addLayer("b", {
 			},
 		},
 		12: {
-			title: () => "Point Banking",
+			title: () => "点数业务",
 			cost(x) {
 				return new Decimal(0)
 			},
@@ -545,7 +545,7 @@ addLayer("b", {
 			},
 		},
 		13: {
-			title: () => "Time Banking",
+			title: () => "时间业务",
 			cost(x) {
 				return new Decimal(0)
 			},
@@ -583,7 +583,7 @@ addLayer("b", {
 			},
 		},
 		21: {
-			title: () => "Metacoin Banking",
+			title: () => "多元金币业务",
 			cost(x) {
 				return new Decimal(0)
 			},
@@ -616,7 +616,7 @@ addLayer("b", {
 			},
 		},
 		22: {
-			title: () => "Metapoint Banking",
+			title: () => "多元点数业务",
 			cost(x) {
 				return new Decimal(0)
 			},
@@ -648,7 +648,7 @@ addLayer("b", {
 			},
 		},
 		23: {
-			title: () => "Work Banking",
+			title: () => "工作业务",
 			cost(x) {
 				return new Decimal(0)
 			},
@@ -681,7 +681,7 @@ addLayer("b", {
 			},
 		},	
 		31: {	
-			title:() => "Speed Banking",	
+			title:() => "速度业务",	
 			cost(x) {	
 				return new Decimal(0)	
 			},	
@@ -708,7 +708,7 @@ addLayer("b", {
 			},	
 		},
 		32: {	
-			title:() => "Production Banking",	
+			title:() => "产量业务",	
 			cost(x) {	
 				return new Decimal(0)	
 			},	
@@ -733,7 +733,7 @@ addLayer("b", {
 			},	
 		},
 		33: {	
-			title:() => "Generation Banking",	
+			title:() => "世代业务",	
 			cost(x) {	
 				return new Decimal(0)	
 			},	
