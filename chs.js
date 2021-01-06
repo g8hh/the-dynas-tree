@@ -16,6 +16,19 @@ var cnItems = {
     'In case you haven\'t noticed, there will be more content after this. You can keep continuing. but the game has been paused, since singularity was meant to be a forced prestige layer.': '希望您明白，不出意外的话，这后面还会有其他内容。您当然可以接着继续玩，但目前来说进度不会有太大提升了，因为奇点本意就是这个。',
     'Play Again': '从头再来',
     'Keep Going': '继续游戏',
+    'Game Changelog': '游戏更新日志',
+    'Discord servers': 'Discord频道',
+    'Hotkeys': '快捷键',
+    'Achievements': '成就',
+    'Unfortunately, this world does not have any achievements.': '很遗憾，世界上暂时还没有任何成就。',
+    'Current endgame': '目前的最终阶段',
+    'The Singularity': '奇点',
+    'Statistics': '统计数据',
+    'Layer Breakdown': '层级明细',
+    'Layer / Resource': '层级/资源',
+    'Amount': '数量',
+    'Best': '最高值',
+    'Total': '总量',
 
 
     //原样
@@ -89,6 +102,11 @@ var cnPostfix = {
 var cnExcludeWhole = [
     /^x?\d+(\.\d+)?(e[+\-]?\d+)?\s*\-?$/, //12.34e+4
     /^\s*$/, //纯空格
+    /^(.*)\{(.+)\}(.*)$/, //不抓取内容
+    /^(.*)了(.*)$/, //不抓取内容
+    /^(.*)的(.*)$/, //不抓取内容
+    /^(.*)地(.*)$/, //不抓取内容
+    /^(.*)得(.*)$/, //不抓取内容
 ];
 var cnExcludePostfix = [
     /:?\s*x?\d+(\.\d+)?(e[+\-]?\d+)?\s*$/, //12.34e+4
