@@ -61,7 +61,7 @@ var statsResources = [
 	},
 	{
 		layer: "魂灵",
-		name: "└ 魔法",
+		name: "└ 魔力",
 		unl: () => player.sp.unl,
 		points: () => formatWhole(player.sp.magic),
 	},

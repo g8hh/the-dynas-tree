@@ -120,6 +120,23 @@ var cnItems = {
     'Bankings': '银行业务',
     'Note: Enabling/Disabling bankings will force a bank reset.': '注意：激活或者取消银行业务后将强制进行一次银行重置。',
     'B: Build banks': '快捷键B：建造银行',
+    ' spiritual power': ' 魂灵能量',
+    'Convert spiritual power into castable magic fountain': '将魂灵能量转化为流动的魔力源泉',
+    'Extend the fabric of time using spiritual power': '使用魂灵能量延展时间的结构',
+    'Use spiritual power to enchant basic spells': '使用魂灵能量强化基础的魔咒',
+    'Use spiritual power to power magic in advanced spells': '使用魂灵能量控制高级魔咒的魔力',
+    'Spell of Generation': '产量魔咒',
+    'Spell of Goldilocks': '金凤花魔咒',
+    'Spell of Haste': '急速魔咒',
+    'Spell of Fortune': '财富魔咒',
+    'Spell of Skills': '技巧魔咒',
+    'Spell of Spirits': '魂灵魔咒',
+    'Spell of Spells': '咒之魔咒',
+    'Spell of Savings': '储蓄魔咒',
+    'Spell of “Strongetivity”': '“强化”魔咒',
+    'Spell of Unsoftcappers': '界限突破魔咒',
+    'Spells': '魔咒',
+    'S: Reset for spiritual power': '快捷键S：魂灵能量重置',
     //层级2结束
 
 

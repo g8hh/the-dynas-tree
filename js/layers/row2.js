@@ -22,7 +22,7 @@ addLayer("wf", {
 	resource: "工作中介",
 	row: 1,
 
-	baseResource: "coins",
+	baseResource: "金币",
 	baseAmount() { return player["c"].points },
 	branches: [["c", 1]],
 
@@ -332,7 +332,7 @@ addLayer("wf", {
 				function () { return "您有 " + format(player.wf.workUndone, 0) + " 未完成的工作，它使已完成的工作效果变为原来的 ^" + format(player.wf.workUndoneEffect, 5).replace(",", "") + " 。" }],
 			["blank", "5px"],
 			["display-text",
-				function () { return "工作中介每秒找到 " + format(player.wf.workUndonePerSec) + " 未完成的工作，工人们每秒完成 " + format(player.wf.workDonePerSec) + " 工作。(每秒实际上 " + format(player.wf.workUndonePerSec.sub(player.wf.workDonePerSec)) + " 未完成的工作， " + format(Decimal.min(player.wf.workUndonePerSec, player.wf.workDonePerSec)) + " 已完成的工作)" }],
+				function () { return "工作中介每秒找到 " + format(player.wf.workUndonePerSec) + " 未完成的工作，工人们每秒完成 " + format(player.wf.workDonePerSec) + " 工作。(每秒实际上有 " + format(player.wf.workUndonePerSec.sub(player.wf.workDonePerSec)) + " 未完成的工作， " + format(Decimal.min(player.wf.workUndonePerSec, player.wf.workDonePerSec)) + " 已完成的工作)" }],
 			["blank", "5px"],
 			["microtabs", "stuff"], "milestones"],
 
@@ -437,7 +437,7 @@ addLayer("b", {
 	resource: "银行",
 	row: 1,
 
-	baseResource: "points",
+	baseResource: "点数",
 	baseAmount() { return player.points },
 
 	requires: () => new Decimal(5e83),
@@ -825,11 +825,11 @@ addLayer("sp", {
 	layerShown() { return player.bd.buyables[13].gte(1) && !inChallenge("t", 22) },
 
 	color: () => "#FF00FF",
-	resource: "spiritual power",
+	resource: "魂灵能量",
 	row: 1,
 	branches: [["c", 1]],
 
-	baseResource: "points",
+	baseResource: "点数",
 	baseAmount() { return player.points },
 
 	requires: () => new Decimal("1e540"),
@@ -844,7 +844,7 @@ addLayer("sp", {
 	},
 	effectDescription() {
 		eff = tmp.layerEffs.sp;
-		return "which are boosting your point gains by ×" + format(eff)
+		return "使点数获取量变为 " + format(eff) + " 倍"
 	},
 
 	gainMult() {
@@ -872,9 +872,9 @@ addLayer("sp", {
 			},
 			display() { // Everything else displayed in the buyable button after the title
 				let data = tmp.buyables[this.layer][this.id]
-				return "Level " + player[this.layer].buyables[this.id] + "\n\
-				Cost: " + format(data.cost) + " spiritual power\n\
-				Generates " + format(data.effect) + " magic every second."
+				return "等级 " + player[this.layer].buyables[this.id] + "<br/>" + 
+				"花费：" + format(data.cost) + " 魂灵能量<br/>" + 
+				"每秒产生 " + format(data.effect) + " 魔力。"
 			},
 			unl() { return true },
 			canAfford() {
@@ -903,9 +903,9 @@ addLayer("sp", {
 			},
 			display() { // Everything else displayed in the buyable button after the title
 				let data = tmp.buyables[this.layer][this.id]
-				return "Level " + player[this.layer].buyables[this.id] + "\n\
-				Cost: " + format(data.cost) + " spiritual power\n\
-				Increase the time of spells by " + format(data.effect.sub(40)) + " seconds."
+				return "等级 " + player[this.layer].buyables[this.id] + "<br/>" + 
+				"花费：" + format(data.cost) + " 魂灵能量<br/>" + 
+				"使魔咒的持续时间增加 " + format(data.effect.sub(40)) + " 秒。"
 			},
 			unl() { return hasChall("t", 31) },
 			canAfford() {
@@ -933,9 +933,9 @@ addLayer("sp", {
 			},
 			display() { // Everything else displayed in the buyable button after the title
 				let data = tmp.buyables[this.layer][this.id]
-				return "Level " + player[this.layer].buyables[this.id] + "\n\
-				Cost: " + format(data.cost) + " spiritual power\n\
-				Increase the effect of the first three spells by ×" + format(data.effect) + "."
+				return "等级 " + player[this.layer].buyables[this.id] + "<br/>" + 
+				"花费：" + format(data.cost) + " 魂灵能量<br/>" + 
+				"将前三个魔咒的效果变为 " + format(data.effect) + " 倍。"
 			},
 			unl() { return hasChall("t", 31) },
 			canAfford() {
@@ -965,9 +965,9 @@ addLayer("sp", {
 			},
 			display() { // Everything else displayed in the buyable button after the title
 				let data = tmp.buyables[this.layer][this.id]
-				return "Level " + player[this.layer].buyables[this.id] + "\n\
-				Cost: " + format(data.cost) + " spiritual power\n\
-				Increase the effect of the second three spells by ×" + format(data.effect, 3) + " (based on current magic)."
+				return "等级 " + player[this.layer].buyables[this.id] + "<br/>" + 
+				"花费：" + format(data.cost) + " 魂灵能量<br/>" + 
+				"将第二行的三个魔咒效果变为 " + format(data.effect, 3) + " 倍(基于目前的魔力)。"
 			},
 			unl() { return hasChall("t", 31) },
 			canAfford() {
@@ -1051,9 +1051,9 @@ addLayer("sp", {
 			},
 			display() { // Everything else displayed in the buyable button after the title
 				let data = tmp.buyables[this.layer][this.id]
-				return (player.sp.buyables[21].lte(0) ? "Duration on cast: " + formatTime(tmp.buyables.sp[12].effect) : "Time left: " + formatTime(player.sp.buyables[21])) + "\n\
-				Casting cost: " + format(data.cost) + " magic\n\
-				Point generation is " + format(data.effect) + "× stronger (based on your shrines)."
+				return (player.sp.buyables[21].lte(0) ? "魔咒持续时间：" + formatTime(tmp.buyables.sp[12].effect) : "剩余时间：" + formatTime(player.sp.buyables[21])) + "<br/>" + 
+				"施法花费：" + format(data.cost) + " 魔力<br/>" + 
+				"点数产量变为 " + format(data.effect) + " 倍(基于圣地数量)。"
 			},
 			unl() { return true },
 			canAfford() {
@@ -1090,9 +1090,9 @@ addLayer("sp", {
 			},
 			display() { // Everything else displayed in the buyable button after the title
 				let data = tmp.buyables[this.layer][this.id]
-				return (player.sp.buyables[22].lte(0) ? "Duration on cast: " + formatTime(tmp.buyables.sp[12].effect) : "Time left: " + formatTime(player.sp.buyables[22])) + "\n\
-				Casting cost: " + format(data.cost) + " magic\n\
-				Coin gains is " + format(data.effect) + "× stronger (based on your shrines)."
+				return (player.sp.buyables[22].lte(0) ? "魔咒持续时间：" + formatTime(tmp.buyables.sp[12].effect) : "剩余时间：" + formatTime(player.sp.buyables[22])) + "<br/>" + 
+				"施法花费：" + format(data.cost) + " 魔力<br/>" + 
+				"金币获取量变为 " + format(data.effect) + " 倍(基于圣地数量)。"
 			},
 			unl() { return player.bd.buyables[13].gte(2) },
 			canAfford() {
@@ -1129,9 +1129,9 @@ addLayer("sp", {
 			},
 			display() { // Everything else displayed in the buyable button after the title
 				let data = tmp.buyables[this.layer][this.id]
-				return (player.sp.buyables[23].lte(0) ? "Duration on cast: " + formatTime(tmp.buyables.sp[12].effect) : "Time left: " + formatTime(player.sp.buyables[23])) + "\n\
-				Casting cost: " + format(data.cost) + " magic\n\
-				Finding and finishing work speed is " + format(data.effect) + "× stronger (based on your shrines)."
+				return (player.sp.buyables[23].lte(0) ? "魔咒持续时间：" + formatTime(tmp.buyables.sp[12].effect) : "剩余时间：" + formatTime(player.sp.buyables[23])) + "<br/>" + 
+				"施法花费：" + format(data.cost) + " 魔力<br/>" + 
+				"找到和完成工作的速度变为 " + format(data.effect) + " 倍(基于圣地数量)。"
 			},
 			unl() { return player.bd.buyables[13].gte(3) },
 			canAfford() {
@@ -1168,9 +1168,9 @@ addLayer("sp", {
 			},
 			display() { // Everything else displayed in the buyable button after the title
 				let data = tmp.buyables[this.layer][this.id]
-				return (player.sp.buyables[24].lte(0) ? "Duration on cast: " + formatTime(tmp.buyables.sp[12].effect) : "Time left: " + formatTime(player.sp.buyables[24])) + "\n\
-				Casting cost: " + format(data.cost) + " magic\n\
-				Banks' effect is raised to the power of ^" + format(data.effect, 3) + " (based on your shrines)."
+				return (player.sp.buyables[24].lte(0) ? "魔咒持续时间：" + formatTime(tmp.buyables.sp[12].effect) : "剩余时间：" + formatTime(player.sp.buyables[24])) + "<br/>" + 
+				"施法花费：" + format(data.cost) + " 魔力<br/>" + 
+				"银行的效果变为 ^" + format(data.effect, 3) + " (基于圣地数量)。"
 			},
 			unl() { return player.bd.buyables[13].gte(4) },
 			canAfford() {
@@ -1207,9 +1207,9 @@ addLayer("sp", {
 			},
 			display() { // Everything else displayed in the buyable button after the title
 				let data = tmp.buyables[this.layer][this.id]
-				return (player.sp.buyables[25].lte(0) ? "Duration on cast: " + formatTime(tmp.buyables.sp[12].effect) : "Time left: " + formatTime(player.sp.buyables[25])) + "\n\
-				Casting cost: " + format(data.cost) + " magic\n\
-				Finished work's effect is raised to the power of ^" + format(data.effect, 3) + " (based on your shrines)."
+				return (player.sp.buyables[25].lte(0) ? "魔咒持续时间：" + formatTime(tmp.buyables.sp[12].effect) : "剩余时间：" + formatTime(player.sp.buyables[25])) + "<br/>" + 
+				"施法花费：" + format(data.cost) + " 魔力<br/>" + 
+				"已完成的工作效果变为 ^" + format(data.effect, 3) + " (基于圣地数量)。"
 			},
 			unl() { return player.bd.buyables[13].gte(5) },
 			canAfford() {
@@ -1246,9 +1246,9 @@ addLayer("sp", {
 			},
 			display() { // Everything else displayed in the buyable button after the title
 				let data = tmp.buyables[this.layer][this.id]
-				return (player.sp.buyables[26].lte(0) ? "Duration on cast: " + formatTime(tmp.buyables.sp[12].effect) : "Time left: " + formatTime(player.sp.buyables[26])) + "\n\
-				Casting cost: " + format(data.cost) + " magic\n\
-				Spiritual power's effect is raised to the power of ^" + format(data.effect, 3) + " (based on your shrines)."
+				return (player.sp.buyables[26].lte(0) ? "魔咒持续时间：" + formatTime(tmp.buyables.sp[12].effect) : "剩余时间：" + formatTime(player.sp.buyables[26])) + "<br/>" + 
+				"施法花费：" + format(data.cost) + " 魔力<br/>" + 
+				"魂灵能量的效果变为 ^" + format(data.effect, 3) + " (基于圣地数量)。"
 			},
 			unl() { return player.bd.buyables[13].gte(6) },
 			canAfford() {
@@ -1290,9 +1290,9 @@ addLayer("sp", {
 			},
 			display() { // Everything else displayed in the buyable button after the title
 				let data = tmp.buyables[this.layer][this.id]
-				return (player.sp.buyables[27].lte(0) ? "Duration on cast: " + formatTime(tmp.buyables.sp[12].effect.mul(1.5)) + " (1.5× normal spells' duration)" : "Time left: " + formatTime(player.sp.buyables[27])) + "\n\
-				Casting cost: " + format(data.cost) + " magic\n\
-				Raises all of the first row of spells' effects by ^" + format(data.effect.first, 3) + " and multiplies all of your second row of spells' effects by ×" + format(data.effect.second, 3) + " (based on your shrines)."
+				return (player.sp.buyables[27].lte(0) ? "魔咒持续时间：" + formatTime(tmp.buyables.sp[12].effect.mul(1.5)) + " (普通魔咒1.5倍的持续时间)" : "剩余时间：" + formatTime(player.sp.buyables[27])) + "<br/>" + 
+				"施法花费：" + format(data.cost) + " 魔力<br/>" + 
+				"第一行魔咒的效果变为 ^" + format(data.effect.first, 3) + " ，第二行的魔咒效果变为 " + format(data.effect.second, 3) + " 倍(基于圣地数量)。"
 			},
 			unl() { return player.bd.buyables[13].gte(7) },
 			canAfford() {
@@ -1334,9 +1334,9 @@ addLayer("sp", {
 			},
 			display() { // Everything else displayed in the buyable button after the title
 				let data = tmp.buyables[this.layer][this.id]
-				return (player.sp.buyables[28].lte(0) ? "Duration on cast: " + formatTime(60) : "Time left: " + formatTime(player.sp.buyables[28])) + "\n\
-				Casting cost: " + format(data.cost) + " magic\n\
-				Multiplies all of your first 8 bankings' generation speed by ×" + format(data.effect, 3) + " and boost their effects by ×" + format(data.effect.sqrt(), 3) + " (based on your total amount of time left on normal spells)."
+				return (player.sp.buyables[28].lte(0) ? "魔咒持续时间：" + formatTime(60) : "剩余时间：" + formatTime(player.sp.buyables[28])) + "<br/>" + 
+				"施法花费：" + format(data.cost) + " 魔力<br/>" + 
+				"前8个银行业务的速度变为 " + format(data.effect, 3) + " 倍，效果变为 " + format(data.effect.sqrt(), 3) + " 倍(基于普通魔咒的剩余总时间)。"
 			},
 			unl() { return hasUpg("wi", 44) },
 			canAfford() {
@@ -1377,9 +1377,9 @@ addLayer("sp", {
 			},
 			display() { // Everything else displayed in the buyable button after the title
 				let data = tmp.buyables[this.layer][this.id]
-				return (player.sp.buyables[29].lte(0) ? "Duration on cast: " + formatTime(60) : "Time left: " + formatTime(player.sp.buyables[29])) + "\n\
-				Casting cost: " + format(data.cost) + " magic\n\
-				Raises all effects of “Spell of Spells” by ^" + format(data.effect, 3) + ". That's it actually."
+				return (player.sp.buyables[29].lte(0) ? "魔咒持续时间：" + formatTime(60) : "剩余时间：" + formatTime(player.sp.buyables[29])) + "<br/>" + 
+				"施法花费：" + format(data.cost) + " 魔力<br/>" + 
+				"将“咒之魔咒”的所有效果变为 ^" + format(data.effect, 3) + " 。真的，就这样。"
 			},
 			unl() { return hasUpg("wi", 51) },
 			canAfford() {
@@ -1420,9 +1420,9 @@ addLayer("sp", {
 			},
 			display() { // Everything else displayed in the buyable button after the title
 				let data = tmp.buyables[this.layer][this.id]
-				return (player.sp.buyables[30].lte(0) ? "Duration on cast: " + formatTime(60) : "Time left: " + formatTime(player.sp.buyables[30])) + "\n\
-				Casting cost: " + format(data.cost) + " magic\n\
-				Increases the softcap threshold of the first six bankings by ×" + format(data.effect, 3) + " (based on your current magic)."
+				return (player.sp.buyables[30].lte(0) ? "魔咒持续时间：" + formatTime(60) : "剩余时间：" + formatTime(player.sp.buyables[30])) + "<br/>" + 
+				"施法花费：" + format(data.cost) + " 魔力<br/>" + 
+				"将前六个银行业务的软上限阈值变为 " + format(data.effect, 3) + " 倍(基于目前的魔力)。"
 			},
 			unl() { return hasUpg("wi", 61) },
 			canAfford() {
@@ -1491,7 +1491,7 @@ addLayer("sp", {
             spells: { title: () => "Spells", content: [
 				["blank", "5px"],
 				["display-text", () => 
-					"You have " + format(player ? player.sp.magic : "0") + " magic."
+					"您拥有 " + format(player ? player.sp.magic : "0") + " 魔力。"
 				],
 				["blank", "5px"],
 				["row", [["buyable", "21"], ["buyable", "22"], ["buyable", "23"]]],
@@ -1509,7 +1509,7 @@ addLayer("sp", {
 			["prestige-button", function () { return "Reset for " }],
 			["blank", "5px"],
 			["display-text",
-				function () { return "You have at best " + format(player.sp.best, 0) + " " + " spiritual power." }],
+				function () { return "您最高拥有 " + format(player.sp.best, 0) + " " + " 魂灵能量。" }],
 			["blank", "5px"],
 			["microtabs", "stuff"]],
 
