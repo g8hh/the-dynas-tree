@@ -568,10 +568,10 @@ addLayer("b", {
 			display() { // Everything else displayed in the buyable button after the title
 				let data = tmp.buyables[this.layer][this.id]
 				return data.canAfford
-					? "You have " + format(player[this.layer].buyables[this.id], 0) + " banked time, which are boosting the point generation speed by ×" + format(data.effect) + ".\n\n\
-						Banking is currently " + (player.b.banking == 3 ? "enabled.\n\
-						Click here to disable banking and gain " + format(Decimal.sub(tmp.pointGen, player.b.buyables[13]).max(0), 0) + " banked time." : "disabled.\n\
-						Click here to enable banking, which will activate all of the previous banking debuffs at once. The thing you are banking here is your points generated per second.")
+					? "您拥有 " + format(player[this.layer].buyables[this.id], 0) + " 已存入的时间，因此点数产量变为了 " + format(data.effect) + " 倍。<br/>" + 
+						"此项业务目前" + (player.b.banking == 3 ? "已激活。<br/>" + 
+						"点击此处以取消此项业务并获得 " + format(Decimal.sub(tmp.pointGen, player.b.buyables[13]).max(0), 0) + " 已存入的时间。" : "未激活。<br/>" + 
+						"点击此处以激活此项业务，激活后，之前银行的负面效果将同时触发。此处存入的是您每秒的点数产量。")
 					: (player.b.banking > 0 ? "Please disable the current active banking before you can activate another one." : "You need to build at least 6 banks before you can use this function.")
 			},
 			unl() { return true },
@@ -601,10 +601,10 @@ addLayer("b", {
 			display() { // Everything else displayed in the buyable button after the title
 				let data = tmp.buyables[this.layer][this.id]
 				return data.canAfford
-					? "You have " + format(player[this.layer].buyables[this.id], 0) + " banked metacoins, which are boosting all previous bankings' buffs by ×" + format(data.effect) + ".\n\n\
-						Banking is currently " + (player.b.banking == 4 ? "enabled.\n\
-						Click here to disable banking and gain " + format(Decimal.sub(tmp.resetGain ? tmp.resetGain["c"] : 0, player.b.buyables[21]).max(0), 0) + " banked metacoins." : "disabled.\n\
-						Click here to enable banking, which will tenth root your point generation and coin gains. The thing you are banking here is your coins gain on coin reset.")
+					? "您拥有 " + format(player[this.layer].buyables[this.id], 0) + " 已存入的多元金币，因此之前的银行效果变为了 " + format(data.effect) + " 倍。<br/>" + 
+						"此项业务目前" + (player.b.banking == 4 ? "已激活。<br/>" + 
+						"点击此处以取消此项业务并获得 " + format(Decimal.sub(tmp.resetGain ? tmp.resetGain["c"] : 0, player.b.buyables[21]).max(0), 0) + " 已存入的多元金币。" : "未激活。<br/>" + 
+						"点击此处以激活此项业务，激活后，点数产量和金币获取量变为原来的十次方根。此处存入的是您金币重置时的金币获取量。")
 					: (player.b.banking > 0 ? "Please disable the current active banking before you can activate another one." : "You need to build at least 12 banks before you can use this function.")
 			},
 			unl() { return hasMilestone("w", 10) },
@@ -633,10 +633,10 @@ addLayer("b", {
 			display() {
 				let data = tmp.buyables[this.layer][this.id]
 				return data.canAfford
-					? "You have " + format(player[this.layer].buyables[this.id], 0) + " banked metapoints, which are boosting all previous bankings' buffs by ×" + format(data.effect) + ".\n\n\
-						Banking is currently " + (player.b.banking == 8 ? "enabled.\n\
-						Click here to disable banking and gain " + format(Decimal.sub(tmp.pointGen, player.b.buyables[22]).max(0), 0) + " banked metapoints." : "disabled.\n\
-						Click here to enable banking, which will override the point generation speed and make it stronger based on your current coin count ((coins^0.1)-1). You also bank point generated per second on this one.")
+					? "您拥有 " + format(player[this.layer].buyables[this.id], 0) + " 已存入的多元点数，因此之前的银行效果变为了 " + format(data.effect) + " 倍。<br/>" + 
+						"此项业务目前" + (player.b.banking == 8 ? "已激活。<br/>" + 
+						"点击此处以取消此项业务并获得 " + format(Decimal.sub(tmp.pointGen, player.b.buyables[22]).max(0), 0) + " 已存入的多元点数。" : "未激活。<br/>" + 
+						"点击此处以激活此项业务，激活后，点数产量变为以下公式：((目前金币数^0.1)-1)。此处存入的是您每秒的点数产量。")
 					: (player.b.banking > 0 ? "Please disable the current active banking before you can activate another one." : "You need to build at least 15 banks before you can use this function.")
 			},
 			unl() { return hasMilestone("w", 10) },
@@ -664,10 +664,10 @@ addLayer("b", {
 			display() {
 				let data = tmp.buyables[this.layer][this.id]
 				return data.canAfford
-					? "You have " + format(player[this.layer].buyables[this.id], 0) + " banked work, which are which are boosting all previous bankings' buffs by ×" + format(data.effect) + ".\n\n\
-						Banking is currently " + (player.b.banking == 15 ? "enabled.\n\
-						Click here to disable banking and gain " + format(Decimal.sub(player.wf.workDone, player.b.buyables[23]).max(0), 0) + " banked work." : "disabled.\n\
-						Click here to enable banking, which will activate all the previous bankings' debuffs at once. Your current finished and unfinished work are also resetted, and the finished work's speed is overriden and depends on your current point count ((points^0.2)-1). The thing you're banking here is your current finished work count.")
+					? "您拥有 " + format(player[this.layer].buyables[this.id], 0) + " 已存入的工作，因此之前的银行效果变为了 " + format(data.effect) + " 倍。<br/>" + 
+						"此项业务目前" + (player.b.banking == 15 ? "已激活。<br/>" + 
+						"点击此处以取消此项业务并获得 " + format(Decimal.sub(player.wf.workDone, player.b.buyables[23]).max(0), 0) + " 已存入的工作。" : "未激活。<br/>" + 
+						"点击此处以激活此项业务，激活后，之前银行的负面效果将同时触发。您的已完成和未完成的工作数量也将被重置，已完成的工作效果变为以下公式：((目前点数^0.2)-1)。此处存入的是目前已完成的工作数量。")
 					: (player.b.banking > 0 ? "Please disable the current active banking before you can activate another one." : "You need to build at least 19 banks before you can use this function.")
 			},
 			unl() { return hasMilestone("w", 10) },
@@ -693,10 +693,10 @@ addLayer("b", {
 			display() { 	
 				let data = tmp.buyables[this.layer][this.id]	
 				return data.canAfford 	
-					? "You have " + format(player[this.layer].buyables[this.id], 0) + " banked speed, which are boosting all previous bankings' buffs by ×" + format(data.effect) + ".\n\n\
-						Banking is currently " + (player.b.banking == 16 ? "enabled.\n\
-						Click here to disable banking and gain " + format(Decimal.sub(player.b.speed, player.b.buyables[31]).max(0), 0) + " banked speed." : "disabled.\n\
-						Click here to enable banking, which will make your point generation worse over time. You will also lose 99.999% of your points every second. In return, you will start gaining speed if your points generated per second is greater than 1e10 and will be converted into banked speed on banking disable.")	
+					? "您拥有 " + format(player[this.layer].buyables[this.id], 0) + " 已存入的速度，因此之前的银行效果变为了 " + format(data.effect) + " 倍。<br/>" + 
+						"此项业务目前" + (player.b.banking == 16 ? "已激活。<br/>" + 
+						"点击此处以取消此项业务并获得 " + format(Decimal.sub(player.b.speed, player.b.buyables[31]).max(0), 0) + " 已存入的速度。" : "未激活。<br/>" + 
+						"点击此处以激活此项业务，激活后，点数产量将随着时间衰减。您同时每秒失去目前的99.999%点数。如果您的每秒点数产量大于1e10，您就可以获得速度。")	
 					: (player.b.banking > 0 ? "Please disable the current active banking before you can activate another one." : "You need to build at least 60 banks before you can use this function.")	
 			},	
 			unl() { return hasChall("t", 21) }, 	
@@ -718,10 +718,10 @@ addLayer("b", {
 			display() { 	
 				let data = tmp.buyables[this.layer][this.id]	
 				return data.canAfford 	
-					? "You have " + format(player[this.layer].buyables[this.id], 0) + " banked production.\n\n\
-						Banking is currently " + (player.b.banking == 19 ? "enabled.\n\
-						Click here to disable banking and gain " + format(Decimal.sub(player.b.speed, player.b.buyables[32]).max(0), 0) + " banked speed." : "disabled.\n\
-						Click here to enable banking, which will apply “Speed Banking” and “Time Banking” at once. This banking has no more purposes than just to produce banked speed.")	
+					? "您拥有 " + format(player[this.layer].buyables[this.id], 0) + " 已存入的产量。<br/>" + 
+						"此项业务目前" + (player.b.banking == 19 ? "已激活。<br/>" + 
+						"点击此处以取消此项业务并获得 " + format(Decimal.sub(player.b.speed, player.b.buyables[32]).max(0), 0) + " 已存入的速度。" : "未激活。<br/>" + 
+						"点击此处以激活此项业务，激活后，速度业务和时间业务的负面效果将同时触发。此项业务只是为了产生已存入的速度而已。")	
 					: (player.b.banking > 0 ? "Please disable the current active banking before you can activate another one." : "You need to build at least 80 banks before you can use this function.")	
 			},	
 			unl() { return hasChall("t", 21) }, 	
@@ -744,8 +744,8 @@ addLayer("b", {
 			display() { 	
 				let data = tmp.buyables[this.layer][this.id]	
 				return data.canAfford 	
-					? "You have " + format(player[this.layer].buyables[this.id], 0) + " banked generation, which are speeding the banking generation speed by ×" + format(data.effect) + ".\n\n\
-						This one isn't much of a banking. Instead, this “banking” allows you to reset your banks for a boost in banking generation. This will not reset your bankings and does not produce banked production. Click here to gain " + format(Decimal.sub(player.b.points, player.b.buyables[33]).max(0), 0) + " banked generation."	
+					? "您拥有 " + format(player[this.layer].buyables[this.id], 0) + " 已存入的世代，因此银行业务的速度变为了 " + format(data.effect) + " 倍。<br/>" + 
+						"此项其实算不上业务。它会重置目前的银行，然后使银行业务变得更快。它不会重置银行业务，也不会存入其他东西。点击此处以获得 " + format(Decimal.sub(player.b.points, player.b.buyables[33]).max(0), 0) + " 已存入的世代。"	
 					: "You need to build at least 125 banks before you can use this function."
 			},	
 			unl() { return hasUpg("wi", 23) }, 	
@@ -794,14 +794,14 @@ addLayer("b", {
 			["prestige-button", function () { return "Build " }],
 			["blank", "5px"],
 			["display-text",
-				function () { return "You have at best " + format(player.b.best, 0) + " " + " banks." }],
+				function () { return "您最高拥有 " + format(player.b.best, 0) + " " + " 银行。" }],
 			["display-text",
-				function () { return player.b.banking > 0 ? ("You have been banking for " + formatTime(player.b.bankTime.toNumber()) + (".")) : "" }],
+				function () { return player.b.banking > 0 ? ("您已经进行了 " + formatTime(player.b.bankTime.toNumber()) + (" 的业务。")) : "" }],
 			["display-text",
-				function () { return player.b.banking & 16 ? ("You have " + format(player.b.speed) + " speed.") : "" }],
+				function () { return player.b.banking & 16 ? ("您拥有 " + format(player.b.speed) + " 速度。") : "" }],
 			["blank", "5px"],
 			["display-text",
-				function () { return "<h3>Bankings</h3><br/><h5>Note: Enabling/Disabling bankings will force a bank reset.<br/>Total multiplier to point generation: ×" + format(tmp.buyables.b[11].effect.mul(tmp.buyables.b[12].effect).mul(tmp.buyables.b[13].effect)) + "</h5>" }],
+				function () { return "<h3>Bankings</h3><br/><h5>Note: Enabling/Disabling bankings will force a bank reset.<br/>点数产量的总加成为：" + format(tmp.buyables.b[11].effect.mul(tmp.buyables.b[12].effect).mul(tmp.buyables.b[13].effect)) + " 倍</h5>" }],
 			"buyables", ["blank", "5px"]
 			, "milestones", "upgrades"],
 
