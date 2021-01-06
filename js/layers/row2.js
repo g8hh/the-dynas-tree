@@ -322,17 +322,17 @@ addLayer("wf", {
 				function () { return "您最高拥有 " + format(player.wf.best, 0) + " 工作中介。" }],
 			["display-text",
 				function () {
-					return player.wf.best >= 100 ? "\
-				Workfinders' efficiency starts dropping at 100 workfinders, then it drops faster at 40,000 and 16,000,000 workfinders. Currently: " + format(awf.max(100).log10().div(player.wf.points.max(100).log10()).min(1).mul(100), 3) + "%" : ""
+					return player.wf.best >= 100 ? "<br/>" + 
+				"超过100以后，工作中介的效果将开始下降，在超过40000及16000000时下降的更厉害。目前效果：" + format(awf.max(100).log10().div(player.wf.points.max(100).log10()).min(1).mul(100), 3) + "%" : ""
 				}],
 			["blank", "5px"],
 			["display-text",
-				function () { return "You have " + format(player.wf.workDone, 0) + " finished work, which are increasing the effects of the first two rows of your coin layer's boost upgrades by ×" + format(player.wf.workDoneEffect, 3) + "." }],
+				function () { return "您有 " + format(player.wf.workDone, 0) + " 已完成的工作，它可以增加金币层级前两行的“增加”升级效果至 " + format(player.wf.workDoneEffect, 3) + " 倍。" }],
 			["display-text",
-				function () { return "You have " + format(player.wf.workUndone, 0) + " unfinished work, which are raising the finished work's effect to the power of ^" + format(player.wf.workUndoneEffect, 5).replace(",", "") + "." }],
+				function () { return "您有 " + format(player.wf.workUndone, 0) + " 未完成的工作，它使已完成的工作效果变为原来的 ^" + format(player.wf.workUndoneEffect, 5).replace(",", "") + " 。" }],
 			["blank", "5px"],
 			["display-text",
-				function () { return "Your workfinders are finding " + format(player.wf.workUndonePerSec) + " unfinished work and your workers are finishing " + format(player.wf.workDonePerSec) + " work per second. (" + format(player.wf.workUndonePerSec.sub(player.wf.workDonePerSec)) + " actual unfinished work and " + format(Decimal.min(player.wf.workUndonePerSec, player.wf.workDonePerSec)) + " actual finished work per second)" }],
+				function () { return "工作中介每秒找到 " + format(player.wf.workUndonePerSec) + " 未完成的工作，工人们每秒完成 " + format(player.wf.workDonePerSec) + " 工作。(每秒实际上 " + format(player.wf.workUndonePerSec.sub(player.wf.workDonePerSec)) + " 未完成的工作， " + format(Decimal.min(player.wf.workUndonePerSec, player.wf.workDonePerSec)) + " 已完成的工作)" }],
 			["blank", "5px"],
 			["microtabs", "stuff"], "milestones"],
 
@@ -434,7 +434,7 @@ addLayer("b", {
 	layerShown() { return (hasMilestone("w", 6) || player[this.layer].unl || player.m.unl) && !inChallenge("t", 21) },
 
 	color: () => "#00FF00",
-	resource: "banks",
+	resource: "银行",
 	row: 1,
 
 	baseResource: "points",
@@ -455,7 +455,7 @@ addLayer("b", {
 	},
 	effectDescription() {
 		eff = tmp.layerEffs.b;
-		return "which are boosting your coin gains by ×" + format(eff)
+		return "使金币获取量变为 " + format(eff) + " 倍"
 	},
 
 	gainMult() {
@@ -492,10 +492,10 @@ addLayer("b", {
 			display() { // Everything else displayed in the buyable button after the title
 				let data = tmp.buyables[this.layer][this.id]
 				return data.canAfford
-					? "You have " + format(player[this.layer].buyables[this.id], 0) + " banked coins, which are boosting the point generation speed by ×" + format(data.effect) + ".\n\n\
-						Banking is currently " + (player.b.banking == 1 ? "enabled.\n\
-						Click here to disable banking and gain " + format(player.c.points.sub(player.b.buyables[11]).max(0), 0) + " banked coins." : "disabled.\n\
-						Click here to enable banking, which will square root all of your point generation speed, coin gains, workers' effect, finished works' effects, banks' effects and your “all previous boost upgrades” upgrades' effects.")
+					? "您拥有 " + format(player[this.layer].buyables[this.id], 0) + " 已存入的金币，因此点数产量变为了 " + format(data.effect) + " 倍。<br/>" + 
+						"此项业务目前" + (player.b.banking == 1 ? "已激活。<br/>" + 
+						"点击此处以取消此项业务并获得 " + format(player.c.points.sub(player.b.buyables[11]).max(0), 0) + " 已存入的金币。" : "未激活。<br/>" + 
+						"点击此处以激活此项业务，激活后，点数产量，金币获取量，工人效果，已完成的工作的效果，银行效果及“使之前的‘增加’升级效果更好”的升级效果变为原来的平方根。")
 					: (player.b.banking > 0 ? "Please disable the current active banking before you can activate another one." : "You need to build at least 2 banks before you can use this function.")
 			},
 			unl() { return true },
@@ -530,10 +530,10 @@ addLayer("b", {
 			display() { // Everything else displayed in the buyable button after the title
 				let data = tmp.buyables[this.layer][this.id]
 				return data.canAfford
-					? "You have " + format(player[this.layer].buyables[this.id], 0) + " banked points, which are boosting the point generation speed by ×" + format(data.effect) + ".\n\n\
-						Banking is currently " + (player.b.banking == 2 ? "enabled.\n\
-						Click here to disable banking and gain " + format(player.points.sub(player.b.buyables[12]).max(0), 0) + " banked points." : "disabled.\n\
-						Click here to enable banking, which will cube root your point generation speed and lock you out so you can only be able to access the first two coin upgrades.")
+					? "您拥有 " + format(player[this.layer].buyables[this.id], 0) + " 已存入的点数，因此点数产量变为了 " + format(data.effect) + " 倍。<br/>" + 
+						"此项业务目前" + (player.b.banking == 2 ? "已激活。<br/>" + 
+						"点击此处以取消此项业务并获得 " + format(player.points.sub(player.b.buyables[12]).max(0), 0) + " 已存入的点数。" : "未激活。<br/>" + 
+						"点击此处以激活此项业务，激活后，点数产量变为原来的立方根，且金币升级只能进行前两个升级。")
 					: (player.b.banking > 0 ? "Please disable the current active banking before you can activate another one." : "You need to build at least 4 banks before you can use this function.")
 			},
 			unl() { return true },

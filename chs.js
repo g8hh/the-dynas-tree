@@ -95,6 +95,13 @@ var cnItems = {
     'Rebuyables': '重复购买项',
     'Upgrades': '升级',
     'Hire ': '雇佣 ',
+    'F: Hire workfinders': '快捷键F：雇佣工作中介',
+    ' banks': ' 银行',
+    'Coin Banking': '金币业务',
+    'Please disable the current active banking before you can activate another one.': '请在激活此项业务之前先取消正在进行中的业务。',
+    'You need to build at least 2 banks before you can use this function.': '至少建造2银行后才可以开始使用此项业务。',
+    'Point Banking': '点数业务',
+    'You need to build at least 4 banks before you can use this function.': '至少建造4银行后才可以开始使用此项业务。',
     //层级2结束
 
 
