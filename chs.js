@@ -1,4 +1,4 @@
-/*
+7/*
 
  @name    : 锅巴汉化 - Web汉化插件
  @author  : 麦子、JAR、小蓝、好阳光的小锅巴
@@ -45,10 +45,11 @@ var cnItems = {
 
 
     //层级1
+    ' coins': ' 金币',
     'Boosts points generation based on your total coin count.': '根据金币总数，增加点数产量。',
     'Boosts the previous upgrade based on your best coin count.': '根据金币最高值，增加前一个升级的效果。',
-    'Boosts the previous upgrade based on your current coin count.': '根据金币当前数量，增加前一个升级的效果。',
-    'Boosts all boost upgrades above based on your current point count.': '根据点数当前数量，增加之前的“增加”升级效果。',
+    'Boosts the previous upgrade based on your current coin count.': '根据金币目前数量，增加前一个升级的效果。',
+    'Boosts all boost upgrades above based on your current point count.': '根据点数目前数量，增加之前的“增加”升级效果。',
     'Boosts the previous upgrade based on your coins gain on coin reset.': '根据金币重置可获得的金币数量，增加前一个升级的效果。',
     'The point generation upgrade also gets boosted by the “all previous boost upgrades” upgrade.': '产生点数的升级也受到“使之前的‘增加’升级效果更好”的升级影响。',
     'Boosts coins gain on coin reset (unaffected by the “all previous boost upgrades” upgrades).': '增加金币重置时的金币获取量(不受“使之前的‘增加’升级效果更好”的升级影响)。',
@@ -67,9 +68,34 @@ var cnItems = {
     'Boost all boost upgrades on the fifth row based on unfinished work.': '根据未完成的工作数量，增加第五行所有“增加”升级的效果。',
     'Boost all boost upgrades on the fifth row based on finished work.': '根据已完成的工作数量，增加第五行所有“增加”升级的效果。',
     'Boost all boost upgrades on the fifth row based on bankings\' effects.': '根据银行的效果，增加第五行所有“增加”升级的效果。',
-    'Boost all left upgrades based on current bank count.': '根据银行当前数量，增加左边的所有升级效果。',
+    'Boost all left upgrades based on current bank count.': '根据银行目前数量，增加左边的所有升级效果。',
     'C: Reset for coins': '快捷键C：金币重置',
     //层级1结束
+
+
+    //层级2
+    ' workfinders': ' 工作中介',
+    'Increase workers\' strength': '增加工人的力量',
+    'Increase workers\' dexterity': '增加工人的敏捷',
+    'Increase workers\' collaborativeness': '增加工人的协同能力',
+    'Promote workfinders to part-time workers': '让工作中介也来兼职',
+    'Increase work quality': '增加工作的质量',
+    'Increase work planning skills': '提升工作规划的技能',
+    'Unlock a new row of coin upgrades because why not?': '解锁一行新的金币升级。原因？何乐不为呢？',
+    'Finish work faster based on unfinished work count.': '根据未完成的工作数量，增加完成工作的速度。',
+    'Finish work faster based on finshed work\'s effect.': '根据已完成的工作效果，增加完成工作的速度。',
+    'Find work faster based on finshed work count.': '根据已完成的工作数量，增加找到工作的速度。',
+    'Find work faster based on current workfinder count.': '根据目前的工作中介数量，增加找到工作的速度。',
+    'Multiplier to finished work\'s effect based on unfinished work\'s effect.': '根据未完成的工作效果，使已完成的工作效果乘上一个倍率。',
+    'Power to unfinished work\'s effect based on finished work\'s effect.': '根据已完成的工作效果，使未完成的工作效果变为原来的一个指数。',
+    'Finish work 10 times faster. Are you happy now?': '完成工作的速度变为原来的10倍。您开心了吗？',
+    'Find work 5 times faster. With yin there are yang.': '找到工作的速度变为原来的5倍。阴阳相生，道法自然。',
+    'Find work 3 times faster.': '找到工作的速度变为原来的3倍。',
+    'Guys this is it. A new prestige layer.': '兄弟们，就是这样。新的转生层级来了。',
+    'Rebuyables': '重复购买项',
+    'Upgrades': '升级',
+    'Hire ': '雇佣 ',
+    //层级2结束
 
 
     //选项
@@ -188,6 +214,7 @@ var cnExcludeWhole = [
     /^\s*$/, //纯空格
     /^(.*)\d{1,2}(\.\d+)?(e\+?\d+)?(.*)$/, //不抓取内容
     /^(.*)\{(.+)\}(.*)$/, //不抓取内容
+    /^(.*)\\t\\t(.*)$/, //不抓取内容
     /^(.*)了(.*)$/, //不抓取内容
     /^(.*)的(.*)$/, //不抓取内容
     /^(.*)地(.*)$/, //不抓取内容

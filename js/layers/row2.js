@@ -64,10 +64,10 @@ addLayer("wf", {
 			},
 			display() { // Everything else displayed in the buyable button after the title
 				let data = tmp.buyables[this.layer][this.id]
-				return "Level " + player[this.layer].buyables[this.id] + "\n\
-				Cost: " + format(data.cost) + " finished work\n\
-				Increases work finishing speed by ×" + format(tmp.buyables[this.layer][12].effect.add ? tmp.buyables[this.layer][12].effect.add(1.35) : 1.35) + " per level.\n\
-				Currently: ×" + format(data.effect)
+				return "等级 " + player[this.layer].buyables[this.id] + "\n\
+				花费：" + format(data.cost) + " 已完成的工作\n\
+				每级使工作完成速度增加 " + format(tmp.buyables[this.layer][12].effect.add ? tmp.buyables[this.layer][12].effect.add(1.35) : 1.35) + " 倍。\n\
+				目前：x" + format(data.effect)
 			},
 			unl() { return player[this.layer].unl },
 			canAfford() {
@@ -92,10 +92,10 @@ addLayer("wf", {
 			},
 			display() { // Everything else displayed in the buyable button after the title
 				let data = tmp.buyables[this.layer][this.id]
-				return "Level " + player[this.layer].buyables[this.id] + "\n\
-				Cost: " + format(data.cost) + " finished work\n\
-				Increases the previous increase upgrade by +0.01 per level per level.\n\
-				Currently: +" + format(data.effect)
+				return "等级 " + player[this.layer].buyables[this.id] + "\n\
+				花费：" + format(data.cost) + " 已完成的工作\n\
+				每级使前一个“增加”升级每有一级效果增加0.01。\n\
+				目前：+" + format(data.effect)
 			},
 			unl() { return player[this.layer].unl },
 			canAfford() {
@@ -120,10 +120,10 @@ addLayer("wf", {
 			},
 			display() { // Everything else displayed in the buyable button after the title
 				let data = tmp.buyables[this.layer][this.id]
-				return "Level " + player[this.layer].buyables[this.id] + "\n\
-				Cost: " + format(data.cost) + " finished work\n\
-				Increases the first upgrade's effect by ^+0.01 per level. Levels on this upgrade stack additively.\n\
-				Currently: ^" + format(data.effect)
+				return "等级 " + player[this.layer].buyables[this.id] + "\n\
+				花费：" + format(data.cost) + " 已完成的工作\n\
+				第一个升级的效果变为原来的一个指数，每级此升级使指数增加0.01。此升级效果互相叠加。\n\
+				目前：^" + format(data.effect)
 			},
 			unl() { return player[this.layer].unl },
 			canAfford() {
@@ -149,10 +149,10 @@ addLayer("wf", {
 			},
 			display() { // Everything else displayed in the buyable button after the title
 				let data = tmp.buyables[this.layer][this.id]
-				return "Level " + player[this.layer].buyables[this.id] + "\n\
-				Cost: " + format(data.cost) + " workfinders\n\
-				Workfinders also finish works at reduced workers' capacity.\n\
-				Currently: " + format(data.effect) + "%"
+				return "等级 " + player[this.layer].buyables[this.id] + "\n\
+				花费：" + format(data.cost) + " 工作中介\n\
+				工作中介可以按照比工人低的速度完成工作。\n\
+				目前：" + format(data.effect) + "%"
 			},
 			unl() { return player[this.layer].unl },
 			canAfford() {
@@ -177,10 +177,10 @@ addLayer("wf", {
 			},
 			display() { // Everything else displayed in the buyable button after the title
 				let data = tmp.buyables[this.layer][this.id]
-				return "Level " + player[this.layer].buyables[this.id] + "\n\
-				Cost: " + format(data.cost) + " coins\n\
-				Boosts the finished work's effect.\n\
-				Currently: ^" + format(data.effect)
+				return "等级 " + player[this.layer].buyables[this.id] + "\n\
+				花费：" + format(data.cost) + " 金币\n\
+				增加已完成的工作的效果。\n\
+				目前：^" + format(data.effect)
 			},
 			unl() { return player[this.layer].unl },
 			canAfford() {
@@ -205,10 +205,10 @@ addLayer("wf", {
 			},
 			display() { // Everything else displayed in the buyable button after the title
 				let data = tmp.buyables[this.layer][this.id]
-				return "Level " + player[this.layer].buyables[this.id] + "\n\
-				Cost: " + format(data.cost) + " coins\n\
-				Reduces the unfinished work penalty.\n\
-				Currently: ^" + format(data.effect, 3)
+				return "等级 " + player[this.layer].buyables[this.id] + "\n\
+				花费：" + format(data.cost) + " 金币\n\
+				减少未完成的工作的惩罚。\n\
+				目前：^" + format(data.effect, 3)
 			},
 			unl() { return player[this.layer].unl },
 			canAfford() {
@@ -319,7 +319,7 @@ addLayer("wf", {
 			["prestige-button", function () { return "Hire " }],
 			["blank", "5px"],
 			["display-text",
-				function () { return "You have at best " + format(player.wf.best, 0) + " workfinders." }],
+				function () { return "您最高拥有 " + format(player.wf.best, 0) + " 工作中介。" }],
 			["display-text",
 				function () {
 					return player.wf.best >= 100 ? "\

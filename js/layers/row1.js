@@ -10,7 +10,7 @@ addLayer("c", {
 
 	layerShown() { return true },
 
-	name: "金币",
+	name: "coins",
 	color: () => "#FFFF00",
 	resource: "coins",
 	row: 0,
