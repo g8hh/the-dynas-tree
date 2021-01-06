@@ -244,37 +244,37 @@
 			<!-- *************************** Modify the tree in the table below! *************************** -->
 			<div v-if="player.points.lt(ENDGAME)">
 				<table>
-					<td><layer-node layer='c' abb='金'></layer-node></td>
+					<td><layer-node layer='c' abb='金币'></layer-node></td>
 				</table><table>
 					<td><button class="treeNode hidden"></button></td>
 				</table><table>
 					<td><layer-node layer='wf' abb='中介'></layer-node></td>
 					<td><layer-node layer='sp' abb='魂灵'></layer-node></td>
-					<td><layer-node layer='b' abb='银'></layer-node></td>
+					<td><layer-node layer='b' abb='银行'></layer-node></td>
 				</table><table>
 					<td><button class="treeNode hidden"></button></td>
 				</table><table>
-					<td><layer-node layer='w' abb='工'></layer-node></td>
+					<td><layer-node layer='w' abb='工人'></layer-node></td>
 				</table><table>
 					<td><button class="treeNode hidden"></button></td>
 				</table><table>
 					<td><layer-node layer='bd' abb='建造'></layer-node></td>
 					<td><layer-node layer='so' abb='士兵'></layer-node></td>
-					<td><layer-node layer='m' abb='经'></layer-node></td>
-					<td><layer-node layer='t' abb='领'></layer-node></td>
-					<td><layer-node layer='wi' abb='智'></layer-node></td>
+					<td><layer-node layer='m' abb='经理'></layer-node></td>
+					<td><layer-node layer='t' abb='领土'></layer-node></td>
+					<td><layer-node layer='wi' abb='智慧'></layer-node></td>
 				</table>
 				</table><table>
 					<td><button class="treeNode hidden"></button></td>
 				</table><table>
-					<td><layer-node layer='s' abb='奇'></layer-node></td>
+					<td><layer-node layer='s' abb='奇点'></layer-node></td>
 				</table>
 			</div>
 			<div v-if="player.points.gte(ENDGAME)">
 				<h5>The point of singularity has been reached. Your civilization did not make it through.</h5>
 				<br/><br/>
 				<table>
-					<td><layer-node layer='s' abb='S'></layer-node></td>
+					<td><layer-node layer='s' abb='奇点'></layer-node></td>
 				</table>
 			</div>
 			<canvas id="treeCanvas" class="canvas"></canvas>
