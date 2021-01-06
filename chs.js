@@ -29,6 +29,12 @@ var cnItems = {
     'Amount': '数量',
     'Best': '最高值',
     'Total': '总量',
+    '🏆 Achievements': '🏆 成就',
+    '📊 Statistics': '📊 统计数据',
+    '⚙️ Options': '⚙️ 选项',
+    'You have': '您拥有',
+    'The point of singularity has been reached. Your civilization did not make it through.': '奇点已至。您的文明并没有例外，同样无法通过。',
+    'Close': '关闭',
     //主界面等结束
 
 

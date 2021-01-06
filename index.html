@@ -60,7 +60,7 @@
 			<ul>
 				<h5><i>“征服世界”</i></h5>
 				<li><h3>v0.4.0</h3><li>
-				<li>增加了 <spoiler>奇点</spoiler> 。没有任何文明可以超过它。</li>
+				<li>增加了 <spoiler>奇点</spoiler> 。没有任何文明可以通过它。</li>
 				<li>增加了 <spoiler>知识</spoiler> 层级。</li>
 				<li>增加了含有 <spoiler>自动生成世界效果</spoiler> 的 <spoiler>世界地图</spoiler> ，在 <spoiler>领土</spoiler> 层级下。</li>
 				<li>增加了 <spoiler>土地与工作管理</spoiler> ，在 <spoiler>经理</spoiler> 层级下。</li>
@@ -231,10 +231,10 @@
 			<br/>
 			<h5>{{getWorldName()}}</h5>
 			<h5 v-if="player.devSpeed && player.devSpeed != 1">
-				Dev Speed: {{format(player.devSpeed)}}×<br>
+				设备速度：{{format(player.devSpeed)}} 倍<br>
 			</h5>
 			<h5 v-if="player.offTime !== undefined">
-				Offline Time: {{formatTime(player.offTime.remain)}}<br>
+				离线时间：{{formatTime(player.offTime.remain)}}<br>
 			</h5>
 			<br>
 			<span>You have </span>
@@ -286,10 +286,10 @@
 				<div v-if="!layers[layer].tabFormat">
 					<main-display :layer="layer"></main-display>
 					<prestige-button :layer="layer"></prestige-button>
-					<span v-if="layers[layer].type=='normal' && tmp.resetGain[layer].lt(100) && player[layer].points.lt(1e3)"><br>You have {{formatWhole(tmp.layerAmt[layer])}} {{layers[layer].baseResource}}.</span>
+					<span v-if="layers[layer].type=='normal' && tmp.resetGain[layer].lt(100) && player[layer].points.lt(1e3)"><br>您拥有 {{formatWhole(tmp.layerAmt[layer])}} {{layers[layer].baseResource}}。</span>
 					<br><br>
-					<span v-if="player[layer].best != undefined">You have at best {{formatWhole(player[layer].best)}} {{layers[layer].resource}}.<br></span>
-					<span v-if="player[layer].total != undefined">You have made a total of {{formatWhole(player[layer].total)}} {{layers[layer].resource}}.<br></span>
+					<span v-if="player[layer].best != undefined">您最高拥有 {{formatWhole(player[layer].best)}} {{layers[layer].resource}}。<br></span>
+					<span v-if="player[layer].total != undefined">您一共拥有 {{formatWhole(player[layer].total)}} {{layers[layer].resource}}。<br></span>
 					<milestones :layer="layer"></milestones>
 					<buyables :layer="layer"></buyables>
 					<upgrades :layer="layer"></upgrades>
