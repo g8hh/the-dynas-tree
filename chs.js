@@ -90,7 +90,7 @@ var cnItems = {
     'Power to unfinished work\'s effect based on finished work\'s effect.': '根据已完成的工作效果，使未完成的工作效果变为原来的一个指数。',
     'Finish work 10 times faster. Are you happy now?': '完成工作的速度变为原来的10倍。您开心了吗？',
     'Find work 5 times faster. With yin there are yang.': '找到工作的速度变为原来的5倍。阴阳相生，道法自然。',
-    'Find work 3 times faster.': '找到工作的速度变为原来的3倍。',
+    'Find work 3 more times faster.': '找到工作的速度再度变为原来的3倍。',
     'Guys this is it. A new prestige layer.': '兄弟们，就是这样。新的转生层级来了。',
     'Rebuyables': '重复购买项',
     'Upgrades': '升级',
@@ -219,10 +219,13 @@ var cnExcludeWhole = [
     /^(.*)的(.*)$/, //不抓取内容
     /^(.*)地(.*)$/, //不抓取内容
     /^(.*)得(.*)$/, //不抓取内容
+    /^花费(.*)$/, //不抓取内容
+    /^(.*)\d{1,3}(\.\,\d+)+(.*)$/, //不抓取内容
 ];
 var cnExcludePostfix = [
     /:?\s*x?\d+(\.\d+)?(e[+\-]?\d+)?\s*$/, //12.34e+4
     /:?\s*x?\d+(\.\d+)?[A-Za-z]{0,2}$/, //: 12.34K, x1.5
+    /秒$/, //不抓取时间
 ]
 
 //正则替换，带数字的固定格式句子
