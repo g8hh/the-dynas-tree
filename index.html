@@ -48,7 +48,7 @@
 			<h2>{{modInfo.name}} {{VERSION.withoutName}}</h2><br><br>
 			<h3>Congratulations! You have reached the point of singularity and beaten this game, but for now...</h3><br>
 			In case you haven't noticed, there will be more content after this. You can keep continuing. but the game has been paused, since singularity was meant to be a forced prestige layer.<br>
-			<div v-if="!player.timePlayedReset">It took you {{formatTimeLong(player.timePlayed)}} to reach the singularity point.</div>
+			<div v-if="!player.timePlayedReset">您一共玩了 {{formatTimeLong(player.timePlayed)}} 以后到达了奇点。</div>
 			<br>
 			<button class="longUpg can" onclick="hardReset(true)">Play Again</button>&nbsp;&nbsp;&nbsp;&nbsp;<button class="longUpg can" onclick="keepGoing()">Keep Going</button>
 			<br><br><br>
@@ -58,53 +58,53 @@
 		<div v-if="player.tab=='changelog'" class="col right">
 			<button class="back" onclick="showTab('tree')">&gt;</button><br>
 			<ul>
-				<h5><i>“Conquer the World”</i></h5>
+				<h5><i>“征服世界”</i></h5>
 				<li><h3>v0.4.0</h3><li>
-				<li>Added the <spoiler>point of singularity</spoiler>. Any civilization go past this point did not make it through.</li>
-				<li>Added the <spoiler>knowledge</spoiler> layer.</li>
-				<li>Added the <spoiler>World Map</spoiler> with <spoiler>procedural world generation</spoiler> to the <spoiler>territory</spoiler> layer.</li>
-				<li>Added <spoiler>Land and Jobs Management</spoiler> to the <spoiler>manager</spoiler> layer.</li>
-				<li>Added more <spoiler>bankings</spoiler> and <spoiler>spiritual power</spoiler> rebuyables.</li>
-				<li>Added ETAs to <spoiler>buildings</spoiler> and total <spoiler>banking</spoiler> multiplier.</li>
-				<li>Fix the number formatting not working correctly over e1,000 bug.</li>
-				<li>Added the achievements tab. It's just a placeholder for now. Or there won't be any achievements in the game at all. We'll see...</li>
-				<li>Make more various UI adjustments.</li>
-				<li>You might have noticed the word "World &alpha;" above the point counter. What does it mean?</li>
+				<li>增加了 <spoiler>奇点</spoiler> 。没有任何文明可以超过它。</li>
+				<li>增加了 <spoiler>知识</spoiler> 层级。</li>
+				<li>增加了含有 <spoiler>自动生成世界效果</spoiler> 的 <spoiler>世界地图</spoiler> ，在 <spoiler>领土</spoiler> 层级下。</li>
+				<li>增加了 <spoiler>土地与工作管理</spoiler> ，在 <spoiler>经理</spoiler> 层级下。</li>
+				<li>增加了更多 <spoiler>银行</spoiler> 及 <spoiler>魂灵能量</spoiler> 的重复购买项。</li>
+				<li>增加了 <spoiler>建筑</spoiler> 的预计完成时间，以及 <spoiler>银行</spoiler> 的总加成倍率。</li>
+				<li>修复了高于e1000以上的数值格式显示不正确的问题。</li>
+				<li>增加了成就选项卡。目前只是用来占位置的。以后也不保证一定添加成就。到底会不会添加，这个之后再说吧……</li>
+				<li>进行了更多的界面调整。</li>
+				<li>您可能在点数计数上方看到了一个 "世界 &alpha;" 。这到底是个啥？</li>
 				<br>
 				<br>
-				<h5><i>“Expanding Civilization”</i></h5>
+				<h5><i>“文明扩张”</i></h5>
 				<li><h3>v0.3.1</h3><li>
-				<li>Fixed the <spoiler>“Market Crash” obstacle</spoiler> not functioning as intended.</li>
+				<li>修复了 <spoiler>“市场崩盘” 障碍</spoiler> 未按预想中生效的问题。</li>
 				<br>
 				<li><h3>v0.3.0</h3><li>
-				<li>Added the <spoiler>territory</spoiler> and the <spoiler>solider</spoiler> layer.</li>
-				<li>Added more <spoiler>buildings</spoiler>, <spoiler>magic spells</spoiler> and <spoiler>manager</spoiler> milestones.</li>
-				<li>Hotkeys should work even if you don't unlock that layer yet.</li>
-				<li>Added a concept of a modal. It should appear if you have an error along with details of it for easier reporting.</li>
+				<li>增加了 <spoiler>领土</spoiler> 和 <spoiler>士兵</spoiler> 层级。</li>
+				<li>增加了更多 <spoiler>建筑</spoiler> ， <spoiler>魔咒</spoiler> 及 <spoiler>经理</spoiler> 里程碑。</li>
+				<li>快捷键在未解锁层级的情况下也能生效。</li>
+				<li>增加了模态框。当游戏出错时，将显示详细错误信息，以便报告错误。</li>
 				<br>
-				<h5><i>“A New Age”</i></h5>
+				<h5><i>“新时代”</i></h5>
 				<li><h3>v0.2.0</h3><li>
-				<li>Added the <spoiler>builder</spoiler> and the <spoiler>spiritual power</spoiler> layer.</li>
-				<li>Added more mechanics to the <spoiler>manager</spoiler> layer.</li>
-				<li>Replaced two of the last <spoiler>bankings</spoiler> and renamed the <spoiler>banking</spoiler> before that.</li>
-				<li>Migrated to The Modding Tree v1.3.4.</li>
-				<li>Added spoiler boxes to the changelog, which should be looking like <spoiler>this one over here</spoiler>.</li>
-				<li>Made various UI adjustments.</li>
+				<li>增加了 <spoiler>建造者</spoiler> 和 <spoiler>魂灵能量</spoiler> 层级。</li>
+				<li> <spoiler>经理</spoiler> 层级增加了更多内容。</li>
+				<li>替换了最后的两个 <spoiler>银行</spoiler> 并将这两个之前的 <spoiler>银行</spoiler> 重新命名了。</li>
+				<li>将使用的 The Modding Tree 版本升到了 v1.3.4.</li>
+				<li>更新日志中增加了防剧透的白条，效果类似右边 <spoiler>这个一样</spoiler> 。</li>
+				<li>进行了部分界面调整。</li>
 				<br>
 				<br>
-				<h5><i>“The Beginning”</i></h5>
+				<h5><i>“万物之始”</i></h5>
 				<li><h3>v0.1.0</h3><li>
-				<li>Added the <spoiler>manager</spoiler> layer (didn't have anything for now).</li>
-				<li>Added some new things to the layers before that.</li>
-				<li>Fixed some bugs related to progressing and save importing.</li>
+				<li>增加了 <spoiler>经理</spoiler> 层级(暂时没有实际作用)。</li>
+				<li>该层级之前的一个层级增加了一些新东西。</li>
+				<li>修复了一些与游戏进程和存档有关的问题。</li>
 				<br>
 				<br>
-				<h5><i>“Before Life”</i></h5>
+				<h5><i>“史前”</i></h5>
 				<li><h3>v0.0.1</h3><li>
-				<li>Made some rebalancing to the early game.</li>
+				<li>游戏初期的进程进行了一定程度的平衡调整。</li>
 				<br>
 				<li><h3>v0.0.0</h3><li>
-				<li>This exists. Posibly buggy. Very unbalanced. Need suggestions.</li>
+				<li>呱呱坠地。问题很多。并不平衡。欢迎建议。</li>
 			</ul>
 		</div>
 		<div v-if="player.tab=='old-stuff'" class="col right">
