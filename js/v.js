@@ -126,7 +126,7 @@ function loadVue() {
 			<span v-html="tmp.challs[layer][data].desc"></span><br>
 			Goal: {{format(tmp.challs[layer][data].goal)}} {{layers[layer].challs[data].currencyDisplayName ? layers[layer].challs[data].currencyDisplayName : "points"}}<br>
 			Reward: <span v-html="tmp.challs[layer][data].reward"></span><br>
-			<span v-if="tmp.challs[layer][data].effect!==undefined">Currently: <span v-html="(tmp.challs[layer][data].effectDisplay) ? (tmp.challs[layer][data].effectDisplay) : format(tmp.challs[layer][data].effect)"></span></span>
+			<span v-if="tmp.challs[layer][data].effect!==undefined">目前：<span v-html="(tmp.challs[layer][data].effectDisplay) ? (tmp.challs[layer][data].effectDisplay) : format(tmp.challs[layer][data].effect)"></span></span>
 		</div>
 		`
 	})
@@ -153,7 +153,7 @@ function loadVue() {
 			v-bind:style="[((!hasUpg(layer, data) && canAffordUpg(layer, data)) ? {'background-color': tmp.layerColor[layer]} : {}), tmp.upgrades[layer][data].style]">
 			<span v-if= "tmp.upgrades[layer][data].title"><h3 v-html="tmp.upgrades[layer][data].title"></h3><br></span>
 			<span v-html="tmp.upgrades[layer][data].desc"></span>
-			<span v-if="tmp.upgrades[layer][data].effect"><br>Currently: <span v-html="(tmp.upgrades[layer][data].effectDisplay) ? (tmp.upgrades[layer][data].effectDisplay) : format(tmp.upgrades[layer][data].effect)"></span></span>
+			<span v-if="tmp.upgrades[layer][data].effect"><br>目前：<span v-html="(tmp.upgrades[layer][data].effectDisplay) ? (tmp.upgrades[layer][data].effectDisplay) : format(tmp.upgrades[layer][data].effect)"></span></span>
 			<br><br>花费：{{ formatWhole(tmp.upgrades[layer][data].cost) }} {{(layers[layer].upgrades[data].currencyDisplayName ? layers[layer].upgrades[data].currencyDisplayName : layers[layer].resource)}}
 		</button>
 		`
