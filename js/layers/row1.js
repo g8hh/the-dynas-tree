@@ -10,7 +10,7 @@ addLayer("c", {
 
 	layerShown() { return true },
 
-	name: "coins",
+	name: "金币",
 	color: () => "#FFFF00",
 	resource: "coins",
 	row: 0,
@@ -48,7 +48,7 @@ addLayer("c", {
 		rows: 6,
 		cols: 4,
 		11: {
-			desc: () => "Generates " + format(tmp.pointGen) + " points every second.",
+			desc: () => "每秒产生 " + format(tmp.pointGen) + " 点数。",
 			cost: () => new Decimal(2),
 			unl() { return player[this.layer].unl },
 		},

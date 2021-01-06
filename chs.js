@@ -35,7 +35,42 @@ var cnItems = {
     'You have ': '您拥有 ',
     'The point of singularity has been reached. Your civilization did not make it through.': '奇点已至。您的文明并没有例外，同样无法通过。',
     'Close': '关闭',
+    'Finish': '点此完成',
+    'Exit Early': '提前退出',
+    'Completed': '已完成',
+    'Start': '点此开始',
+    'Currently': '目前',
+    'Reset for ': '重置以获得 ',
+    'Respec': '洗点',
     //主界面等结束
+
+
+    //层级1
+    'Boosts points generation based on your total coin count.': '根据金币总数，增加点数产量。',
+    'Boosts the previous upgrade based on your best coin count.': '根据金币最高值，增加前一个升级的效果。',
+    'Boosts the previous upgrade based on your current coin count.': '根据金币当前数量，增加前一个升级的效果。',
+    'Boosts all boost upgrades above based on your current point count.': '根据点数当前数量，增加之前的“增加”升级效果。',
+    'Boosts the previous upgrade based on your coins gain on coin reset.': '根据金币重置可获得的金币数量，增加前一个升级的效果。',
+    'The point generation upgrade also gets boosted by the “all previous boost upgrades” upgrade.': '产生点数的升级也受到“使之前的‘增加’升级效果更好”的升级影响。',
+    'Boosts coins gain on coin reset (unaffected by the “all previous boost upgrades” upgrades).': '增加金币重置时的金币获取量(不受“使之前的‘增加’升级效果更好”的升级影响)。',
+    'Boosts all boost upgrades and point production above based on your best worker count.': '根据工人最高值，增加之前的“增加”升级和产生点数的升级效果。',
+    'Boosts coins gain on coin reset based on point generation speed.': '根据点数产量，增加金币重置时的金币获取量。',
+    'The two previous “all previous boost upgrades” upgrades are applied once more to point production.': '之前两个“使之前的‘增加’升级效果更好”的升级再对点数产量生效一次。',
+    'Boosts the above upgrade based on the two previous “all previous boost upgrades” upgrades.': '根据之前两个“使之前的‘增加’升级效果更好”的升级效果，增加上方升级的效果。',
+    'Boosts all boost upgrades above (again) based on your point production speed.': '根据点数产量，再次增加之前的“增加”升级效果。',
+    'Alright this is getting boring. Boosts the previous upgrade by itself.': '这么下去没创意了。这样吧，使前一个升级的效果增加它自己的数值。',
+    'Same as the previous upgrade, but the boost is cube rooted.': '与前一个升级效果类似，但效果为它自己的立方根。',
+    'Same as the previous upgrade. That\'s literally all you need to know.': '与前一个升级效果类似。您知道的太多了。',
+    'Boosts all boost upgrades above (yet again) based on your current workfinder count.': '根据工作中介的数量，又一次增加之前的“增加”升级效果。',
+    'Boosts the previous upgrade based on point generation speed.': '根据点数产量，增加前一个升级的效果。',
+    'Boosts the previous upgrade based on finished work count.': '根据已完成的工作数量，增加前一个升级的效果。',
+    'Raises all left upgrades to the power of ^1.02.': '左边的所有升级效果变为原来的^1.02。',
+    'Boost all boost upgrades on the fifth row based on unfinished work.': '根据未完成的工作数量，增加第五行所有“增加”升级的效果。',
+    'Boost all boost upgrades on the fifth row based on finished work.': '根据已完成的工作数量，增加第五行所有“增加”升级的效果。',
+    'Boost all boost upgrades on the fifth row based on bankings\' effects.': '根据银行的效果，增加第五行所有“增加”升级的效果。',
+    'Boost all left upgrades based on current bank count.': '根据银行当前数量，增加左边的所有升级效果。',
+    'C: Reset for coins': '快捷键C：金币重置',
+    //层级1结束
 
 
     //选项

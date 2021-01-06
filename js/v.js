@@ -154,7 +154,7 @@ function loadVue() {
 			<span v-if= "tmp.upgrades[layer][data].title"><h3 v-html="tmp.upgrades[layer][data].title"></h3><br></span>
 			<span v-html="tmp.upgrades[layer][data].desc"></span>
 			<span v-if="tmp.upgrades[layer][data].effect"><br>Currently: <span v-html="(tmp.upgrades[layer][data].effectDisplay) ? (tmp.upgrades[layer][data].effectDisplay) : format(tmp.upgrades[layer][data].effect)"></span></span>
-			<br><br>Cost: {{ formatWhole(tmp.upgrades[layer][data].cost) }} {{(layers[layer].upgrades[data].currencyDisplayName ? layers[layer].upgrades[data].currencyDisplayName : layers[layer].resource)}}
+			<br><br>花费：{{ formatWhole(tmp.upgrades[layer][data].cost) }} {{(layers[layer].upgrades[data].currencyDisplayName ? layers[layer].upgrades[data].currencyDisplayName : layers[layer].resource)}}
 		</button>
 		`
 	})
@@ -187,7 +187,7 @@ function loadVue() {
 	Vue.component('toggle', {
 		props: ['layer', 'data'],
 		template: `
-		<button class="smallUpg can" v-bind:style="{'background-color': tmp.layerColor[data[0]]}" v-on:click="toggleAuto(data)">{{player[data[0]][data[1]]?"ON":"OFF"}}</button>
+		<button class="smallUpg can" v-bind:style="{'background-color': tmp.layerColor[data[0]]}" v-on:click="toggleAuto(data)">{{player[data[0]][data[1]]?"开":"关"}}</button>
 		`
 	})
 
@@ -197,9 +197,9 @@ function loadVue() {
 		template: `
 		<span>
 			<button v-if="layers[layer].type=='normal'" v-bind:class="{ [layer]: true, reset: true, locked: tmp.layerAmt[layer].lt(tmp.layerReqs[layer]), can: tmp.layerAmt[layer].gte(tmp.layerReqs[layer]) }"
-				v-bind:style="[tmp.layerAmt[layer].gte(tmp.layerReqs[layer]) ? {'background-color': tmp.layerColor[layer]} : {}, tmp.componentStyles[layer]['prestige-button']]" v-on:click="doReset(layer)"><span v-if="player[layer].points.lt(1e3)">{{data ? data() : "Reset for "}}</span>+<b>{{formatWhole(tmp.resetGain[layer])}}</b> {{layers[layer].resource}}<span v-if="tmp.resetGain[layer].lt(100) && player[layer].points.lt(1e3)"><br><br>Next at {{ (layers[layer].resCeil ? formatWhole(tmp.nextAt[layer]) : format(tmp.nextAt[layer])) }} {{ layers[layer].baseResource }}</span></button>
+				v-bind:style="[tmp.layerAmt[layer].gte(tmp.layerReqs[layer]) ? {'background-color': tmp.layerColor[layer]} : {}, tmp.componentStyles[layer]['prestige-button']]" v-on:click="doReset(layer)"><span v-if="player[layer].points.lt(1e3)">{{data ? data() : "Reset for "}}</span>+<b>{{formatWhole(tmp.resetGain[layer])}}</b> {{layers[layer].resource}}<span v-if="tmp.resetGain[layer].lt(100) && player[layer].points.lt(1e3)"><br><br>下一个需要 {{ (layers[layer].resCeil ? formatWhole(tmp.nextAt[layer]) : format(tmp.nextAt[layer])) }} {{ layers[layer].baseResource }}</span></button>
 			<button v-if="layers[layer].type=='static'" v-bind:class="{ [layer]: true, reset: true, locked: tmp.layerAmt[layer].lt(tmp.nextAt[layer]), can: tmp.layerAmt[layer].gte(tmp.nextAt[layer]) }"
-				v-bind:style="[tmp.layerAmt[layer].gte(tmp.nextAt[layer]) ? {'background-color': tmp.layerColor[layer]} : {}, tmp.componentStyles[layer]['prestige-button']]" v-on:click="doReset(layer)"><span v-if="player[layer].points.lt(10)">{{data ? data() : "Reset for "}}</span>+<b>{{formatWhole(tmp.resetGain[layer])}}</b> {{layers[layer].resource}}<br><br><span v-if="player[layer].points.lt(10)">{{(tmp.layerAmt[layer].gte(tmp.nextAt[layer])&&layers[layer].canBuyMax && layers[layer].canBuyMax())?"Next":"Req"}}: {{formatWhole(tmp.layerAmt[layer])}} / </span>{{(layers[layer].resCeil ? formatWhole(tmp.nextAtDisp[layer]) : format(tmp.nextAtDisp[layer]))}} {{ layers[layer].baseResource }}</button>		
+				v-bind:style="[tmp.layerAmt[layer].gte(tmp.nextAt[layer]) ? {'background-color': tmp.layerColor[layer]} : {}, tmp.componentStyles[layer]['prestige-button']]" v-on:click="doReset(layer)"><span v-if="player[layer].points.lt(10)">{{data ? data() : "Reset for "}}</span>+<b>{{formatWhole(tmp.resetGain[layer])}}</b> {{layers[layer].resource}}<br><br><span v-if="player[layer].points.lt(10)">{{(tmp.layerAmt[layer].gte(tmp.nextAt[layer])&&layers[layer].canBuyMax && layers[layer].canBuyMax())?"下一个":"需要"}}：{{formatWhole(tmp.layerAmt[layer])}} / </span>{{(layers[layer].resCeil ? formatWhole(tmp.nextAtDisp[layer]) : format(tmp.nextAtDisp[layer]))}} {{ layers[layer].baseResource }}</button>		
 			<button v-if="layers[layer].type=='custom'" v-bind:class="{ [layer]: true, reset: true, locked: !tmp.canReset[layer], can: tmp.canReset[layer] }"
 				v-bind:style="[tmp.canReset[layer] ? {'background-color': tmp.layerColor[layer]} : {}, tmp.componentStyles[layer]['prestige-button']]" v-on:click="doReset(layer)" v-html="tmp.prestigeButtonText[layer]"></button>		
 		</span>
@@ -293,7 +293,7 @@ function loadVue() {
 			}"
 			v-bind:tooltip="
 				player[layer].unl ? (layers[layer].tooltip ? tmp.tooltips[layer] : formatWhole(player[layer].points) + ' ' + layers[layer].resource)
-				: (layers[layer].tooltipLocked ? tmp.tooltipsLocked[layer] : 'Reach ' + formatWhole(tmp.layerReqs[layer]) + ' ' + layers[layer].baseResource + ' to unlock (You have ' + formatWhole(tmp.layerAmt[layer]) + ' ' + layers[layer].baseResource + ')')
+				: (layers[layer].tooltipLocked ? tmp.tooltipsLocked[layer] : '到达 ' + formatWhole(tmp.layerReqs[layer]) + ' ' + layers[layer].baseResource + ' 以解锁 (您拥有 ' + formatWhole(tmp.layerAmt[layer]) + ' ' + layers[layer].baseResource + ')')
 			"
 			v-bind:class="{
 				treeNode: true,
