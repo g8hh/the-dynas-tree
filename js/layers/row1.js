@@ -12,7 +12,7 @@ addLayer("c", {
 
 	name: "coins",
 	color: () => "#FFFF00",
-	resource: "coins",
+	resource: "金币",
 	row: 0,
 
 	baseResource: "points",

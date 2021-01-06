@@ -19,7 +19,7 @@ addLayer("wf", {
 	layerShown() { return (hasMilestone("w", 3) || player[this.layer].unl || player.m.unl) && !inChallenge("t", 12) },
 
 	color: () => "#555555",
-	resource: "workfinders",
+	resource: "工作中介",
 	row: 1,
 
 	baseResource: "coins",
