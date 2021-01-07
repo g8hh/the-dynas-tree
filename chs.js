@@ -259,6 +259,13 @@ var cnItems = {
     'This tile is too far for you to initialize conquering.': '这个方格太远了，无法开始征服。',
     'Your Soldiers': '您的士兵',
     'No Encounters': '暂无遭遇',
+    'Soldiers are Idling.': '士兵们无所事事。',
+    'Conquering is paused because soldiers are battling the encounters.': '士兵们正在与遭遇的敌人作战，暂时停止征服。',
+    'Please select a land to be conquered.': '请选择一块土地进行征服。',
+    'The Queue': '队列',
+    'You can increase the maximum queue length by getting more territories or military bases.': '您可以通过获取更多领土，或者是建造更多军事基地来增加队列最大长度。',
+    'Explore ': '探索 ',
+    'T: Explore territories': '快捷键T：探索领土',
     //层级4结束
 
 

@@ -1036,19 +1036,19 @@ addLayer("t", {
 					["info-box", [
 						["display-text", function () { return (player.world.encounter ? player.world.encounter.name : "No Encounters") + "<h5 style='font-size:6px'><br/>" + "<p style='color:transparent; font-size:0.001px'>" + format(player.time) + "</p>" }],
 						["mini-bar", function () { return format(player.world.encounter ? Decimal.div(player.world.encounter.health, player.world.encounter.maxhealth) : 0) + (player.time * 10 % 1 ? "0" : "") }, {"background-color": "#300"}],
-						["display-text", function () { return "<h5>Health: " + (player.world.encounter ? formatWhole(player.world.encounter.health) + " / " + formatWhole(player.world.encounter.maxhealth) : "----- / -----") + "</h5>" + "<p style='color:transparent; font-size:0.001px'>" + format(player.time) + "</p>" }],
-						["display-text", function () { return "<h5>Power: " + (player.world.encounter ? formatWhole(Decimal.div(player.world.encounter.health, player.world.encounter.maxhealth).mul(player.world.encounter.power)) + " / " + formatWhole(player.world.encounter.power) : "----- / -----") + "</h5>" + "<p style='color:transparent; font-size:0.001px'>" + format(player.time) + "</p>" }],
-						["display-text", function () { return "<h5>Honor: " + (player.world.encounter ? format(player.world.encounter.elo) : "-----") + "</h5>" + "<p style='color:transparent; font-size:0.001px'>" + format(player.time) + "</p>" }],
+						["display-text", function () { return "<h5>生命值：" + (player.world.encounter ? formatWhole(player.world.encounter.health) + " / " + formatWhole(player.world.encounter.maxhealth) : "----- / -----") + "</h5>" + "<p style='color:transparent; font-size:0.001px'>" + format(player.time) + "</p>" }],
+						["display-text", function () { return "<h5>强度：" + (player.world.encounter ? formatWhole(Decimal.div(player.world.encounter.health, player.world.encounter.maxhealth).mul(player.world.encounter.power)) + " / " + formatWhole(player.world.encounter.power) : "----- / -----") + "</h5>" + "<p style='color:transparent; font-size:0.001px'>" + format(player.time) + "</p>" }],
+						["display-text", function () { return "<h5>荣誉值：" + (player.world.encounter ? format(player.world.encounter.elo) : "-----") + "</h5>" + "<p style='color:transparent; font-size:0.001px'>" + format(player.time) + "</p>" }],
 						], {"width": "228px"}
 					], 
 				]],
 				["info-box", [
 					["display-text", function () { return (
-						player.world.conquering ? "Conquering " + player.world.conquerTarget + "..." : "Soldiers are Idling."
+						player.world.conquering ? "正在征服" + player.world.conquerTarget + "……" : "Soldiers are Idling."
 						) + "<p style='color:transparent; font-size:0.001px'>" + format(player.time) + "</p>"
 					}],
 					["display-text", function () { return (
-						player.world.conquering ? "<h5>Progress: " + formatWhole(player.world.conquerProgress) + " / " + formatWhole(player.world.conquerGoal) + "<br/>" + (player.world.encounter ? "Conquering is paused because soldiers are battling the encounters." : "ETA: " + formatTime(new Decimal(player.world.conquerGoal).sub(player.world.conquerProgress).div(Decimal.div(player.world.health, soldierStats.mhp).mul(soldierStats.spd))) + "</h5>") : "<h5>Please select a land to be conquered.<br/></h5>"
+						player.world.conquering ? "<h5>进度：" + formatWhole(player.world.conquerProgress) + " / " + formatWhole(player.world.conquerGoal) + "<br/>" + (player.world.encounter ? "Conquering is paused because soldiers are battling the encounters." : "预计完成时间：" + formatTime(new Decimal(player.world.conquerGoal).sub(player.world.conquerProgress).div(Decimal.div(player.world.health, soldierStats.mhp).mul(soldierStats.spd))) + "</h5>") : "<h5>Please select a land to be conquered.<br/></h5>"
 						) + "<p style='color:transparent; font-size:0.001px'>" + format(player.time) + "</p>"
 					}],
 					], {"width": "480px"}
@@ -1058,7 +1058,7 @@ addLayer("t", {
 			]},
             queue: { title: () => "The Queue", unl: () => hasMilestone("t", 6), content: [
 				["blank", "5px"],
-				["display-text", function () { return "Your queue length is " + formatWhole(player.world.queue ? player.world.queue.length : 0) + " / " + formatWhole(tmp.layerEffs.t.queueLength) + "." }],
+				["display-text", function () { return "您的队列长度为 " + formatWhole(player.world.queue ? player.world.queue.length : 0) + " / " + formatWhole(tmp.layerEffs.t.queueLength) + "。" }],
 				["display-text", function () { return "You can increase the maximum queue length by getting more territories or military bases." }],
 				["blank", "5px"],
 				["buyable", 11], ["buyable", 12],
@@ -1107,7 +1107,7 @@ addLayer("t", {
 			["prestige-button", function () { return "Explore " }],
 			["blank", "5px"],
 			["display-text",
-				function () { return "You have at best " + format(player.t.best, 0) + " " + " territories." }],
+				function () { return "您最高拥有 " + format(player.t.best, 0) + " " + " 领土。" }],
 			["blank", "5px"],
 			["microtabs", "stuff"],
 		],
