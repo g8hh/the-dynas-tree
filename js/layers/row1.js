@@ -15,7 +15,7 @@ addLayer("c", {
 	resource: "金币",
 	row: 0,
 
-	baseResource: "points",
+	baseResource: "点数",
 	baseAmount() { return player.points },
 
 	requires: () => new Decimal(2.5),
