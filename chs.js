@@ -58,7 +58,7 @@ var cnItems = {
     'The two previous “all previous boost upgrades” upgrades are applied once more to point production.': '之前两个“使之前的‘增加’升级效果更好”的升级再对点数产量生效一次。',
     'Boosts the above upgrade based on the two previous “all previous boost upgrades” upgrades.': '根据之前两个“使之前的‘增加’升级效果更好”的升级效果，增加上方升级的效果。',
     'Boosts all boost upgrades above (again) based on your point production speed.': '根据点数产量，再次增加之前的“增加”升级效果。',
-    'Alright this is getting boring. Boosts the previous upgrade by itself.': '这么下去没创意了。这样吧，使前一个升级的效果增加它自己的数值。',
+    'Alright this is getting boring. Boosts the previous upgrade by itself.': '这么下去没创意了。这样吧，使前一个升级的效果对它自己也生效。',
     'Same as the previous upgrade, but the boost is cube rooted.': '与前一个升级效果类似，但效果为它自己的立方根。',
     'Same as the previous upgrade. That\'s literally all you need to know.': '与前一个升级效果类似。您知道的太多了。',
     'Boosts all boost upgrades above (yet again) based on your current workfinder count.': '根据工作中介的数量，又一次增加之前的“增加”升级效果。',
@@ -174,6 +174,7 @@ var cnItems = {
 
     //层级4
     '选择方格：Unselected': '选择方格：未选择',
+    '正在征服Unselected……': '正在征服未选择……',
     'Click on a tile in the map to see its details. Drag the tiles on the map to see more of it.': '点击地图上的方格可以查看它的详情，拖动方格可以查看地图的其他部分。',
     ' managers': ' 经理',
     '1 Manager': '1名经理',
@@ -285,9 +286,9 @@ var cnItems = {
     'Unlocks a new banking option.': '解锁一项新的银行业务。',
     'You gain 100% of your spiritual power gain on reset every second (only when you unlocked the layer).': '您每秒获得魂灵重置时的魂灵能量获取量100%的魂灵能量(只在解锁该层级后生效)。',
     'Reduces the “Extend the fabric of time using spiritual power” cost scaling.': '使“使用魂灵能量延展时间的结构”重复购买项的花费增加速度降低。',
-    'You thought it was a discovery, but it was me, A Brick!': '您以为您发现了什么，但其实是我哒，一块砖块！',
+    'You thought it was a discovery, but it was me, A Brick!': '您以为这是一项发现，但其实是我哒，一块砖块！',
     'Wait, it\'s all bricks? Always has been.': '那是……砖块？一直都是。',
-    'One does not simply discover a brick.': '砖块不是你想找，想找就能找。',
+    'One does not simply discover a brick.': '砖块不是你想发现，想发现就能发现。',
     'I\'m sorry, but the brick is in this castle.': '很抱歉，但砖块就在这座城堡里。',
     'Honor reduces the requirements of wisdom.': '荣誉值可以减少智慧的需求。',
     'Knowledge adds time to the first exotic spell\'s effect.': '知识可以使第一个异域魔咒的效果中基于的时间变得更多。',
@@ -296,7 +297,43 @@ var cnItems = {
     'Knowledge and wisdom reduces the requirement of wisdom.': '知识和智慧可以减少智慧的需求。',
     'Unlocks an exotic spell. Exotic spells are not affected by amount of shrines or spiritual power upgrades.': '解锁一个异域魔咒。异域魔咒不受圣地数量或魂灵能量升级的影响。',
     'Knowledge boosts spiritual power gain.': '知识可以使魂灵能量获取量变得更多。',
+    'Unlocks a second exotic spell.': '解锁第二个异域魔咒。',
+    'Its-a-me, Brick-io!': '这就是我，砖块哦！',
+    'If you haven\'t realized it already, you can not discover bricked discoveries.': '还不明白吗？您是无法发现砖块化的发现的。',
+    'Knowledge boosts knowledge gain. Yes, really.': '知识可以增加知识获取量。是的，千真万确。',
+    'It\'s not just a placeholder, it\'s a brick.': '这可不是滥竽充数占位置的，这是一块砖块。',
+    'Unlocks a third exotic spell.': '解锁第三个异域魔咒。',
+    'Not yet implemented.': '待后续更新追加。',
+    'get bricked lol': '砖块摇摇(笑',
+    'The upgrade above boosts that upgrade. Recursion.': '上方的升级效果对它自己也生效。套娃。',
+    'Schools boost knowledge gain.': '学校可以增加知识获取量。',
+    'This discovery is dimmed out, meaning this discovery it actually a brick and thus can not be discovered.': '这个发现是暗的，意思是，它实际上是砖块，并不能被发现。',
+    'The upgrade above boosts that upgrade again. Recursive recursion.': '上方的升级效果再对它自己生效。套套娃娃。',
+    'Spiritual power reduces the requirements of wisdom.': '魂灵能量可以减少智慧的需求。',
+    'Your wisdom has exceed this far and you\'re wanting to seek for more. You unlock a new layer, far higher than this one.': '您的智慧已经到达如此程度，而您却还想继续探求。因此，您解锁了一个新的层级，比此层级高很多很多。',
+    'Unfortunately, we no longer be able to find anymore brick puns so enjoy this line instead.': '不幸的是我们用完了砖块的梗，只好请您看这段话了。',
+    'Yay! You found me! I\'m a brick!.': '耶！您发现了我！我是砖块！。',
+    'Don\'t look at me, I\'m a brick, you should be looking at this instead ->': '看我作甚，别看了，一块砖块而已，看看这个吧 ->',
+    'Unlock the Subjects tab. Note that this discovery will reset your wisdom back to 0 and will make them harder to get, so be ready first!': '解锁学科选项卡。注意此发现会将智慧重置回0，并使智慧更难获得，因此您应该先做好相应的准备！',
+    'Respec Wisdom Discovers': '洗点智慧的发现',
+    'Philosophy': '哲学',
+    'Mathematics': '数学',
+    'Psychology': '心理学',
+    'Physical Education': '体育',
+    'Structural Engineering': '结构工程学',
+    'Calculus': '微积分',
+    'Literature': '文学',
+    'Algebra': '代数学',
+    'Discoveries': '发现',
+    'Subjects': '学科',
+    'I: Gain wisdom': '快捷键I：获得智慧',
     //层级4结束
+
+
+    //层级5
+    'WARNING: You\'re approaching the point of singularity. Once you go past this, the game will end.': '警告：您正在接近奇点。当超过奇点以后游戏将完结。',
+    'This is pretty much the end game for now. Content coming soon, I guess?': '目前这就是游戏终点了。或许之后还会有其他内容？',
+    //层级5结束
 
 
     //选项
@@ -432,6 +469,11 @@ var cnExcludeWhole = [
     /^世界(.*)$/, //不抓取内容
     /^需要(.*)$/, //不抓取内容
     /^预计完成时间(.*)$/, //不抓取内容
+    /^进度(.*)$/, //不抓取内容
+    /^难度(.*)$/, //不抓取内容
+    /^荣誉值(.*)$/, //不抓取内容
+    /^伤害(.*)$/, //不抓取内容
+    /^生命值(.*)$/, //不抓取内容
 ];
 var cnExcludePostfix = [
     /:?\s*x?\d+(\.\d+)?(e[+\-]?\d+)?\s*$/, //12.34e+4

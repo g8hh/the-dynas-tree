@@ -1010,7 +1010,7 @@ addLayer("t", {
 			},
             map: { title: () => "World Map", unl: () => player.so.buyables[13].gte(1), content: [
 				["blank", "5px"],
-				["display-text", function () { return "您拥有 " + formatWhole(player.t.lands) + " 已征服的土地，因此领土的需求变为 ÷" + format(tmp.layerEffs.t.territoryRed) + " ，士兵的需求变为 ÷" + format(tmp.layerEffs.t.soldierRed) + "。" }], 
+				["display-text", function () { return "您拥有 " + formatWhole(player.t.lands) + " 已征服的土地，因此领土的需求变为除以 " + format(tmp.layerEffs.t.territoryRed) + " ，士兵的需求变为除以 " + format(tmp.layerEffs.t.soldierRed) + "。" }], 
 				["display-text", function () { return "您目前的荣誉值为 " + formatWhole(player.t.elo) + "。" }], 
 				["blank", "0px"], "map-box", ["blank", "0px"],
 				["info-box", [
@@ -1653,7 +1653,7 @@ addLayer("wi", {
 			cost: () => new Decimal(1e80),
 			currencyLayer: "wi",
 			currencyInternalName: "knowledge",
-			currencyDisplayName: "knowledge",
+			currencyDisplayName: "知识",
 			unl() { return player[this.layer].unl },
 			extraReq() { return hasUpg("wi", 41) && player.wi.points.gt(player.wi.bought) },
 			onPurchase() { player.wi.spent = Decimal.add(player.wi.spent, tmp.upgrades.wi[51].cost); player.wi.bought = Decimal.add(player.wi.bought, 1) }
@@ -1679,7 +1679,7 @@ addLayer("wi", {
 			cost: () => new Decimal(2500000),
 			currencyLayer: "wi",
 			currencyInternalName: "knowledge",
-			currencyDisplayName: "knowledge",
+			currencyDisplayName: "知识",
 			unl() { return player[this.layer].unl },
 			extraReq() { return hasUpg("wi", 44) && player.wi.points.gt(player.wi.bought) },
 			effect() {
@@ -1708,7 +1708,7 @@ addLayer("wi", {
 			cost: () => new Decimal(1e116),
 			currencyLayer: "wi",
 			currencyInternalName: "knowledge",
-			currencyDisplayName: "knowledge",
+			currencyDisplayName: "知识",
 			unl() { return player[this.layer].unl },
 			extraReq() { return hasUpg("wi", 51) && player.wi.points.gt(player.wi.bought) },
 			onPurchase() { player.wi.spent = Decimal.add(player.wi.spent, tmp.upgrades.wi[61].cost); player.wi.bought = Decimal.add(player.wi.bought, 1) }
@@ -1732,7 +1732,7 @@ addLayer("wi", {
 			cost: () => new Decimal(1e11),
 			currencyLayer: "wi",
 			currencyInternalName: "knowledge",
-			currencyDisplayName: "knowledge",
+			currencyDisplayName: "知识",
 			unl() { return player[this.layer].unl },
 			extraReq() { return hasUpg("wi", 54) && player.wi.points.gt(player.wi.bought) },
 			effect() {
@@ -1754,7 +1754,7 @@ addLayer("wi", {
 			cost: () => new Decimal(1e18),
 			currencyLayer: "wi",
 			currencyInternalName: "knowledge",
-			currencyDisplayName: "knowledge",
+			currencyDisplayName: "知识",
 			unl() { return player[this.layer].unl },
 			extraReq() { return hasUpg("wi", 64) && player.wi.points.gt(player.wi.bought) },
 			effect() {
@@ -1788,7 +1788,7 @@ addLayer("wi", {
 			cost: () => new Decimal(1e21),
 			currencyLayer: "wi",
 			currencyInternalName: "knowledge",
-			currencyDisplayName: "knowledge",
+			currencyDisplayName: "知识",
 			unl() { return player[this.layer].unl },
 			extraReq() { return hasUpg("wi", 64) && player.wi.points.gt(player.wi.bought) },
 			effect() {
@@ -1809,7 +1809,7 @@ addLayer("wi", {
 			cost: () => new Decimal(1e30),
 			currencyLayer: "wi",
 			currencyInternalName: "knowledge",
-			currencyDisplayName: "knowledge",
+			currencyDisplayName: "知识",
 			unl() { return player[this.layer].unl },
 			extraReq() { return (hasUpg("wi", 74) || hasUpg("wi", 65)) && player.wi.points.gt(player.wi.bought) },
 			effect() {
@@ -1898,9 +1898,9 @@ addLayer("wi", {
 			},
 			display() { // Everything else displayed in the buyable button after the title
 				let data = tmp.buyables[this.layer][this.id]
-				return "Level " + player[this.layer].buyables[this.id] + "\n\
-				Cost: " + formatWhole(data.cost) + " knowledge\n\
-				Increases base knowledge gain and multiplies knowledge gain by +/×" + format(data.effect.add(1)) + "."
+				return "等级 " + player[this.layer].buyables[this.id] + "<br/>" + 
+				"花费：" + formatWhole(data.cost) + " 知识<br/>" + 
+				"使基础的知识获取量增加 " + format(data.effect.add(1)) + " 并使知识获取量变为 " + format(data.effect.add(1)) + " 倍。"
 			},
 			unl() { return true },
 			canAfford() {
@@ -1926,9 +1926,9 @@ addLayer("wi", {
 			},
 			display() { // Everything else displayed in the buyable button after the title
 				let data = tmp.buyables[this.layer][this.id]
-				return "Level " + player[this.layer].buyables[this.id] + "\n\
-				Cost: " + formatWhole(data.cost) + " knowledge\n\
-				Increases the banking production multiplier by ×" + formatWhole(data.effect) + " (based on philosophy level). This equals to the production speed of “Point Banking” and gets raised by ^0.7 per every further banking. Also adds +" + formatWhole(player[this.layer].buyables[this.id]) + " to base “Philosophy” level."
+				return "等级 " + player[this.layer].buyables[this.id] + "<br/>" + 
+				"花费：" + formatWhole(data.cost) + " 知识<br/>" + 
+				"使银行业务产量倍率变为 " + formatWhole(data.effect) + " 倍(基于哲学等级)。此倍率等于“点数业务”的产量倍率，且分别乘以后面每个银行业务倍率的一定数值次方，该数值初始为0.7，且每再往后一个银行业务，就使此数值再乘以0.7。另外还使“哲学”的基础等级增加 " + formatWhole(player[this.layer].buyables[this.id]) + " 。"
 			},
 			unl() { return true },
 			canAfford() {
@@ -1957,9 +1957,9 @@ addLayer("wi", {
 			},
 			display() { // Everything else displayed in the buyable button after the title
 				let data = tmp.buyables[this.layer][this.id]
-				return "Level " + player[this.layer].buyables[this.id] + "\n\
-				Cost: " + formatWhole(data.cost) + " knowledge\n\
-				Muliplies spiritual power gain by ×" + format(data.effect) + " and reduces spiritual power needed for wisdom gaining by ÷" + format(data.effect.pow(data.effect.add(1).log(1e10).add(1).add(player.wi.points.add(1).pow(0.5).sub(1))).pow(data.effect.add(1).log(1e20).add(1))) + " (based on knowledge and wisdom). Also adds +" + formatWhole(player[this.layer].buyables[this.id]) + " to base “Philosophy” level and +" + format(player[this.layer].buyables[this.id].div(5)) + " to “Philosophy” effect's exponent."
+				return "等级 " + player[this.layer].buyables[this.id] + "<br/>" + 
+				"花费：" + formatWhole(data.cost) + " 知识<br/>" + 
+				"使魂灵能量获取量变为 " + format(data.effect) + " 倍，并将智慧获取所需的魂灵能量数值除以 " + format(data.effect.pow(data.effect.add(1).log(1e10).add(1).add(player.wi.points.add(1).pow(0.5).sub(1))).pow(data.effect.add(1).log(1e20).add(1))) + " (基于知识和智慧)。另外使“哲学”的基础等级增加 " + formatWhole(player[this.layer].buyables[this.id]) + " ，并使“哲学”效果的指数增加 " + format(player[this.layer].buyables[this.id].div(5)) + " 。"
 			},
 			unl() { return true },
 			canAfford() {
@@ -1986,9 +1986,9 @@ addLayer("wi", {
 			},
 			display() { // Everything else displayed in the buyable button after the title
 				let data = tmp.buyables[this.layer][this.id]
-				return "Level " + player[this.layer].buyables[this.id] + "\n\
-				Cost: " + formatWhole(data.cost) + " knowledge\n\
-				Muliplies finished work's effect and building speed by ×" + format(data.effect.first) + " and raises workers and managers' effect by ^" + format(data.effect.second) + " (based on wisdom). Also adds +" + formatWhole(player[this.layer].buyables[this.id]) + " to base “Philosophy” level."
+				return "等级 " + player[this.layer].buyables[this.id] + "<br/>" + 
+				"花费：" + formatWhole(data.cost) + " 知识<br/>" + 
+				"使已完成的工作效果和建造速度变为 " + format(data.effect.first) + " 倍，并使工人和经理的效果变为原来的 ^" + format(data.effect.second) + " (基于智慧)。另外使“哲学”的基础等级增加 " + formatWhole(player[this.layer].buyables[this.id]) + " 。"
 			},
 			unl() { return true },
 			canAfford() {
@@ -2016,9 +2016,9 @@ addLayer("wi", {
 			},
 			display() { // Everything else displayed in the buyable button after the title
 				let data = tmp.buyables[this.layer][this.id]
-				return "Level " + player[this.layer].buyables[this.id] + "\n\
-				Cost: " + formatWhole(data.cost) + " knowledge\n\
-				Adds +" + format(data.effect) + " to “Philosophy” effect's exponent and base “Psychology” level."
+				return "等级 " + player[this.layer].buyables[this.id] + "<br/>" + 
+				"花费：" + formatWhole(data.cost) + " 知识<br/>" + 
+				"使“哲学”效果的指数和基础等级增加 " + format(data.effect) + " 。"
 			},
 			unl() { return true },
 			canAfford() {
@@ -2043,9 +2043,9 @@ addLayer("wi", {
 			},
 			display() { // Everything else displayed in the buyable button after the title
 				let data = tmp.buyables[this.layer][this.id]
-				return "Level " + player[this.layer].buyables[this.id] + "\n\
-				Cost: " + formatWhole(data.cost) + " knowledge\n\
-				Adds +" + format(data.effect) + " to base “Philosophy”, “Mathematics” and “Structural Engineering” level."
+				return "等级 " + player[this.layer].buyables[this.id] + "<br/>" + 
+				"花费：" + formatWhole(data.cost) + " 知识<br/>" + 
+				"使“哲学”，“数学”和“结构工程学”的基础等级增加 " + format(data.effect) + " 。"
 			},
 			unl() { return true },
 			canAfford() {
@@ -2069,9 +2069,9 @@ addLayer("wi", {
 			},
 			display() { // Everything else displayed in the buyable button after the title
 				let data = tmp.buyables[this.layer][this.id]
-				return "Level " + player[this.layer].buyables[this.id] + "\n\
-				Cost: " + formatWhole(data.cost) + " knowledge\n\
-				Adds +" + format(data.effect) + " to “Philosophy” effect's exponent, base “Psychology” level and base “Structural Engineering” level."
+				return "等级 " + player[this.layer].buyables[this.id] + "<br/>" + 
+				"花费：" + formatWhole(data.cost) + " 知识<br/>" + 
+				"使“哲学”效果的指数、基础等级，“结构工程学”的基础等级增加 " + format(data.effect) + " 。"
 			},
 			unl() { return true },
 			canAfford() {
@@ -2095,9 +2095,9 @@ addLayer("wi", {
 			},
 			display() { // Everything else displayed in the buyable button after the title
 				let data = tmp.buyables[this.layer][this.id]
-				return "Level " + player[this.layer].buyables[this.id] + "\n\
-				Cost: " + formatWhole(data.cost) + " knowledge\n\
-				Adds +" + format(data.effect) + " to “Philosophy” effect's exponent, base “Philosophy”, “Psychology”, “Mathematics”, “Structural Engineering” and “Calculus” level."
+				return "等级 " + player[this.layer].buyables[this.id] + "<br/>" + 
+				"花费：" + formatWhole(data.cost) + " 知识<br/>" + 
+				"使“哲学”效果的指数，“哲学”、“心理学”、“数学”、“结构工程学”和“微积分”的基础等级增加 " + format(data.effect) + " 。"
 			},
 			unl() { return true },
 			canAfford() {
@@ -2134,13 +2134,13 @@ addLayer("wi", {
 			["prestige-button", function () { return "Gain " }],
 			["blank", "5px"],
 			["display-text",
-				function () { return "You have at best " + format(player.wi.best, 0) + " wisdom." }],
+				function () { return "您最高拥有 " + format(player.wi.best, 0) + " 智慧。" }],
 			["blank", "5px"],
 			["display-text",
-				function () { return "You have " + format(player.wi.knowledge, 0) + " knowledge." }],
+				function () { return "您拥有 " + format(player.wi.knowledge, 0) + " 知识。" }],
 			["blank", "5px"],
 			["display-text",
-				function () { return "You have " + format(player.wi.points.sub(player.wi.bought), 0) + " undiscovered wisdom.<h5>You have " + formatWhole(player.wi.spent) + " spent knowledge.</h5>" }],
+				function () { return "您拥有 " + format(player.wi.points.sub(player.wi.bought), 0) + " 未发现的智慧。<h5>您拥有 " + formatWhole(player.wi.spent) + " 已花费的知识。</h5>" }],
 			["microtabs", "stuff"]
 		],
 

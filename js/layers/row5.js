@@ -19,10 +19,10 @@ addLayer("s", {
 
 	name: "singularity",
 	color: () => "#000000",
-	resource: "singularity points",
+	resource: "奇点点数",
 	row: 4,
 
-	baseResource: "points",
+	baseResource: "点数",
 	baseAmount() { return player.points },
 	branches: [["m", 1]],
 
@@ -43,10 +43,10 @@ addLayer("s", {
 	tabFormat:
 		[
 			["display-text",
-				function () { return player.points.lt(ENDGAME) ? "WARNING: You're approaching the point of singularity. Once you go past this, the game will end." : "You have <h2 style='color: black; text-shadow: white 0px 0px 10px'>" + formatWhole(player.s.points) + "</h2> singularity points." }],
+				function () { return player.points.lt(ENDGAME) ? "WARNING: You're approaching the point of singularity. Once you go past this, the game will end." : "您拥有 <h2 style='color: black; text-shadow: white 0px 0px 10px'>" + formatWhole(player.s.points) + "</h2> 奇点点数。" }],
 			["blank", "5px"],
 			["display-text",
-				function () { return "Capacity: <h2 style='color: black; text-shadow: white 0px 0px 10px'>" + format(player.points) + " / " + format(Decimal.pow(2, 262144)) + "</h2> points" }],
+				function () { return "容量：<h2 style='color: black; text-shadow: white 0px 0px 10px'>" + format(player.points) + " / " + format(Decimal.pow(2, 262144)) + "</h2> 点数" }],
 			["blank"],
 			["bar", function () { return format(player.points ? player.points.add(1).log(Decimal.pow(2, 262144)) : 0) }, {"background-color": "#000"}],
 			["blank", "5px"],
