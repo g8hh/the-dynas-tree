@@ -791,10 +791,10 @@ addLayer("t", {
 	layerShown() { return player.bd.buyables[21].gte(1) || player[this.layer].unl },
 
 	color: () => "#77FFAA",
-	resource: "territories",
+	resource: "领土",
 	row: 4,
 
-	baseResource: "coins",
+	baseResource: "金币",
 	baseAmount() { return player.c.points },
 	branches: [["w", 2], ["c", 2]],
 
@@ -825,7 +825,7 @@ addLayer("t", {
         rows: 3,
         cols: 2,
         11: {
-            name:() => "The First Obstacle",
+            name:() => "最初的障碍",
 			desc:() => "Coin gain and point generation is square rooted.",
 			reward:() => "Builders build faster based on points.",
 			effect() {
@@ -836,7 +836,7 @@ addLayer("t", {
 			},
 			effectDisplay:(eff) => "×" + format(eff),
 			goal:() => new Decimal("e75"),
-			currencyDisplayName: "points",
+			currencyDisplayName: "点数",
 			currencyInternalName: "points",
 			unl:() => player.t.best.gte(1),
         },

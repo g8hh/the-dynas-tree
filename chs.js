@@ -214,6 +214,8 @@ var cnItems = {
     'Note: Starting building structures will force a builder reset.': '注意：开始建造建筑后将强制进行一次建造者重置。',
     'You\'ll unlock more structures as you get more managers.': '获得更多经理以后您可以解锁更多建筑。',
     'D: Hire builders': '快捷键D：雇佣建造者',
+    'Coin gain and point generation is square rooted.': '金币获取量和点数产量变为原来的平方根。',
+    'Builders build faster based on points.': '根据点数，使建造者的建造速度变得更快。',
     //层级4结束
 
 
@@ -341,6 +343,7 @@ var cnExcludeWhole = [
     /^离线时间(.*)$/, //不抓取内容
     /^每秒产生(.*)$/, //不抓取内容
     /^魔咒持续时间(.*)$/, //不抓取内容
+    /^您拥有(.*)$/, //不抓取内容
     /^您最高拥有(.*)$/, //不抓取内容
     /^施法花费(.*)$/, //不抓取内容
     /^世界(.*)$/, //不抓取内容

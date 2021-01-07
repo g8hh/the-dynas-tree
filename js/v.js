@@ -124,8 +124,8 @@ function loadVue() {
 			<br><h3 v-html="tmp.challs[layer][data].name"></h3><br><br>
 			<button v-bind:class="{ longUpg: true, can: true, [layer]: true }" v-bind:style="{'background-color': tmp.layerColor[layer]}" v-on:click="startChall(layer, data)">{{player[layer].active==(data)?(canCompleteChall(layer, data)?"Finish":"Exit Early"):(player[layer].challs.includes(data)?"Completed":"Start")}}</button><br><br>
 			<span v-html="tmp.challs[layer][data].desc"></span><br>
-			Goal: {{format(tmp.challs[layer][data].goal)}} {{layers[layer].challs[data].currencyDisplayName ? layers[layer].challs[data].currencyDisplayName : "points"}}<br>
-			Reward: <span v-html="tmp.challs[layer][data].reward"></span><br>
+			目标：{{format(tmp.challs[layer][data].goal)}} {{layers[layer].challs[data].currencyDisplayName ? layers[layer].challs[data].currencyDisplayName : "点数"}}<br>
+			奖励：<span v-html="tmp.challs[layer][data].reward"></span><br>
 			<span v-if="tmp.challs[layer][data].effect!==undefined">目前：<span v-html="(tmp.challs[layer][data].effectDisplay) ? (tmp.challs[layer][data].effectDisplay) : format(tmp.challs[layer][data].effect)"></span></span>
 		</div>
 		`
