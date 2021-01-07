@@ -172,6 +172,45 @@ var cnItems = {
     //层级3结束
 
 
+    //层级4
+    ' managers': ' 经理',
+    'Click on a tile in the map to see its details. Drag the tiles on the map to see more of it.': '点击地图上的方格可以查看它的详情，拖动方格可以查看更多。',
+    '1 Manager': '1名经理',
+    '2 Managers': '2名经理',
+    '3 Managers': '3名经理',
+    '4 Managers': '4名经理',
+    '5 Managers': '5名经理',
+    '6 Managers': '6名经理',
+    '7 Managers': '7名经理',
+    '8 Managers': '8名经理',
+    '10 Managers': '10名经理',
+    'Not available yet': '暂不可用',
+    'Unlocks builders, which can build structures to boost your production.': '解锁建造者，可以建造建筑来提升产量。',
+    'Hiring workers no longer resets anything and you can choose to automate finding workers. Also you unlock a new structure.': '雇佣工人不再重置任何东西，您可以自动找到工人。同时解锁一个新建筑。',
+    'You can choose to automate finding workfinders. Also you unlock an another new structure. This one might be hard.': '您可以自动找到工作中介。同时解锁一个新建筑。这个可能会有点难。',
+    'Unlocks an another new structure. This one is probably easier.': '解锁一个新建筑。这个应该会容易不少。',
+    'Each banking produces the banking before it. This will boost your builders\' speed by a lot. You\'ll still need to manually do bankings sometimes though.': '每个银行业务都可以产生它之前的银行业务。这将使建造者的速度提升很多。不过您还是需要手动操作银行业务的。',
+    'Unlocks an another new structure. This one is very important.': '解锁一个新建筑。这个很重要。',
+    'Unlocks an another new structure. This one is also important.': '解锁一个新建筑。这个也很重要。',
+    'Managers now have the ability to manage jobs and lands.': '经理可以管理工作和土地。',
+    'To be continued...': '未完待续……',
+    'Respec Land & Jobs Allocation': '洗点土地和工作的分配',
+    'Farmlands': '农田',
+    'Sheep Farm': '绵羊牧场',
+    'Mine': '矿井',
+    'Large Mine': '大型矿井',
+    'Wood Workshop': '木作坊',
+    'Large Wood Workshop': '大型木作坊',
+    'Savanna Transportation': '荒原运输',
+    'Desert Transportation': '沙漠运输',
+    'Fish Farm': '养鱼场',
+    'Ice Farm': '冰之农场',
+    'Land & Jobs Management': '土地与工作管理',
+    'Each manager gives 2 managing power.': '每个经理提供2点管理权力。',
+    'M: Hire managers': '快捷键M：雇佣经理',
+    //层级4结束
+
+
     //选项
     'Saving': '保存',
     'Instant save': '立刻保存',
