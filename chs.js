@@ -208,6 +208,12 @@ var cnItems = {
     'Land & Jobs Management': '土地与工作管理',
     'Each manager gives 2 managing power.': '每个经理提供2点管理权力。',
     'M: Hire managers': '快捷键M：雇佣经理',
+    'You can not build more than one structure at once.': '您同时只能建造一个建筑。',
+    'You can adjust the allocated builders using the slider above.': '您可以通过上方的滑块来调整分配的建造者数量。',
+    'Structures': '建筑列表',
+    'Note: Starting building structures will force a builder reset.': '注意：开始建造建筑后将强制进行一次建造者重置。',
+    'You\'ll unlock more structures as you get more managers.': '获得更多经理以后您可以解锁更多建筑。',
+    'D: Hire builders': '快捷键D：雇佣建造者',
     //层级4结束
 
 

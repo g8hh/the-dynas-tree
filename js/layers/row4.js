@@ -468,10 +468,10 @@ addLayer("bd", {
 	layerShown() { return hasMilestone("m", 1) },
 
 	color: () => "#FFFF77",
-	resource: "builders",
+	resource: "建造者",
 	row: 4,
 
-	baseResource: "workers",
+	baseResource: "工人",
 	baseAmount() { return player["w"].points },
 	branches: [["w", 1]],
 
@@ -506,7 +506,7 @@ addLayer("bd", {
 		rows: 3,
 		cols: 3,
 		11: {
-			title: () => "Tavern",
+			title: () => "酒馆",
 			cost(x) {
 				if (x.gte(25)) x = x.pow(2).div(25)
 				if (x.gte(15)) x = x.pow(2).div(15)
@@ -518,13 +518,13 @@ addLayer("bd", {
 			display() { // Everything else displayed in the buyable button after the title
 				let data = tmp.buyables[this.layer][this.id]
 				return data.canAfford
-					? "You have " + format(player[this.layer].buyables[this.id], 0) + " taverns, which are boosting the find and finish work speed by ×" + format(data.effect) + "." + 
-						(player.bd.building == 11 ? "\n\n\
-						Progress: " + format(player.bd.progress, 0) + " / " + format(data.cost, 0) + " (" + format(Decimal.div(player.bd.progress, data.cost).mul(100)) + "%) \n\
-						ETA: " + (Decimal.lte(tmp.layerEffs.bd.speed, 0) ? "never" : formatTime(data.cost.sub(player.bd.progress).div(tmp.layerEffs.bd.speed))) + "\n\
-						Click here to stop building and discard the building progress." : "\n\n\
-						Progress needed: " + format(data.cost, 0) + "\n\
-						Click here to start building.")
+					? "您拥有 " + format(player[this.layer].buyables[this.id], 0) + " 酒馆，因此找到工作和完成工作的速度变为了 " + format(data.effect) + " 倍。" + 
+						(player.bd.building == 11 ? "<br/>" + 
+						"进度：" + format(player.bd.progress, 0) + " / " + format(data.cost, 0) + " (" + format(Decimal.div(player.bd.progress, data.cost).mul(100)) + "%) <br/>" + 
+						"预计完成时间：" + (Decimal.lte(tmp.layerEffs.bd.speed, 0) ? "永不" : formatTime(data.cost.sub(player.bd.progress).div(tmp.layerEffs.bd.speed))) + "<br/>" + 
+						"点击此处以停止建造，现有进度将消失。" : "<br/>" + 
+						"需要进度：" + format(data.cost, 0) + " <br/>" + 
+						"点击此处以开始建造。")
 					: "You can not build more than one structure at once."
 			},
 			unl() { return player.bd.points.gte(1) },
@@ -535,7 +535,7 @@ addLayer("bd", {
 			},
 		},
 		12: {
-			title: () => "Housing Area",
+			title: () => "居住区",
 			cost(x) {
 				if (x.gte(25)) x = x.pow(2).div(25)
 				if (x.gte(15)) x = x.pow(2).div(15)
@@ -547,13 +547,13 @@ addLayer("bd", {
 			display() { // Everything else displayed in the buyable button after the title
 				let data = tmp.buyables[this.layer][this.id]
 				return data.canAfford
-					? "You have " + format(player[this.layer].buyables[this.id], 0) + " housing areas, which are boosting all of the first three rows of coin upgrades by ×" + format(data.effect) + "." + 
-						(player.bd.building == 12 ? "\n\n\
-						Progress: " + format(player.bd.progress, 0) + " / " + format(data.cost, 0) + " (" + format(Decimal.div(player.bd.progress, data.cost).mul(100)) + "%) \n\
-						ETA: " + (Decimal.lte(tmp.layerEffs.bd.speed, 0) ? "never" : formatTime(data.cost.sub(player.bd.progress).div(tmp.layerEffs.bd.speed))) + "\n\
-						Click here to stop building and discard the building progress." : "\n\n\
-						Progress needed: " + format(data.cost, 0) + "\n\
-						Click here to start building.")
+					? "您拥有 " + format(player[this.layer].buyables[this.id], 0) + " 居住区，因此前三行金币升级的效果变为了 " + format(data.effect) + " 倍。" + 
+						(player.bd.building == 12 ? "<br/>" + 
+						"进度：" + format(player.bd.progress, 0) + " / " + format(data.cost, 0) + " (" + format(Decimal.div(player.bd.progress, data.cost).mul(100)) + "%) <br/>" + 
+						"预计完成时间：" + (Decimal.lte(tmp.layerEffs.bd.speed, 0) ? "永不" : formatTime(data.cost.sub(player.bd.progress).div(tmp.layerEffs.bd.speed))) + "<br/>" + 
+						"点击此处以停止建造，现有进度将消失。" : "<br/>" + 
+						"需要进度：" + format(data.cost, 0) + " <br/>" + 
+						"点击此处以开始建造。")
 					: "You can not build more than one structure at once."
 			},
 			unl() { return player.bd.points.gte(1) },
@@ -564,7 +564,7 @@ addLayer("bd", {
 			},
 		},
 		13: {
-			title: () => "Shrine",
+			title: () => "圣地",
 			cost(x) {
 				if (x.gte(8)) x = x.pow(2).div(8)
 				if (x.gte(5)) x = x.pow(2).div(5)
@@ -576,13 +576,13 @@ addLayer("bd", {
 			display() { // Everything else displayed in the buyable button after the title
 				let data = tmp.buyables[this.layer][this.id]
 				return data.canAfford
-					? "You have " + format(player[this.layer].buyables[this.id], 0) + " shrines." + (player[this.layer].buyables[this.id].gte(1) ? (player[this.layer].buyables[this.id].gte(7) ? " Building more will make your spells stronger." : " Building more will give you an another spell to cast.") : " Building one will unlock another layer.") + 
-						(player.bd.building == 13 ? "\n\n\
-						Progress: " + format(player.bd.progress, 0) + " / " + format(data.cost, 0) + " (" + format(Decimal.div(player.bd.progress, data.cost).mul(100)) + "%) \n\
-						ETA: " + (Decimal.lte(tmp.layerEffs.bd.speed, 0) ? "never" : formatTime(data.cost.sub(player.bd.progress).div(tmp.layerEffs.bd.speed))) + "\n\
-						Click here to stop building and discard the building progress." : "\n\n\
-						Progress needed: " + format(data.cost, 0) + "\n\
-						Click here to start building.")
+					? "您拥有 " + format(player[this.layer].buyables[this.id], 0) + " 圣地。" + (player[this.layer].buyables[this.id].gte(1) ? (player[this.layer].buyables[this.id].gte(7) ? "建造后可以使魔咒变得更强。" : "建造后可解锁另一个魔咒。") : "建造后可解锁另一个层级。") + 
+						(player.bd.building == 13 ? "<br/>" + 
+						"进度：" + format(player.bd.progress, 0) + " / " + format(data.cost, 0) + " (" + format(Decimal.div(player.bd.progress, data.cost).mul(100)) + "%) <br/>" + 
+						"预计完成时间：" + (Decimal.lte(tmp.layerEffs.bd.speed, 0) ? "永不" : formatTime(data.cost.sub(player.bd.progress).div(tmp.layerEffs.bd.speed))) + "<br/>" + 
+						"点击此处以停止建造，现有进度将消失。" : "<br/>" + 
+						"需要进度：" + format(data.cost, 0) + " <br/>" + 
+						"点击此处以开始建造。")
 					: "You can not build more than one structure at once."
 			},
 			unl() { return player.bd.points.gte(1) && hasMilestone("m", 2) },
@@ -593,7 +593,7 @@ addLayer("bd", {
 			},
 		},
 		21: {
-			title: () => "Road",
+			title: () => "道路",
 			cost(x) {
 				if (x.gte(8)) x = x.pow(2).div(8)
 				if (x.gte(5)) x = x.pow(2).div(5)
@@ -605,13 +605,13 @@ addLayer("bd", {
 			display() { // Everything else displayed in the buyable button after the title
 				let data = tmp.buyables[this.layer][this.id]
 				return data.canAfford
-					? "You have " + format(player[this.layer].buyables[this.id], 0) + " roads." + (player[this.layer].buyables[this.id].gte(1) ? (player[this.layer].buyables[this.id].gte(6) ? " Building more will make your obstacle rewards stronger." : " Building more will give you an another obstacle to be completed.") : " Building one will unlock another prestige layer.") + 
-						(player.bd.building == 21 ? "\n\n\
-						Progress: " + format(player.bd.progress, 0) + " / " + format(data.cost, 0) + " (" + format(Decimal.div(player.bd.progress, data.cost).mul(100)) + "%) \n\
-						ETA: " + (Decimal.lte(tmp.layerEffs.bd.speed, 0) ? "never" : formatTime(data.cost.sub(player.bd.progress).div(tmp.layerEffs.bd.speed))) + "\n\
-						Click here to stop building and discard the building progress." : "\n\n\
-						Progress needed: " + format(data.cost, 0) + "\n\
-						Click here to start building.")
+					? "您拥有 " + format(player[this.layer].buyables[this.id], 0) + " 道路。" + (player[this.layer].buyables[this.id].gte(1) ? (player[this.layer].buyables[this.id].gte(6) ? "建造后可以使障碍给予的奖励变得更多。" : "建造后可解锁另一个障碍。") : "建造后可解锁另一个转生层级。") + 
+						(player.bd.building == 21 ? "<br/>" + 
+						"进度：" + format(player.bd.progress, 0) + " / " + format(data.cost, 0) + " (" + format(Decimal.div(player.bd.progress, data.cost).mul(100)) + "%) <br/>" + 
+						"预计完成时间：" + (Decimal.lte(tmp.layerEffs.bd.speed, 0) ? "永不" : formatTime(data.cost.sub(player.bd.progress).div(tmp.layerEffs.bd.speed))) + "<br/>" + 
+						"点击此处以停止建造，现有进度将消失。" : "<br/>" + 
+						"需要进度：" + format(data.cost, 0) + " <br/>" + 
+						"点击此处以开始建造。")
 					: "You can not build more than one structure at once."
 			},
 			unl() { return player.bd.points.gte(1) && hasMilestone("m", 3) },
@@ -622,7 +622,7 @@ addLayer("bd", {
 			},
 		},
 		22: {
-			title: () => "Construction Site",
+			title: () => "建筑工地",
 			cost(x) {
 				if (x.gte(25)) x = x.pow(2).div(25)
 				if (x.gte(15)) x = x.pow(2).div(15)
@@ -634,13 +634,13 @@ addLayer("bd", {
 			display() { // Everything else displayed in the buyable button after the title
 				let data = tmp.buyables[this.layer][this.id]
 				return data.canAfford
-					? "You have " + format(player[this.layer].buyables[this.id], 0) + " construction sites, which are making your builders build " + format(data.effect) + "× faster." + 
-						(player.bd.building == 22 ? "\n\n\
-						Progress: " + format(player.bd.progress, 0) + " / " + format(data.cost, 0) + " (" + format(Decimal.div(player.bd.progress, data.cost).mul(100)) + "%) \n\
-						ETA: " + (Decimal.lte(tmp.layerEffs.bd.speed, 0) ? "never" : formatTime(data.cost.sub(player.bd.progress).div(tmp.layerEffs.bd.speed))) + "\n\
-						Click here to stop building and discard the building progress." : "\n\n\
-						Progress needed: " + format(data.cost, 0) + "\n\
-						Click here to start building.")
+					? "您拥有 " + format(player[this.layer].buyables[this.id], 0) + " 建筑工地，因此建造者的建造速度变为了 " + format(data.effect) + " 倍。" + 
+						(player.bd.building == 22 ? "<br/>" + 
+						"进度：" + format(player.bd.progress, 0) + " / " + format(data.cost, 0) + " (" + format(Decimal.div(player.bd.progress, data.cost).mul(100)) + "%) <br/>" + 
+						"预计完成时间：" + (Decimal.lte(tmp.layerEffs.bd.speed, 0) ? "永不" : formatTime(data.cost.sub(player.bd.progress).div(tmp.layerEffs.bd.speed))) + "<br/>" + 
+						"点击此处以停止建造，现有进度将消失。" : "<br/>" + 
+						"需要进度：" + format(data.cost, 0) + " <br/>" + 
+						"点击此处以开始建造。")
 					: "You can not build more than one structure at once."
 			},
 			unl() { return player.bd.points.gte(1) && hasMilestone("m", 4) },
@@ -651,7 +651,7 @@ addLayer("bd", {
 			},
 		},
 		23: {
-			title: () => "Military Base",
+			title: () => "军事基地",
 			cost(x) {
 				if (x.gte(25)) x = x.pow(2).div(25)
 				if (x.gte(15)) x = x.pow(2).div(15)
@@ -663,13 +663,13 @@ addLayer("bd", {
 			display() { // Everything else displayed in the buyable button after the title
 				let data = tmp.buyables[this.layer][this.id]
 				return data.canAfford
-					? "You have " + format(player[this.layer].buyables[this.id], 0) + " military bases." + (player[this.layer].buyables[this.id].gte(1) ? "" : " Building one will unlock another prestige layer.") + 
-						(player.bd.building == 23 ? "\n\n\
-						Progress: " + format(player.bd.progress, 0) + " / " + format(data.cost, 0) + " (" + format(Decimal.div(player.bd.progress, data.cost).mul(100)) + "%) \n\
-						ETA: " + (Decimal.lte(tmp.layerEffs.bd.speed, 0) ? "never" : formatTime(data.cost.sub(player.bd.progress).div(tmp.layerEffs.bd.speed))) + "\n\
-						Click here to stop building and discard the building progress." : "\n\n\
-						Progress needed: " + format(data.cost, 0) + "\n\
-						Click here to start building.")
+					? "您拥有 " + format(player[this.layer].buyables[this.id], 0) + " 军事基地。" + (player[this.layer].buyables[this.id].gte(1) ? "" : "建造后可解锁另一个转生层级。") + 
+						(player.bd.building == 23 ? "<br/>" + 
+						"进度：" + format(player.bd.progress, 0) + " / " + format(data.cost, 0) + " (" + format(Decimal.div(player.bd.progress, data.cost).mul(100)) + "%) <br/>" + 
+						"预计完成时间：" + (Decimal.lte(tmp.layerEffs.bd.speed, 0) ? "永不" : formatTime(data.cost.sub(player.bd.progress).div(tmp.layerEffs.bd.speed))) + "<br/>" + 
+						"点击此处以停止建造，现有进度将消失。" : "<br/>" + 
+						"需要进度：" + format(data.cost, 0) + " <br/>" + 
+						"点击此处以开始建造。")
 					: "You can not build more than one structure at once."
 			},
 			unl() { return player.bd.points.gte(1) && hasMilestone("m", 6) },
@@ -680,7 +680,7 @@ addLayer("bd", {
 			},
 		},
 		31: {
-			title: () => "School",
+			title: () => "学校",
 			cost(x) {
 				if (x.gte(25)) x = x.pow(2).div(25)
 				if (x.gte(15)) x = x.pow(2).div(15)
@@ -692,13 +692,13 @@ addLayer("bd", {
 			display() { // Everything else displayed in the buyable button after the title
 				let data = tmp.buyables[this.layer][this.id]
 				return data.canAfford
-					? "You have " + format(player[this.layer].buyables[this.id], 0) + " schools." + (player[this.layer].buyables[this.id].gte(1) ? "" : " Building one will unlock another prestige layer.") + 
-						(player.bd.building == 31 ? "\n\n\
-						Progress: " + format(player.bd.progress, 0) + " / " + format(data.cost, 0) + " (" + format(Decimal.div(player.bd.progress, data.cost).mul(100)) + "%) \n\
-						ETA: " + (Decimal.lte(tmp.layerEffs.bd.speed, 0) ? "never" : formatTime(data.cost.sub(player.bd.progress).div(tmp.layerEffs.bd.speed))) + "\n\
-						Click here to stop building and discard the building progress." : "\n\n\
-						Progress needed: " + format(data.cost, 0) + "\n\
-						Click here to start building.")
+					? "您拥有 " + format(player[this.layer].buyables[this.id], 0) + " 学校。" + (player[this.layer].buyables[this.id].gte(1) ? "" : "建造后可解锁另一个转生层级。") + 
+						(player.bd.building == 31 ? "<br/>" + 
+						"进度：" + format(player.bd.progress, 0) + " / " + format(data.cost, 0) + " (" + format(Decimal.div(player.bd.progress, data.cost).mul(100)) + "%) <br/>" + 
+						"预计完成时间：" + (Decimal.lte(tmp.layerEffs.bd.speed, 0) ? "永不" : formatTime(data.cost.sub(player.bd.progress).div(tmp.layerEffs.bd.speed))) + "<br/>" + 
+						"点击此处以停止建造，现有进度将消失。" : "<br/>" + 
+						"需要进度：" + format(data.cost, 0) + " <br/>" + 
+						"点击此处以开始建造。")
 					: "You can not build more than one structure at once."
 			},
 			unl() { return player.bd.points.gte(1) && hasMilestone("m", 7) },
@@ -745,10 +745,10 @@ addLayer("bd", {
 			["prestige-button", function () { return "Hire " }],
 			["blank", "5px"],
 			["display-text",
-				function () { return "You have at best " + format(player.bd.best, 0) + " " + " builders." }],
+				function () { return "您最高拥有 " + format(player.bd.best, 0) + " " + " 建造者。" }],
 			["blank", "5px"],
 			["display-text",
-				function () { return player.bd.points.gte(1) ? "You have " + format(player.bd.allocated, 0) + " allocated builders, which are giving you " + format(tmp.layerEffs.bd.speed) + " building speed (also based on current coin count) but will raise your coin gains and point generation to the power of ^" + format(tmp.layerEffs.bd.penalty, 5).replace(",", "") + " when you're building something." : "" }],
+				function () { return player.bd.points.gte(1) ? "您已经分配了 " + format(player.bd.allocated, 0) + " 建造者，获得了 " + format(tmp.layerEffs.bd.speed) + " 的建造速度(也跟目前的金币数量有关)，但也会使金币获取量和点数产量变为原来的 ^" + format(tmp.layerEffs.bd.penalty, 5).replace(",", "") + " ，直到您停止建造为止。" : "" }],
 			["raw-html",
 				function () {
 					return player.bd.points.gte(2) && player.bd.building == 0 ?
