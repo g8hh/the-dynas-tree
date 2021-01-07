@@ -1044,7 +1044,7 @@ addLayer("t", {
 				]],
 				["info-box", [
 					["display-text", function () { return (
-						player.world.conquering ? "正在征服" + player.world.conquerTarget + "……" : "Soldiers are Idling."
+						player.world.conquering ? "Conquering " + player.world.conquerTarget + "..." : "Soldiers are Idling."
 						) + "<p style='color:transparent; font-size:0.001px'>" + format(player.time) + "</p>"
 					}],
 					["display-text", function () { return (
