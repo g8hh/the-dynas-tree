@@ -173,8 +173,9 @@ var cnItems = {
 
 
     //层级4
-    ' managers': ' 经理',
+    'Unselected': '未选择',
     'Click on a tile in the map to see its details. Drag the tiles on the map to see more of it.': '点击地图上的方格可以查看它的详情，拖动方格可以查看地图的其他部分。',
+    ' managers': ' 经理',
     '1 Manager': '1名经理',
     '2 Managers': '2名经理',
     '3 Managers': '3名经理',
@@ -266,6 +267,14 @@ var cnItems = {
     'You can increase the maximum queue length by getting more territories or military bases.': '您可以通过获取更多领土，或者是建造更多军事基地来增加队列最大长度。',
     'Explore ': '探索 ',
     'T: Explore territories': '快捷键T：探索领土',
+    'Strength': '力量',
+    'Endurance': '耐力',
+    'Dexterity': '敏捷',
+    'Recruit ': '招募 ',
+    'Soldier Statistics': '士兵统计数据',
+    'Accounts for all soldiers': '以下数字为所有士兵的数据总和',
+    'Soldier Attributes': '士兵属性',
+    'O: Recruit soldiers': '快捷键O：招募士兵',
     //层级4结束
 
 

@@ -1029,7 +1029,7 @@ addLayer("t", {
 						["display-text", function () { return "Your Soldiers<h5 style='font-size:6px'><br/>" }],
 						["mini-bar", function () { return format(Decimal.div(player.world.health, soldierStats.mhp)) }, {"background-color": "#300"}],
 						["display-text", function () { return "<h5>生命值：" + formatWhole(player.world.health) + " / " + formatWhole(soldierStats.mhp) + "</h5>" }],
-						["display-text", function () { return "<h5>强度：" + formatWhole(Decimal.div(player.world.health, soldierStats.mhp).mul(soldierStats.atk)) + " / " + formatWhole(soldierStats.atk) + "</h5>" }],
+						["display-text", function () { return "<h5>伤害：" + formatWhole(Decimal.div(player.world.health, soldierStats.mhp).mul(soldierStats.atk)) + " / " + formatWhole(soldierStats.atk) + "</h5>" }],
 						["display-text", function () { return "<h5>荣誉值：" + format(player.t.elo) + "</h5>" }],
 						], {"width": "228px"}
 					], 
@@ -1037,7 +1037,7 @@ addLayer("t", {
 						["display-text", function () { return (player.world.encounter ? player.world.encounter.name : "No Encounters") + "<h5 style='font-size:6px'><br/>" + "<p style='color:transparent; font-size:0.001px'>" + format(player.time) + "</p>" }],
 						["mini-bar", function () { return format(player.world.encounter ? Decimal.div(player.world.encounter.health, player.world.encounter.maxhealth) : 0) + (player.time * 10 % 1 ? "0" : "") }, {"background-color": "#300"}],
 						["display-text", function () { return "<h5>生命值：" + (player.world.encounter ? formatWhole(player.world.encounter.health) + " / " + formatWhole(player.world.encounter.maxhealth) : "----- / -----") + "</h5>" + "<p style='color:transparent; font-size:0.001px'>" + format(player.time) + "</p>" }],
-						["display-text", function () { return "<h5>强度：" + (player.world.encounter ? formatWhole(Decimal.div(player.world.encounter.health, player.world.encounter.maxhealth).mul(player.world.encounter.power)) + " / " + formatWhole(player.world.encounter.power) : "----- / -----") + "</h5>" + "<p style='color:transparent; font-size:0.001px'>" + format(player.time) + "</p>" }],
+						["display-text", function () { return "<h5>伤害：" + (player.world.encounter ? formatWhole(Decimal.div(player.world.encounter.health, player.world.encounter.maxhealth).mul(player.world.encounter.power)) + " / " + formatWhole(player.world.encounter.power) : "----- / -----") + "</h5>" + "<p style='color:transparent; font-size:0.001px'>" + format(player.time) + "</p>" }],
 						["display-text", function () { return "<h5>荣誉值：" + (player.world.encounter ? format(player.world.encounter.elo) : "-----") + "</h5>" + "<p style='color:transparent; font-size:0.001px'>" + format(player.time) + "</p>" }],
 						], {"width": "228px"}
 					], 
@@ -1132,10 +1132,10 @@ addLayer("so", {
 	layerShown() { return player.bd.buyables[23].gte(1) || player[this.layer].unl },
 
 	color: () => "#009900",
-	resource: "soldiers",
+	resource: "士兵",
 	row: 4,
 
-	baseResource: "coins",
+	baseResource: "金币",
 	baseAmount() { return player.c.points },
 	branches: [["w", 1], ["c", 2]],
 
@@ -1178,9 +1178,9 @@ addLayer("so", {
 			},
 			display() { // Everything else displayed in the buyable button after the title
 				let data = tmp.buyables[this.layer][this.id]
-				return "Base stat: " + format(data.effect) + "\n\
-				Cost: " + format(data.cost) + " coins\n\
-				Increase your soldiers' attack power."
+				return "基础属性：" + format(data.effect) + "<br/>" + 
+				"花费：" + format(data.cost) + " 金币<br/>" + 
+				"增加士兵的攻击伤害。"
 			},
 			unl() { return player.so.unl },
 			canAfford() {
@@ -1212,9 +1212,9 @@ addLayer("so", {
 			},
 			display() { // Everything else displayed in the buyable button after the title
 				let data = tmp.buyables[this.layer][this.id]
-				return "Base stat: " + format(data.effect) + "\n\
-				Cost: " + format(data.cost) + " coins\n\
-				Increase your soldiers' max hit points."
+				return "基础属性：" + format(data.effect) + "<br/>" + 
+				"花费：" + format(data.cost) + " 金币<br/>" + 
+				"增加士兵的最大生命值。"
 			},
 			unl() { return player.so.unl },
 			canAfford() {
@@ -1246,9 +1246,9 @@ addLayer("so", {
 			},
 			display() { // Everything else displayed in the buyable button after the title
 				let data = tmp.buyables[this.layer][this.id]
-				return "Base stat: " + format(data.effect) + "\n\
-				Cost: " + format(data.cost) + " coins\n\
-				Increase your soldiers' speeds." + (data.effect.gte(6) ? "" : " Increasing this number to 6 will unlock a new tab for the territory layer.")
+				return "基础属性：" + format(data.effect) + "<br/>" + 
+				"花费：" + format(data.cost) + " 金币<br/>" + 
+				"增加士兵的速度。" + (data.effect.gte(6) ? "" : "将此项提升到6以后可以解锁领土层级下的一个新选项卡。")
 			},
 			unl() { return player.so.unl },
 			canAfford() {
@@ -1290,9 +1290,9 @@ addLayer("so", {
 			["prestige-button", function () { return "Recruit " }],
 			["blank", "5px"],
 			["display-text",
-				function () { return "You have at best " + format(player.so.best, 0) + " soldiers." }],
+				function () { return "您最高拥有 " + format(player.so.best, 0) + " 士兵。" }],
 			["display-text",
-				function () { return "Your current military rating is " + format(player.so.rating) + ", which is boosting your point generation speed by ×" + format(tmp.layerEffs.so) + "." }],
+				function () { return "您当前的军队评分为 " + format(player.so.rating) + " ，因此点数产量变为了 " + format(tmp.layerEffs.so) + " 倍。" }],
 			["blank", "5px"],
 			["display-text",
 				function () { return player.so.unl ? "<h3>Soldier Statistics</h3><br/><h5>Accounts for all soldiers</h5>" : "" }],
@@ -1300,16 +1300,16 @@ addLayer("so", {
 			["row", [
 				["display-text",
 					function () { return (player.so.unl ? "<h5/>" + 
-						"Base Power: " + formatWhole(soldierStats.atk).padEnd(15, '\u00A0') + "<br/>" +
-						"Regen SPD : " + (format(soldierStats.gen) + "/s").padEnd(15, '\u00A0') 
+						"基础伤害：" + formatWhole(soldierStats.atk).padEnd(15, '\u00A0') + "<br/>" +
+						"生命值恢复速度：" + (format(soldierStats.gen) + "/秒").padEnd(15, '\u00A0') 
 						: "") + "<br/><p style='color:transparent; font-size:0.001px'>" + format(player.time) + "</p>" }],
 				["display-text",
 					function () { return (player.so.unl ? "<h5/>" + 
-						"Max Health: " + formatWhole(soldierStats.mhp).padEnd(15, '\u00A0')
+						"最大生命值：" + formatWhole(soldierStats.mhp).padEnd(15, '\u00A0')
 						: "") + "<br/><p style='color:transparent; font-size:0.001px'>" + format(player.time) + "</p>" }],
 				["display-text",
 					function () { return (player.so.unl ? "<h5/>" + 
-						"Move Speed: " + formatWhole(soldierStats.spd).padEnd(15, '\u00A0')
+						"移动速度：" + formatWhole(soldierStats.spd).padEnd(15, '\u00A0')
 						: "") + "<br/><p style='color:transparent; font-size:0.001px'>" + format(player.time) + "</p>" }],
 						
 			]],
