@@ -4,9 +4,9 @@
 	<meta charset="utf-8">
 	<script>
 		const modInfo = {
-			name: "王朝之系谱 - The Dynas Tree",
+			name: "The Dynas Tree",
 			id: "dyntree",
-			pointsName: "点数",
+			pointsName: "points",
 			offlineLimit: 1  // In hours
 		}
 	</script>
@@ -239,7 +239,8 @@
 			<br>
 			<span>You have </span>
 			<h2 id="points">{{format(player.points)}}</h2>
-			<span> {{modInfo.pointsName}}</span>
+			<span> 点数</span>
+			<!-- <span> {{modInfo.pointsName}}</span> -->
 			<br><br>
 			<!-- *************************** Modify the tree in the table below! *************************** -->
 			<div v-if="player.points.lt(ENDGAME)">
