@@ -1014,7 +1014,7 @@ addLayer("t", {
 				["display-text", function () { return "您目前的荣誉值为 " + formatWhole(player.t.elo) + "。" }], 
 				["blank", "0px"], "map-box", ["blank", "0px"],
 				["info-box", [
-					["display-text", function () { return "选择方格：" + mapFocusDesc + "<br/><p style='color:transparent; font-size:0.001px'>" + format(player.time) + "</p>"}],
+					["display-text", function () { return "Selected Tile: " + mapFocusDesc + "<br/><p style='color:transparent; font-size:0.001px'>" + format(player.time) + "</p>"}],
 					["display-text", function () { 
 						let entCha = mapFocusDesc === "Unselected" ? 0 : getMapEncounterChance(mapFocusX, mapFocusY)
 					return (

@@ -256,8 +256,8 @@ function onMapMouseDown (e) {
 	
 	var id = player.world.map[mapFocusY].charCodeAt(mapFocusX)
 	var type = id & 15
-	mapFocusDesc = ["水域", "草地", "山脉", "高山", "沙漠", "苔原", "森林", "荒原", "雨林", "浮冰"][type]
-	if (id & 16) mapFocusDesc += "，已征服"
+	mapFocusDesc = ["Waters", "Grasslands", "Mountains", "Tall Mountains", "Desert", "Tundra", "Forest", "Savanna", "Rainforest", "Iced Waters"][type]
+	if (id & 16) mapFocusDesc += ", Conquered"
 }
 
 function onMapMouseMove (e) {
