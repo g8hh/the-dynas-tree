@@ -173,7 +173,7 @@ var cnItems = {
 
 
     //层级4
-    'Unselected': '未选择',
+    '选择方格：Unselected': '选择方格：未选择',
     'Click on a tile in the map to see its details. Drag the tiles on the map to see more of it.': '点击地图上的方格可以查看它的详情，拖动方格可以查看地图的其他部分。',
     ' managers': ' 经理',
     '1 Manager': '1名经理',
@@ -275,6 +275,16 @@ var cnItems = {
     'Accounts for all soldiers': '以下数字为所有士兵的数据总和',
     'Soldier Attributes': '士兵属性',
     'O: Recruit soldiers': '快捷键O：招募士兵',
+    'Knowledge boosts your first row of coin boost upgrades.': '知识可以使第一行金币的“增加”升级效果变得更好。',
+    'Knowledge boosts finished work\'s effect.': '知识可以使已完成的工作效果变得更好。',
+    'Brick. It\'s fun.': '砖块。真有趣。',
+    'Reduces the “Convert spiritual power into castable magic fountain” cost scaling.': '使“将魂灵能量转化为流动的魔力源泉”重复购买项的花费增加速度降低。',
+    'Raise the “Use spiritual power to power magic in advanced spells” upgrade based on schools.': '根据学校的数量，使“使用魂灵能量控制高级魔咒的魔力”重复购买项的效果变得更好。',
+    'Knowledge boosts your second row of coin boost upgrades.': '知识可以使第二行金币的“增加”升级效果变得更好。',
+    'Knowledge boosts your first three banking buffs.': '知识可以使前三个银行业务的效果变得更好。',
+    'Unlocks a new banking option.': '解锁一项新的银行业务。',
+    'You gain 100% of your spiritual power gain on reset every second (only when you unlocked the layer).': '您每秒获得魂灵重置时的魂灵能量获取量100%的魂灵能量(只在解锁该层级后生效)。',
+    'Reduces the “Extend the fabric of time using spiritual power” cost scaling.': '使“使用魂灵能量延展时间的结构”重复购买项的花费增加速度降低。',
     //层级4结束
 
 

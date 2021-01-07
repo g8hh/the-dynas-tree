@@ -1339,11 +1339,11 @@ addLayer("wi", {
 	layerShown() { return player.bd.buyables[31].gte(1) || player[this.layer].unl },
 
 	color: () => "#0077ff",
-	name: "wisdom",
-	resource: "wisdom",
+	name: "智慧",
+	resource: "智慧",
 	row: 4,
 
-	baseResource: "spiritual power",
+	baseResource: "魂灵能量",
 	baseAmount() { return player.sp.points },
 	branches: [["w", 3], ["sp", 3]],
 
@@ -1372,7 +1372,7 @@ addLayer("wi", {
 	},
 	
 	effectDescription() {
-		return "which are generating " + format(tmp.layerEffs.wi) + " knowledge per second"
+		return "每秒产生 " + format(tmp.layerEffs.wi) + " 知识"
 	},
 	
 	
@@ -1384,7 +1384,7 @@ addLayer("wi", {
 			cost: () => new Decimal(1),
 			currencyLayer: "wi",
 			currencyInternalName: "knowledge",
-			currencyDisplayName: "knowledge",
+			currencyDisplayName: "知识",
 			unl() { return player[this.layer].unl },
 			extraReq() { return player.wi.points.gt(player.wi.bought) },
 			effect() {
@@ -1403,7 +1403,7 @@ addLayer("wi", {
 			cost: () => new Decimal(100),
 			currencyLayer: "wi",
 			currencyInternalName: "knowledge",
-			currencyDisplayName: "knowledge",
+			currencyDisplayName: "知识",
 			unl() { return player[this.layer].unl },
 			extraReq() { return hasUpg("wi", 11) && player.wi.points.gt(player.wi.bought) },
 			effect() {
@@ -1430,7 +1430,7 @@ addLayer("wi", {
 			cost: () => new Decimal(25000),
 			currencyLayer: "wi",
 			currencyInternalName: "knowledge",
-			currencyDisplayName: "knowledge",
+			currencyDisplayName: "知识",
 			unl() { return player[this.layer].unl },
 			extraReq() { return hasUpg("wi", 24) && player.wi.points.gt(player.wi.bought) },
 			onPurchase() { player.wi.spent = Decimal.add(player.wi.spent, tmp.upgrades.wi[14].cost); player.wi.bought = Decimal.add(player.wi.bought, 1) }
@@ -1440,7 +1440,7 @@ addLayer("wi", {
 			cost: () => new Decimal(50000),
 			currencyLayer: "wi",
 			currencyInternalName: "knowledge",
-			currencyDisplayName: "knowledge",
+			currencyDisplayName: "知识",
 			unl() { return player[this.layer].unl },
 			extraReq() { return (hasUpg("wi", 14) || hasUpg("wi", 25)) && player.wi.points.gt(player.wi.bought) },
 			effect() {
@@ -1455,7 +1455,7 @@ addLayer("wi", {
 			cost: () => new Decimal(100),
 			currencyLayer: "wi",
 			currencyInternalName: "knowledge",
-			currencyDisplayName: "knowledge",
+			currencyDisplayName: "知识",
 			unl() { return player[this.layer].unl },
 			extraReq() { return hasUpg("wi", 11) && player.wi.points.gt(player.wi.bought) },
 			effect() {
@@ -1474,7 +1474,7 @@ addLayer("wi", {
 			cost: () => new Decimal(3000),
 			currencyLayer: "wi",
 			currencyInternalName: "knowledge",
-			currencyDisplayName: "knowledge",
+			currencyDisplayName: "知识",
 			unl() { return player[this.layer].unl },
 			extraReq() { return (hasUpg("wi", 12) || hasUpg("wi", 21)) && player.wi.points.gt(player.wi.bought) },
 			effect() {
@@ -1493,7 +1493,7 @@ addLayer("wi", {
 			cost: () => new Decimal(10000),
 			currencyLayer: "wi",
 			currencyInternalName: "knowledge",
-			currencyDisplayName: "knowledge",
+			currencyDisplayName: "知识",
 			unl() { return player[this.layer].unl },
 			extraReq() { return hasUpg("wi", 22) && player.wi.points.gt(player.wi.bought) },
 			onPurchase() { player.wi.spent = Decimal.add(player.wi.spent, tmp.upgrades.wi[23].cost); player.wi.bought = Decimal.add(player.wi.bought, 1) }
@@ -1503,7 +1503,7 @@ addLayer("wi", {
 			cost: () => new Decimal(25000),
 			currencyLayer: "wi",
 			currencyInternalName: "knowledge",
-			currencyDisplayName: "knowledge",
+			currencyDisplayName: "知识",
 			unl() { return player[this.layer].unl },
 			extraReq() { return hasUpg("wi", 23) && player.wi.points.gt(player.wi.bought) },
 			onPurchase() { player.wi.spent = Decimal.add(player.wi.spent, tmp.upgrades.wi[24].cost); player.wi.bought = Decimal.add(player.wi.bought, 1) }
@@ -1513,7 +1513,7 @@ addLayer("wi", {
 			cost: () => new Decimal(25000),
 			currencyLayer: "wi",
 			currencyInternalName: "knowledge",
-			currencyDisplayName: "knowledge",
+			currencyDisplayName: "知识",
 			unl() { return player[this.layer].unl },
 			extraReq() { return hasUpg("wi", 24) && player.wi.points.gt(player.wi.bought) },
 			onPurchase() { player.wi.spent = Decimal.add(player.wi.spent, tmp.upgrades.wi[25].cost); player.wi.bought = Decimal.add(player.wi.bought, 1) }

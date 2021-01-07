@@ -179,7 +179,7 @@ addLayer("wf", {
 				let data = tmp.buyables[this.layer][this.id]
 				return "等级 " + player[this.layer].buyables[this.id] + "<br/>" + 
 				"花费：" + format(data.cost) + " 金币<br/>" + 
-				"增加已完成的工作的效果。<br/>" + 
+				"增加已完成的工作效果。<br/>" + 
 				"目前：^" + format(data.effect)
 			},
 			unl() { return player[this.layer].unl },
@@ -495,7 +495,7 @@ addLayer("b", {
 					? "您拥有 " + format(player[this.layer].buyables[this.id], 0) + " 已存入的金币，因此点数产量变为了 " + format(data.effect) + " 倍。<br/>" + 
 						"此项业务目前" + (player.b.banking == 1 ? "已激活。<br/>" + 
 						"点击此处以取消此项业务并获得 " + format(player.c.points.sub(player.b.buyables[11]).max(0), 0) + " 已存入的金币。" : "未激活。<br/>" + 
-						"点击此处以激活此项业务，激活后，点数产量，金币获取量，工人效果，已完成的工作的效果，银行效果及“使之前的‘增加’升级效果更好”的升级效果变为原来的平方根。")
+						"点击此处以激活此项业务，激活后，点数产量，金币获取量，工人效果，已完成的工作效果，银行效果及“使之前的‘增加’升级效果更好”的升级效果变为原来的平方根。")
 					: (player.b.banking > 0 ? "Please disable the current active banking before you can activate another one." : "You need to build at least 2 banks before you can use this function.")
 			},
 			unl() { return true },
