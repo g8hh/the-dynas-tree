@@ -12,7 +12,7 @@ var cnItems = {
     _OTHER_: [],
 
     //主界面等
-    'The Dynas Tree': '王朝之系谱 - The Dynas Tree',
+    '☀️ The Dynas Tree v0.': ' ☀️ 王朝之系谱 - The Dynas Tree v0.',
     'Congratulations! You have reached the point of singularity and beaten this game, but for now...': '恭喜！您已经到达了奇点，暂时您可以认为自己已经通关了……',
     'In case you haven\'t noticed, there will be more content after this. You can keep continuing. but the game has been paused, since singularity was meant to be a forced prestige layer.': '希望您明白，不出意外的话，这后面还会有其他内容。您当然可以接着继续玩，但目前来说进度不会有太大提升了，因为奇点本意就是这个。',
     'Play Again': '从头再来',
