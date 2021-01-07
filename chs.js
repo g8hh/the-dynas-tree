@@ -239,7 +239,7 @@ var cnItems = {
     'You can automate casting spells.': '您可以自动施放魔咒。',
     'You can automate buying spell rebuyables.': '您可以自动购买魔咒的重复购买项。',
     'Unlock The Queue, which lets you plan out which tiles for soldiers to conquer them automatically. Also recruiting soldiers, hiring managers, and exploring territories no longer resets anything.': '解锁队列功能，您可以控制士兵自动征服相应的方格。另外，招募士兵，雇佣经理和探索领土不再重置任何东西。',
-    'Update the queue': '升级队列',
+    'Update the queue': '更新队列',
     'Queue strategy': '队列策略',
     ' Least difficulty': ' 难度最低',
     ' Most encounter chance': ' 最高遭遇概率',
@@ -285,6 +285,17 @@ var cnItems = {
     'Unlocks a new banking option.': '解锁一项新的银行业务。',
     'You gain 100% of your spiritual power gain on reset every second (only when you unlocked the layer).': '您每秒获得魂灵重置时的魂灵能量获取量100%的魂灵能量(只在解锁该层级后生效)。',
     'Reduces the “Extend the fabric of time using spiritual power” cost scaling.': '使“使用魂灵能量延展时间的结构”重复购买项的花费增加速度降低。',
+    'You thought it was a discovery, but it was me, A Brick!': '您以为您发现了什么，但其实是我哒，一块砖块！',
+    'Wait, it\'s all bricks? Always has been.': '那是……砖块？一直都是。',
+    'One does not simply discover a brick.': '砖块不是你想找，想找就能找。',
+    'I\'m sorry, but the brick is in this castle.': '很抱歉，但砖块就在这座城堡里。',
+    'Honor reduces the requirements of wisdom.': '荣誉值可以减少智慧的需求。',
+    'Knowledge adds time to the first exotic spell\'s effect.': '知识可以使第一个异域魔咒的效果中基于的时间变得更多。',
+    'Exotic spells are also be able to be casted by the auto spell milestone.': '自动施放魔咒的里程碑对异域魔咒也生效。',
+    'Knowledge reduces the requirement of wisdom.': '知识可以减少智慧的需求。',
+    'Knowledge and wisdom reduces the requirement of wisdom.': '知识和智慧可以减少智慧的需求。',
+    'Unlocks an exotic spell. Exotic spells are not affected by amount of shrines or spiritual power upgrades.': '解锁一个异域魔咒。异域魔咒不受圣地数量或魂灵能量升级的影响。',
+    'Knowledge boosts spiritual power gain.': '知识可以使魂灵能量获取量变得更多。',
     //层级4结束
 
 

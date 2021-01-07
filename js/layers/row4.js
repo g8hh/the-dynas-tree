@@ -1555,7 +1555,7 @@ addLayer("wi", {
 			cost: () => new Decimal(60000),
 			currencyLayer: "wi",
 			currencyInternalName: "knowledge",
-			currencyDisplayName: "knowledge",
+			currencyDisplayName: "知识",
 			unl() { return player[this.layer].unl },
 			extraReq() { return hasUpg("wi", 25) && player.wi.points.gt(player.wi.bought) },
 			effect() {
@@ -1571,7 +1571,7 @@ addLayer("wi", {
 			cost: () => new Decimal(1e25),
 			currencyLayer: "wi",
 			currencyInternalName: "knowledge",
-			currencyDisplayName: "knowledge",
+			currencyDisplayName: "知识",
 			unl() { return player[this.layer].unl },
 			extraReq() { return hasUpg("wi", 42) && player.wi.points.gt(player.wi.bought) },
 			effect() {
@@ -1589,7 +1589,7 @@ addLayer("wi", {
 			cost: () => new Decimal(1e16),
 			currencyLayer: "wi",
 			currencyInternalName: "knowledge",
-			currencyDisplayName: "knowledge",
+			currencyDisplayName: "知识",
 			unl() { return player[this.layer].unl },
 			extraReq() { return hasUpg("wi", 43) && player.wi.points.gt(player.wi.bought) },
 			onPurchase() { player.wi.spent = Decimal.add(player.wi.spent, tmp.upgrades.wi[42].cost); player.wi.bought = Decimal.add(player.wi.bought, 1) }
@@ -1599,7 +1599,7 @@ addLayer("wi", {
 			cost: () => new Decimal(1e10),
 			currencyLayer: "wi",
 			currencyInternalName: "knowledge",
-			currencyDisplayName: "knowledge",
+			currencyDisplayName: "知识",
 			unl() { return player[this.layer].unl },
 			extraReq() { return hasUpg("wi", 44) && player.wi.points.gt(player.wi.bought) },
 			effect() {
@@ -1627,7 +1627,7 @@ addLayer("wi", {
 			cost: () => new Decimal(150000),
 			currencyLayer: "wi",
 			currencyInternalName: "knowledge",
-			currencyDisplayName: "knowledge",
+			currencyDisplayName: "知识",
 			unl() { return player[this.layer].unl },
 			extraReq() { return hasUpg("wi", 45) && player.wi.points.gt(player.wi.bought) },
 			onPurchase() { player.wi.spent = Decimal.add(player.wi.spent, tmp.upgrades.wi[44].cost); player.wi.bought = Decimal.add(player.wi.bought, 1) }
@@ -1637,7 +1637,7 @@ addLayer("wi", {
 			cost: () => new Decimal(100000),
 			currencyLayer: "wi",
 			currencyInternalName: "knowledge",
-			currencyDisplayName: "knowledge",
+			currencyDisplayName: "知识",
 			unl() { return player[this.layer].unl },
 			extraReq() { return hasUpg("wi", 35) && player.wi.points.gt(player.wi.bought) },
 			effect() {
