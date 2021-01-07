@@ -884,7 +884,7 @@ addLayer("t", {
 			reward:() => "You unlock more spiritual power rebuyable upgrades.",
 			countsAs: [12, 21, 22],
 			goal:() => new Decimal(1500000),
-			currencyDisplayName: "points",
+			currencyDisplayName: "点数",
 			currencyInternalName: "points",
 			unl:() => player.bd.buyables[21].gte(5),
         },
@@ -896,7 +896,7 @@ addLayer("t", {
 			effectDisplay:(eff) => "×" + format(eff),
 			countsAs: [12, 21, 22],
 			goal:() => new Decimal(5000000),
-			currencyDisplayName: "points",
+			currencyDisplayName: "点数",
 			currencyInternalName: "points",
 			unl:() => player.bd.buyables[21].gte(6),
         },
@@ -1010,17 +1010,17 @@ addLayer("t", {
 			},
             map: { title: () => "World Map", unl: () => player.so.buyables[13].gte(1), content: [
 				["blank", "5px"],
-				["display-text", function () { return "You have " + formatWhole(player.t.lands) + " conquered land, which are decreasing the territories' requirements by ÷" + format(tmp.layerEffs.t.territoryRed) + " and soldiers' requirements by ÷" + format(tmp.layerEffs.t.soldierRed) + "." }], 
-				["display-text", function () { return "Your current honor is " + formatWhole(player.t.elo) + "." }], 
+				["display-text", function () { return "您拥有 " + formatWhole(player.t.lands) + " 已征服的土地，因此领土的需求变为 ÷" + format(tmp.layerEffs.t.territoryRed) + " ，士兵的需求变为 ÷" + format(tmp.layerEffs.t.soldierRed) + "。" }], 
+				["display-text", function () { return "您目前的荣誉值为 " + formatWhole(player.t.elo) + "。" }], 
 				["blank", "0px"], "map-box", ["blank", "0px"],
 				["info-box", [
-					["display-text", function () { return "Selected Tile: " + mapFocusDesc + "<br/><p style='color:transparent; font-size:0.001px'>" + format(player.time) + "</p>"}],
+					["display-text", function () { return "选择方格：" + mapFocusDesc + "<br/><p style='color:transparent; font-size:0.001px'>" + format(player.time) + "</p>"}],
 					["display-text", function () { 
 						let entCha = mapFocusDesc === "Unselected" ? 0 : getMapEncounterChance(mapFocusX, mapFocusY)
 					return (
 						mapFocusDesc === "Unselected" ? "<h5>Click on a tile on the map to view its details.<br/><br/>Drag the tiles to move the map around.</h5>" :
 						isConquered(mapFocusX, mapFocusY) ? "<h5>This land has already been conquered.<br/><br/>You can not reconquer the land that you already conquered, duh!</h5>" : 
-						"<h5>Difficulty: " + format(getMapDifficulty(mapFocusX, mapFocusY)) + " -> Best Conquer Time: " + formatTime(Decimal.div(getMapDifficulty(mapFocusX, mapFocusY), soldierStats.spd)) + "<br/>Encounter Chance: " + (entCha.eq(0) ? "not present" : "about " + (entCha.lt(1) ? "once every " + formatTime(Decimal.div(1, entCha)) : format(entCha, 3) + " every second")) + (isConquerable(mapFocusX, mapFocusY) ? (player.world.conquering && player.world.conquerX == mapFocusX && player.world.conquerY == mapFocusY ? "<br/>You are conquering this tile. Click it again to abort conquering." : "<br/>Click on the tile again to initialize conquering on that tile.") : "<br/>This tile is too far for you to initialize conquering.")
+						"<h5>难度：" + format(getMapDifficulty(mapFocusX, mapFocusY)) + " -> 最佳征服时间：" + formatTime(Decimal.div(getMapDifficulty(mapFocusX, mapFocusY), soldierStats.spd)) + "<br/>遭遇概率：" + (entCha.eq(0) ? "不存在" : "约" + (entCha.lt(1) ? "每 " + formatTime(Decimal.div(1, entCha)) + " 一次" : "每秒 " + format(entCha, 3) + " 次")) + (isConquerable(mapFocusX, mapFocusY) ? (player.world.conquering && player.world.conquerX == mapFocusX && player.world.conquerY == mapFocusY ? "<br/>You are conquering this tile. Click it again to abort conquering." : "<br/>Click on the tile again to initialize conquering on that tile.") : "<br/>This tile is too far for you to initialize conquering.")
 					) + "<p style='color:transparent; font-size:0.001px'>" + format(player.time) + "</p>" }]
 					], {"width": "480px"}
 				], 
@@ -1028,9 +1028,9 @@ addLayer("t", {
 					["info-box", [
 						["display-text", function () { return "Your Soldiers<h5 style='font-size:6px'><br/>" }],
 						["mini-bar", function () { return format(Decimal.div(player.world.health, soldierStats.mhp)) }, {"background-color": "#300"}],
-						["display-text", function () { return "<h5>Health: " + formatWhole(player.world.health) + " / " + formatWhole(soldierStats.mhp) + "</h5>" }],
-						["display-text", function () { return "<h5>Power: " + formatWhole(Decimal.div(player.world.health, soldierStats.mhp).mul(soldierStats.atk)) + " / " + formatWhole(soldierStats.atk) + "</h5>" }],
-						["display-text", function () { return "<h5>Honor: " + format(player.t.elo) + "</h5>" }],
+						["display-text", function () { return "<h5>生命值：" + formatWhole(player.world.health) + " / " + formatWhole(soldierStats.mhp) + "</h5>" }],
+						["display-text", function () { return "<h5>强度：" + formatWhole(Decimal.div(player.world.health, soldierStats.mhp).mul(soldierStats.atk)) + " / " + formatWhole(soldierStats.atk) + "</h5>" }],
+						["display-text", function () { return "<h5>荣誉值：" + format(player.t.elo) + "</h5>" }],
 						], {"width": "228px"}
 					], 
 					["info-box", [
