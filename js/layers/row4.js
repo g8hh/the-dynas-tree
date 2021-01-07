@@ -518,7 +518,7 @@ addLayer("bd", {
 			display() { // Everything else displayed in the buyable button after the title
 				let data = tmp.buyables[this.layer][this.id]
 				return data.canAfford
-					? "您拥有 " + format(player[this.layer].buyables[this.id], 0) + " 酒馆，因此找到工作和完成工作的速度变为了 " + format(data.effect) + " 倍。" + 
+					? "您拥有 " + format(player[this.layer].buyables[this.id], 0) + " 酒馆，因此找到和完成工作的速度变为了 " + format(data.effect) + " 倍。" + 
 						(player.bd.building == 11 ? "<br/>" + 
 						"进度：" + format(player.bd.progress, 0) + " / " + format(data.cost, 0) + " (" + format(Decimal.div(player.bd.progress, data.cost).mul(100)) + "%) <br/>" + 
 						"预计完成时间：" + (Decimal.lte(tmp.layerEffs.bd.speed, 0) ? "永不" : formatTime(data.cost.sub(player.bd.progress).div(tmp.layerEffs.bd.speed))) + "<br/>" + 
@@ -841,7 +841,7 @@ addLayer("t", {
 			unl:() => player.t.best.gte(1),
         },
         12: {
-            name:() => "Unemployed Workfinders",
+            name:() => "中介失业了",
 			desc:() => "You can not access the workfinder layer.",
 			reward:() => "Find and finish work faster based on points.",
 			effect() {
@@ -852,34 +852,34 @@ addLayer("t", {
 			},
 			effectDisplay:(eff) => "×" + format(eff),
 			goal:() => new Decimal("e150"),
-			currencyDisplayName: "points",
+			currencyDisplayName: "点数",
 			currencyInternalName: "points",
 			unl:() => player.bd.buyables[21].gte(2),
         },
         21: {
-            name:() => "Market Crash",
-			desc:() => "You can not access the bank layer <i>and</i> the workfinder layer.",
+            name:() => "市场崩盘",
+			desc:() => "您无法使用银行层级 <i>和</i> 工作中介层级。",
 			reward:() => "You can access more banking options.",
 			countsAs: [12],
 			goal:() => new Decimal("e206"),
-			currencyDisplayName: "points",
+			currencyDisplayName: "点数",
 			currencyInternalName: "points",
 			unl:() => player.bd.buyables[21].gte(3),
         },
         22: {
-            name:() => "From Square One",
-			desc:() => "You can not access <i>any</i> layer below this one (well, except for the coin layer, of course).",
+            name:() => "从头开始",
+			desc:() => "您无法使用 <i>任何</i> 低于此层级的层级(当然，金币层级除外)。",
 			reward:() => "Boost the first two obstacles' buffs based on your total territory count.",
 			effect:() => player.t.best.add(1).sqrt(),
 			effectDisplay:(eff) => "×" + format(eff),
 			countsAs: [12, 21],
 			goal:() => new Decimal("e50"),
-			currencyDisplayName: "points",
+			currencyDisplayName: "点数",
 			currencyInternalName: "points",
 			unl:() => player.bd.buyables[21].gte(4),
         },
 		31: {
-            name:() => "Unspendable Coins",
+            name:() => "花不出去的金币",
 			desc:() => "“From Square One” and “Time Banking”'s debuff are applied at once.",
 			reward:() => "You unlock more spiritual power rebuyable upgrades.",
 			countsAs: [12, 21, 22],
@@ -889,7 +889,7 @@ addLayer("t", {
 			unl:() => player.bd.buyables[21].gte(5),
         },
 		32: {
-            name:() => "Unpowered by Meta",
+            name:() => "无力的多元",
 			desc:() => "“From Square One” and “Metacoin Banking”'s debuff are applied at once.",
 			reward:() => "Boost the first two obstacles' buffs based on your number of roads.",
 			effect:() => player.bd.buyables[21].add(1).sqrt(),

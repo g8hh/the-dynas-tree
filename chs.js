@@ -216,6 +216,14 @@ var cnItems = {
     'D: Hire builders': '快捷键D：雇佣建造者',
     'Coin gain and point generation is square rooted.': '金币获取量和点数产量变为原来的平方根。',
     'Builders build faster based on points.': '根据点数，使建造者的建造速度变得更快。',
+    'You can not access the workfinder layer.': '您无法使用工作中介层级。',
+    'Find and finish work faster based on points.': '根据点数，使找到和完成工作的速度变得更快。',
+    'You can access more banking options.': '使可使用的银行业务项变得更多。',
+    'Boost the first two obstacles\' buffs based on your total territory count.': '根据领土总数，使前两个障碍给予的奖励变得更多。',
+    '“From Square One” and “Time Banking”\'s debuff are applied at once.': '“从头开始” 和 “时间业务” 的负面效果同时触发。',
+    'You unlock more spiritual power rebuyable upgrades.': '魂灵能量解锁更多的重复购买项。',
+    '“From Square One” and “Metacoin Banking”\'s debuff are applied at once.': '“从头开始” 和 “多元金币业务” 的负面效果同时触发。',
+    'Boost the first two obstacles\' buffs based on your number of roads.': '根据道路数量，使前两个障碍给予的奖励变得更多。',
     //层级4结束
 
 
@@ -333,9 +341,12 @@ var cnPostfix = {
 var cnExcludeWhole = [
     /^x?\d+(\.\d+)?(e[+\-]?\d+)?\s*\-?$/, //12.34e+4
     /^\s*$/, //纯空格
+    /^x?\d{1,3}(\,\d+)+$/, //不抓取内容
     /^(.*)\d{1,2}(\.\d+)?e(\+?\d+)?(.*)$/, //不抓取内容
+    /^(.*)\d{1,3}(\,\d+)+(.*)$/, //不抓取内容
     /^(.*)\{(.+)\}(.*)$/, //不抓取内容
     /^(.*)了(.*)$/, //不抓取内容
+    /^(.*)倍(.*)$/, //不抓取内容
     /^(.*)的(.*)$/, //不抓取内容
     /^(.*)地(.*)$/, //不抓取内容
     /^(.*)得(.*)$/, //不抓取内容
@@ -349,7 +360,6 @@ var cnExcludeWhole = [
     /^世界(.*)$/, //不抓取内容
     /^需要(.*)$/, //不抓取内容
     /^预计完成时间(.*)$/, //不抓取内容
-    /^(.*)\d{1,3}(\,\d+)+(.*)$/, //不抓取内容
 ];
 var cnExcludePostfix = [
     /:?\s*x?\d+(\.\d+)?(e[+\-]?\d+)?\s*$/, //12.34e+4
