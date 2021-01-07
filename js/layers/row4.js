@@ -24,10 +24,10 @@ addLayer("m", {
 
 	name: "manager",
 	color: () => "#77FFFF",
-	resource: "managers",
+	resource: "经理",
 	row: 4,
 
-	baseResource: "banks",
+	baseResource: "银行",
 	baseAmount() { return player["b"].points },
 	branches: [["w", 1], ["b", 1]],
 
@@ -46,7 +46,7 @@ addLayer("m", {
 	},
 	effectDescription() {
 		eff = tmp.layerEffs.m;
-		return "which are boosting your coin and point gains by ×" + format(eff)
+		return "使金币获取量和点数获取量变为 " + format(eff) + " 倍"
 	},
 
 	gainMult() {
@@ -60,7 +60,7 @@ addLayer("m", {
 		0: {
 			requirementDesc: () => "1 Manager",
 			done() { return player[this.layer].best.gte(1) },
-			effectDesc: () => "You can bulk hire workers, workfinders and banks, workers and workfinders unlocks immediately, kickstart with " + format(1000000) + " coins, gain 10,000% of your coins gain on coin reset every second, and coin reset no longer reset anything. Some of the previous layers' milestones and upgrades' effects are also replaced for this milestone's reward."
+			effectDesc: () => "您可以批量雇佣工人、工作中介和建造银行。工人和工作中介直接解锁。初始拥有 " + format(1000000) + " 金币。每秒获得金币重置时的金币获取量10000%的金币。金币重置不再重置任何东西。一些之前层级的里程碑或升级中与此里程碑效果重复或被替换的项目，其效果也改变了。"
 		},
 		1: {
 			requirementDesc: () => "2 Managers",
@@ -131,7 +131,7 @@ addLayer("m", {
 			},
 			display() { // Everything else displayed in the buyable button after the title
 				let data = tmp.buyables[this.layer][this.id]
-				return "You have " + format(player[this.layer].buyables[this.id], 0) + " farmlands, which are boosting point generation by ×" + format(data.effect) + "." + "\nAllocation cost: " + formatWhole(data.cost) + " grasslands tiles and 1 managing power"
+				return "您拥有 " + format(player[this.layer].buyables[this.id], 0) + " 农田，使点数产量变为 " + format(data.effect) + " 倍。" + "<br/>分配花费：" + formatWhole(data.cost) + " 草地方格和1点管理权力"
 			},
 			unl() { return true },
 			canAfford() { return (!player.m.landsUndoMode && Decimal.gte(player.m.landsAvailable[1] - player.m.landsAllocated[1], tmp.buyables.m[11].cost) && player.m.points.mul(2).sub(player.m.allocated).gte(1)) || (player.m.landsUndoMode && player.m.buyables[11].gte(1)) },
@@ -157,7 +157,7 @@ addLayer("m", {
 			},
 			display() { // Everything else displayed in the buyable button after the title
 				let data = tmp.buyables[this.layer][this.id]
-				return "You have " + format(player[this.layer].buyables[this.id], 0) + " sheep farms, which are boosting point generation by ×" + format(data.effect) + "." + "\nAllocation cost: " + formatWhole(data.cost) + " tundra tiles and 1 managing power"
+				return "您拥有 " + format(player[this.layer].buyables[this.id], 0) + " 绵羊牧场，使点数产量变为 " + format(data.effect) + " 倍。" + "<br/>分配花费：" + formatWhole(data.cost) + " 苔原方格和1点管理权力"
 			},
 			unl() { return true },
 			canAfford() { return (!player.m.landsUndoMode && Decimal.gte(player.m.landsAvailable[5] - player.m.landsAllocated[5], tmp.buyables.m[12].cost) && player.m.points.mul(2).sub(player.m.allocated).gte(1)) || (player.m.landsUndoMode && player.m.buyables[12].gte(1)) },
@@ -183,7 +183,7 @@ addLayer("m", {
 			},
 			display() { // Everything else displayed in the buyable button after the title
 				let data = tmp.buyables[this.layer][this.id]
-				return "You have " + format(player[this.layer].buyables[this.id], 0) + " mines, which are boosting point generation by ×" + format(data.effect) + "." + "\nAllocation cost: " + formatWhole(data.cost) + " mountain tiles and 1 managing power"
+				return "您拥有 " + format(player[this.layer].buyables[this.id], 0) + " 矿井，使点数产量变为 " + format(data.effect) + " 倍。" + "<br/>分配花费：" + formatWhole(data.cost) + " 山脉方格和1点管理权力"
 			},
 			unl() { return true },
 			canAfford() { return (!player.m.landsUndoMode && Decimal.gte(player.m.landsAvailable[2] - player.m.landsAllocated[2], tmp.buyables.m[13].cost) && player.m.points.mul(2).sub(player.m.allocated).gte(1)) || (player.m.landsUndoMode && player.m.buyables[13].gte(1)) },
@@ -209,7 +209,7 @@ addLayer("m", {
 			},
 			display() { // Everything else displayed in the buyable button after the title
 				let data = tmp.buyables[this.layer][this.id]
-				return "You have " + format(player[this.layer].buyables[this.id], 0) + " large mines, which are boosting point generation by ×" + format(data.effect) + "." + "\nAllocation cost: " + formatWhole(data.cost) + " tall mountain tiles and 1 managing power"
+				return "您拥有 " + format(player[this.layer].buyables[this.id], 0) + " 大型矿井，使点数产量变为 " + format(data.effect) + " 倍。" + "<br/>分配花费：" + formatWhole(data.cost) + " 高山方格和1点管理权力"
 			},
 			unl() { return true },
 			canAfford() { return (!player.m.landsUndoMode && Decimal.gte(player.m.landsAvailable[3] - player.m.landsAllocated[3], tmp.buyables.m[14].cost) && player.m.points.mul(2).sub(player.m.allocated).gte(1)) || (player.m.landsUndoMode && player.m.buyables[14].gte(1)) },
@@ -235,7 +235,7 @@ addLayer("m", {
 			},
 			display() { // Everything else displayed in the buyable button after the title
 				let data = tmp.buyables[this.layer][this.id]
-				return "You have " + format(player[this.layer].buyables[this.id], 0) + " wood workshops, which are boosting point generation by ×" + format(data.effect) + "." + "\nAllocation cost: " + formatWhole(data.cost) + " forest tiles and 1 managing power"
+				return "您拥有 " + format(player[this.layer].buyables[this.id], 0) + " 木作坊，使点数产量变为 " + format(data.effect) + " 倍。" + "<br/>分配花费：" + formatWhole(data.cost) + " 森林方格和1点管理权力"
 			},
 			unl() { return true },
 			canAfford() { return (!player.m.landsUndoMode && Decimal.gte(player.m.landsAvailable[6] - player.m.landsAllocated[6], tmp.buyables.m[15].cost) && player.m.points.mul(2).sub(player.m.allocated).gte(1)) || (player.m.landsUndoMode && player.m.buyables[15].gte(1)) },
@@ -261,7 +261,7 @@ addLayer("m", {
 			},
 			display() { // Everything else displayed in the buyable button after the title
 				let data = tmp.buyables[this.layer][this.id]
-				return "You have " + format(player[this.layer].buyables[this.id], 0) + " large wood workshops, which are boosting point generation by ×" + format(data.effect) + "." + "\nAllocation cost: " + formatWhole(data.cost) + " rainforest tiles and 1 managing power"
+				return "您拥有 " + format(player[this.layer].buyables[this.id], 0) + " 大型木作坊，使点数产量变为 " + format(data.effect) + " 倍。" + "<br/>分配花费：" + formatWhole(data.cost) + " 雨林方格和1点管理权力"
 			},
 			unl() { return true },
 			canAfford() { return (!player.m.landsUndoMode && Decimal.gte(player.m.landsAvailable[8] - player.m.landsAllocated[8], tmp.buyables.m[16].cost) && player.m.points.mul(2).sub(player.m.allocated).gte(1)) || (player.m.landsUndoMode && player.m.buyables[16].gte(1)) },
@@ -287,7 +287,7 @@ addLayer("m", {
 			},
 			display() { // Everything else displayed in the buyable button after the title
 				let data = tmp.buyables[this.layer][this.id]
-				return "You have " + format(player[this.layer].buyables[this.id], 0) + " savanna transportations, which are boosting point generation by ×" + format(data.effect) + "." + "\nAllocation cost: " + formatWhole(data.cost) + " savanna tiles and 1 managing power"
+				return "您拥有 " + format(player[this.layer].buyables[this.id], 0) + " 荒原运输，使点数产量变为 " + format(data.effect) + " 倍。" + "<br/>分配花费：" + formatWhole(data.cost) + " 荒原方格和1点管理权力"
 			},
 			unl() { return true },
 			canAfford() { return (!player.m.landsUndoMode && Decimal.gte(player.m.landsAvailable[7] - player.m.landsAllocated[7], tmp.buyables.m[17].cost) && player.m.points.mul(2).sub(player.m.allocated).gte(1)) || (player.m.landsUndoMode && player.m.buyables[17].gte(1)) },
@@ -313,7 +313,7 @@ addLayer("m", {
 			},
 			display() { // Everything else displayed in the buyable button after the title
 				let data = tmp.buyables[this.layer][this.id]
-				return "You have " + format(player[this.layer].buyables[this.id], 0) + " desert transportations, which are boosting point generation by ×" + format(data.effect) + "." + "\nAllocation cost: " + formatWhole(data.cost) + " desert tiles and 1 managing power"
+				return "您拥有 " + format(player[this.layer].buyables[this.id], 0) + " 沙漠运输，使点数产量变为 " + format(data.effect) + " 倍。" + "<br/>分配花费：" + formatWhole(data.cost) + " 沙漠方格和1点管理权力"
 			},
 			unl() { return true },
 			canAfford() { return (!player.m.landsUndoMode && Decimal.gte(player.m.landsAvailable[4] - player.m.landsAllocated[4], tmp.buyables.m[18].cost) && player.m.points.mul(2).sub(player.m.allocated).gte(1)) || (player.m.landsUndoMode && player.m.buyables[18].gte(1)) },
@@ -339,7 +339,7 @@ addLayer("m", {
 			},
 			display() { // Everything else displayed in the buyable button after the title
 				let data = tmp.buyables[this.layer][this.id]
-				return "You have " + format(player[this.layer].buyables[this.id], 0) + " fish farms, which are boosting point generation by ×" + format(data.effect) + "." + "\nAllocation cost: " + formatWhole(data.cost) + " waters tiles and 1 managing power"
+				return "您拥有 " + format(player[this.layer].buyables[this.id], 0) + " 养鱼场，使点数产量变为 " + format(data.effect) + " 倍。" + "<br/>分配花费：" + formatWhole(data.cost) + " 水域方格和1点管理权力"
 			},
 			unl() { return true },
 			canAfford() { return (!player.m.landsUndoMode && Decimal.gte(player.m.landsAvailable[0] - player.m.landsAllocated[0], tmp.buyables.m[19].cost) && player.m.points.mul(2).sub(player.m.allocated).gte(1)) || (player.m.landsUndoMode && player.m.buyables[19].gte(1)) },
@@ -365,7 +365,7 @@ addLayer("m", {
 			},
 			display() { // Everything else displayed in the buyable button after the title
 				let data = tmp.buyables[this.layer][this.id]
-				return "You have " + format(player[this.layer].buyables[this.id], 0) + " ice farms, which are boosting point generation by ×" + format(data.effect) + "." + "\nAllocation cost: " + formatWhole(data.cost) + " iced waters tiles and 1 managing power"
+				return "您拥有 " + format(player[this.layer].buyables[this.id], 0) + " 冰之农场，使点数产量变为 " + format(data.effect) + " 倍。" + "<br/>分配花费：" + formatWhole(data.cost) + " 浮冰方格和1点管理权力"
 			},
 			unl() { return true },
 			canAfford() { return (!player.m.landsUndoMode && Decimal.gte(player.m.landsAvailable[9] - player.m.landsAllocated[9], tmp.buyables.m[20].cost) && player.m.points.mul(2).sub(player.m.allocated).gte(1)) || (player.m.landsUndoMode && player.m.buyables[20].gte(1)) },
@@ -390,48 +390,48 @@ addLayer("m", {
 			]},
 			lands: { title: () => "Land & Jobs Management", unl: () => hasMilestone("m", 8), content: [
 				["display-text",
-					function () { return "You have allocated " + format(player.m.allocated, 0) + " / " + format(player.m.points.mul(2), 0) + ` managing power.<h5>Each manager gives 2 managing power.<br/>Total land multiplier to point generation: ×` + format(tmp.landMul) }],
+					function () { return "您共有 " + format(player.m.points.mul(2), 0) + " 点管理权力，已分配 " + format(player.m.allocated, 0) + " 点" + `管理权力。<h5>Each manager gives 2 managing power.<br/>土地对点数产量的总加成为：` + format(tmp.landMul) + ` 倍`}],
 				["blank", "5px"],
 				"respec-button",
 				["blank", "5px"],
 				["display-text",
-					function () { return "<h3>[<span style='color:#7FFF00'>;;;</span>] Grasslands</h3><h5>" + formatWhole(player.m.landsAllocated[1]) + " / " + formatWhole(player.m.landsAvailable[1]) + " allocated</h5>" + "<br/><p style='color:transparent; font-size:0.001px'>" + format(player.time) + "</p>" }],
+					function () { return "<h3>[<span style='color:#7FFF00'>;;;</span>] 草地</h3><h5>共 " + formatWhole(player.m.landsAvailable[1]) + " ，已分配 " + formatWhole(player.m.landsAllocated[1]) + " </h5>" + "<br/><p style='color:transparent; font-size:0.001px'>" + format(player.time) + "</p>" }],
 				["row", [["buyable", 11]]],
 				["blank", "5px"],
 				["display-text",
-					function () { return "<h3>[<span style='color:#FFFFFF'>:::</span>] Tundra</h3><h5>" + formatWhole(player.m.landsAllocated[5]) + " / " + formatWhole(player.m.landsAvailable[5]) + " allocated</h5>" + "<br/><p style='color:transparent; font-size:0.001px'>" + format(player.time) + "</p>" }],
+					function () { return "<h3>[<span style='color:#FFFFFF'>:::</span>] 苔原</h3><h5>共 " + formatWhole(player.m.landsAvailable[5]) + " ，已分配 " + formatWhole(player.m.landsAllocated[5]) + " </h5>" + "<br/><p style='color:transparent; font-size:0.001px'>" + format(player.time) + "</p>" }],
 				["row", [["buyable", 12]]],
 				["blank", "5px"],
 				["display-text",
-					function () { return "<h3>[<span style='color:#7FFF00'>^^^</span>] Mountains</h3><h5>" + formatWhole(player.m.landsAllocated[2]) + " / " + formatWhole(player.m.landsAvailable[2]) + " allocated</h5>" + "<br/><p style='color:transparent; font-size:0.001px'>" + format(player.time) + "</p>" }],
+					function () { return "<h3>[<span style='color:#7FFF00'>^^^</span>] 山脉</h3><h5>共 " + formatWhole(player.m.landsAvailable[2]) + " ，已分配 " + formatWhole(player.m.landsAllocated[2]) + " </h5>" + "<br/><p style='color:transparent; font-size:0.001px'>" + format(player.time) + "</p>" }],
 				["row", [["buyable", 13]]],
 				["blank", "5px"],
 				["display-text",
-					function () { return "<h3>[<span style='color:#FFFFFF'>AAA</span>] Tall Mountains</h3><h5>" + formatWhole(player.m.landsAllocated[3]) + " / " + formatWhole(player.m.landsAvailable[3]) + " allocated</h5>" + "<br/><p style='color:transparent; font-size:0.001px'>" + format(player.time) + "</p>" }],
+					function () { return "<h3>[<span style='color:#FFFFFF'>AAA</span>] 高山</h3><h5>共 " + formatWhole(player.m.landsAvailable[3]) + " ，已分配 " + formatWhole(player.m.landsAllocated[3]) + " </h5>" + "<br/><p style='color:transparent; font-size:0.001px'>" + format(player.time) + "</p>" }],
 				["row", [["buyable", 14]]],
 				["blank", "5px"],
 				["display-text",
-					function () { return "<h3>[<span style='color:#00FF00'>TTT</span>] Forest</h3><h5>" + formatWhole(player.m.landsAllocated[6]) + " / " + formatWhole(player.m.landsAvailable[6]) + " allocated</h5>" + "<br/><p style='color:transparent; font-size:0.001px'>" + format(player.time) + "</p>" }],
+					function () { return "<h3>[<span style='color:#00FF00'>TTT</span>] 森林</h3><h5>共 " + formatWhole(player.m.landsAvailable[6]) + " ，已分配 " + formatWhole(player.m.landsAllocated[6]) + " </h5>" + "<br/><p style='color:transparent; font-size:0.001px'>" + format(player.time) + "</p>" }],
 				["row", [["buyable", 15]]],
 				["blank", "5px"],
 				["display-text",
-					function () { return "<h3>[<span style='color:#007F00'>♠♠♠</span>] Rainforest</h3><h5>" + formatWhole(player.m.landsAllocated[8]) + " / " + formatWhole(player.m.landsAvailable[8]) + " allocated</h5>" + "<br/><p style='color:transparent; font-size:0.001px'>" + format(player.time) + "</p>" }],
+					function () { return "<h3>[<span style='color:#007F00'>♠♠♠</span>] 雨林</h3><h5>共 " + formatWhole(player.m.landsAvailable[8]) + " ，已分配 " + formatWhole(player.m.landsAllocated[8]) + " </h5>" + "<br/><p style='color:transparent; font-size:0.001px'>" + format(player.time) + "</p>" }],
 				["row", [["buyable", 16]]],
 				["blank", "5px"],
 				["display-text",
-					function () { return "<h3>[<span style='color:#FFFF7F'>,,,</span>] Savanna</h3><h5>" + formatWhole(player.m.landsAllocated[7]) + " / " + formatWhole(player.m.landsAvailable[7]) + " allocated</h5>" + "<br/><p style='color:transparent; font-size:0.001px'>" + format(player.time) + "</p>" }],
+					function () { return "<h3>[<span style='color:#FFFF7F'>,,,</span>] 荒原</h3><h5>共 " + formatWhole(player.m.landsAvailable[7]) + " ，已分配 " + formatWhole(player.m.landsAllocated[7]) + " </h5>" + "<br/><p style='color:transparent; font-size:0.001px'>" + format(player.time) + "</p>" }],
 				["row", [["buyable", 17]]],
 				["blank", "5px"],
 				["display-text",
-					function () { return "<h3>[<span style='color:#FFFF7F'>...</span>] Desert</h3><h5>" + formatWhole(player.m.landsAllocated[4]) + " / " + formatWhole(player.m.landsAvailable[4]) + " allocated</h5>" + "<br/><p style='color:transparent; font-size:0.001px'>" + format(player.time) + "</p>" }],
+					function () { return "<h3>[<span style='color:#FFFF7F'>...</span>] 沙漠</h3><h5>共 " + formatWhole(player.m.landsAvailable[4]) + " ，已分配 " + formatWhole(player.m.landsAllocated[4]) + " </h5>" + "<br/><p style='color:transparent; font-size:0.001px'>" + format(player.time) + "</p>" }],
 				["row", [["buyable", 18]]],
 				["blank", "5px"],
 				["display-text",
-					function () { return "<h3>[<span style='color:#0000FF'>~~~</span>] Waters</h3><h5>" + formatWhole(player.m.landsAllocated[0]) + " / " + formatWhole(player.m.landsAvailable[0]) + " allocated</h5>" + "<br/><p style='color:transparent; font-size:0.001px'>" + format(player.time) + "</p>" }],
+					function () { return "<h3>[<span style='color:#0000FF'>~~~</span>] 水域</h3><h5>共 " + formatWhole(player.m.landsAvailable[0]) + " ，已分配 " + formatWhole(player.m.landsAllocated[0]) + " </h5>" + "<br/><p style='color:transparent; font-size:0.001px'>" + format(player.time) + "</p>" }],
 				["row", [["buyable", 19]]],
 				["blank", "5px"],
 				["display-text",
-					function () { return "<h3>[<span style='color:#7F7FFF'>~~~</span>] Iced Waters</h3><h5>" + formatWhole(player.m.landsAllocated[9]) + " / " + formatWhole(player.m.landsAvailable[9]) + " allocated</h5>" + "<br/><p style='color:transparent; font-size:0.001px'>" + format(player.time) + "</p>" }],
+					function () { return "<h3>[<span style='color:#7F7FFF'>~~~</span>] 浮冰</h3><h5>共 " + formatWhole(player.m.landsAvailable[9]) + " ，已分配 " + formatWhole(player.m.landsAllocated[9]) + " </h5>" + "<br/><p style='color:transparent; font-size:0.001px'>" + format(player.time) + "</p>" }],
 				["row", [["buyable", 20]]],
 				["blank", "5px"],
 			]},
@@ -443,7 +443,7 @@ addLayer("m", {
 			["prestige-button", function () { return "Hire " }],
 			["blank", "5px"],
 			["display-text",
-				function () { return "You have at best " + format(player.m.best, 0) + " " + " managers." }],
+				function () { return "您最高拥有 " + format(player.m.best, 0) + " " + " 经理。" }],
 			["blank", "5px"], ["microtabs", "stuff"],
 		],
 
