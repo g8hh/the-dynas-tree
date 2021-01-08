@@ -22,7 +22,7 @@ addLayer("m", {
 
 	layerShown() { return hasUpg("wf", 25) || player[this.layer].unl },
 
-	name: "经理",
+	name: "manager",
 	color: () => "#77FFFF",
 	resource: "经理",
 	row: 4,
