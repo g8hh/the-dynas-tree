@@ -150,15 +150,15 @@ function getMapEncounter (x, y) {
 	
 	// Max name length = 28
 	var names = [
-		["邻国的船只", "一只克总", "一群鲨鱼"],
-		["邻国的军队", "一群熊"],
-		["邻国的军队"],
-		["邻国的军队"],
-		["邻国的军队"],
-		["邻国的军队"],
-		["邻国的军队"],
-		["邻国的军队"],
-		["邻国的军队"],
+		["Ship of Neighboring Country", "A Cthulhu", "A Shiver of Sharks"],
+		["Army of Neighboring Country", "A Sloth of Bears"],
+		["Army of Neighboring Country"],
+		["Army of Neighboring Country"],
+		["Army of Neighboring Country"],
+		["Army of Neighboring Country"],
+		["Army of Neighboring Country"],
+		["Army of Neighboring Country"],
+		["Army of Neighboring Country"],
 	]
 	
 	var id = getTileType(x, y);
