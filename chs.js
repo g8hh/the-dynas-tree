@@ -348,6 +348,7 @@ var cnItems = {
     'Don\'t look at me, I\'m a brick, you should be looking at this instead ->': '看我作甚，别看了，一块砖块而已，看看这个吧 ->',
     'Unlock the Subjects tab. Note that this discovery will reset your wisdom back to 0 and will make them harder to get, so be ready first!': '解锁学科选项卡。注意此发现会将智慧重置回0，并使智慧更难获得，因此您应该先做好相应的准备！',
     'Respec Wisdom Discovers': '洗点智慧的发现',
+    '这将同时强制进行一次 "wisdom" 重置！': '这将同时强制进行一次智慧重置！',
     'Philosophy': '哲学',
     'Mathematics': '数学',
     'Psychology': '心理学',

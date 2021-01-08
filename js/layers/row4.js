@@ -1339,7 +1339,7 @@ addLayer("wi", {
 	layerShown() { return player.bd.buyables[31].gte(1) || player[this.layer].unl },
 
 	color: () => "#0077ff",
-	name: "智慧",
+	name: "wisdom",
 	resource: "智慧",
 	row: 4,
 
