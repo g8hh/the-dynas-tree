@@ -1,0 +1,333 @@
+﻿<!DOCTYPE html>
+<head>
+	<!-- Abandoned Discord server: https://discord.gg/KHsjfZF -->
+	<meta charset="utf-8">
+	<script>
+		const modInfo = {
+			name: "The Dynas Tree",
+			id: "dyntree",
+			pointsName: "points",
+			offlineLimit: 1  // In hours
+		}
+	</script>
+	<title>王朝之系谱 - The Dynas Tree</title>
+	<link rel="shortcut icon" href="favicon.png" />
+	<link rel="stylesheet" type="text/css" href="style.css" />
+<!--
+	<link href="https://fonts.googleapis.com/css?family=Inconsolata:wght@300;700" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Inconsolata:wdth@150&display=swap" rel="stylesheet">
+-->
+	
+<script src="//g8hh.com/static/js/jquery.min.js"></script>
+	<script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.12/vue.min.js"></script>
+	<script type="text/javascript" src="js/modal.js"></script>
+	<script type="text/javascript" src="js/break_eternity.js"></script>
+	<script type="text/javascript" src="js/layerSupport.js"></script>
+	<script type="text/javascript" src="js/utils.js"></script>
+	<script type="text/javascript" src="js/saves.js"></script>
+	<script type="text/javascript" src="js/map.js"></script>
+
+	<script type="text/javascript" src="js/layers/row1.js"></script>
+	<script type="text/javascript" src="js/layers/row2.js"></script>
+	<script type="text/javascript" src="js/layers/row3.js"></script>
+	<script type="text/javascript" src="js/layers/row4.js"></script>
+	<script type="text/javascript" src="js/layers/row5.js"></script>
+
+	<script type="text/javascript" src="js/temp.js"></script>
+	<script type="text/javascript" src="js/game.js"></script>
+	<script type="text/javascript" src="js/v.js"></script>
+	<script type="text/javascript" src="js/canvas.js"></script>
+</head>
+<body onload="load()">
+<script src="chs.js?202106041511"></script>
+<script src="//g8hh.com/zh/core.js"></script>
+	<div id="app">
+		<div class="vl" v-if="player.tab!='tree'&&player.tab!='gameEnded'"></div>
+		<div v-if="player.tab=='gameEnded'" class="fullWidth">
+			<br>
+			<h2>{{modInfo.name}} {{VERSION.withoutName}}</h2><br><br>
+			<h3>Congratulations! You have reached the point of singularity and beaten this game, but for now...</h3><br>
+			In case you haven't noticed, there will be more content after this. You can keep continuing. but the game has been paused, since singularity was meant to be a forced prestige layer.<br>
+			<div v-if="!player.timePlayedReset">您一共玩了 {{formatTimeLong(player.timePlayed)}} 以后到达了奇点。</div>
+			<br>
+			<button class="longUpg can" onclick="hardReset(true)">Play Again</button>&nbsp;&nbsp;&nbsp;&nbsp;<button class="longUpg can" onclick="keepGoing()">Keep Going</button>
+			<br><br><br>
+			<br>
+			<br><br><br>
+		</div>
+		<div v-if="player.tab=='changelog'" class="col right">
+			<button class="back" onclick="showTab('tree')">&gt;</button><br>
+			<ul>
+				<h5><i>“征服世界”</i></h5>
+				<li><h3>v0.4.0</h3><li>
+				<li>增加了 <spoiler>奇点</spoiler> 。没有任何文明可以通过它。</li>
+				<li>增加了 <spoiler>知识</spoiler> 层级。</li>
+				<li>增加了含有 <spoiler>自动生成世界效果</spoiler> 的 <spoiler>世界地图</spoiler> ，在 <spoiler>领土</spoiler> 层级下。</li>
+				<li>增加了 <spoiler>土地与工作管理</spoiler> ，在 <spoiler>经理</spoiler> 层级下。</li>
+				<li>增加了更多 <spoiler>银行</spoiler> 及 <spoiler>魂灵能量</spoiler> 的重复购买项。</li>
+				<li>增加了 <spoiler>建筑</spoiler> 的预计完成时间，以及 <spoiler>银行</spoiler> 的总加成倍率。</li>
+				<li>修复了高于e1000以上的数值格式显示不正确的问题。</li>
+				<li>增加了成就选项卡。目前只是用来占位置的。以后也不保证一定添加成就。到底会不会添加，这个之后再说吧……</li>
+				<li>进行了更多的界面调整。</li>
+				<li>您可能在点数计数上方看到了一个 "世界 &alpha;" 。这到底是个啥？</li>
+				<br>
+				<br>
+				<h5><i>“文明扩张”</i></h5>
+				<li><h3>v0.3.1</h3><li>
+				<li>修复了 <spoiler>“市场崩盘” 障碍</spoiler> 未按预想中生效的问题。</li>
+				<br>
+				<li><h3>v0.3.0</h3><li>
+				<li>增加了 <spoiler>领土</spoiler> 和 <spoiler>士兵</spoiler> 层级。</li>
+				<li>增加了更多 <spoiler>建筑</spoiler> ， <spoiler>魔咒</spoiler> 及 <spoiler>经理</spoiler> 里程碑。</li>
+				<li>快捷键在未解锁层级的情况下也能生效。</li>
+				<li>增加了模态框。当游戏出错时，将显示详细错误信息，以便报告错误。</li>
+				<br>
+				<h5><i>“新时代”</i></h5>
+				<li><h3>v0.2.0</h3><li>
+				<li>增加了 <spoiler>建造者</spoiler> 和 <spoiler>魂灵能量</spoiler> 层级。</li>
+				<li> <spoiler>经理</spoiler> 层级增加了更多内容。</li>
+				<li>替换了最后的两个 <spoiler>银行</spoiler> 并将这两个之前的 <spoiler>银行</spoiler> 重新命名了。</li>
+				<li>将使用的 The Modding Tree 版本升到了 v1.3.4.</li>
+				<li>更新日志中增加了防剧透的白条，效果类似右边 <spoiler>这个一样</spoiler> 。</li>
+				<li>进行了部分界面调整。</li>
+				<br>
+				<br>
+				<h5><i>“万物之始”</i></h5>
+				<li><h3>v0.1.0</h3><li>
+				<li>增加了 <spoiler>经理</spoiler> 层级(暂时没有实际作用)。</li>
+				<li>该层级之前的一个层级增加了一些新东西。</li>
+				<li>修复了一些与游戏进程和存档有关的问题。</li>
+				<br>
+				<br>
+				<h5><i>“史前”</i></h5>
+				<li><h3>v0.0.1</h3><li>
+				<li>游戏初期的进程进行了一定程度的平衡调整。</li>
+				<br>
+				<li><h3>v0.0.0</h3><li>
+				<li>呱呱坠地。问题很多。并不平衡。欢迎建议。</li>
+			</ul>
+		</div>
+		<div v-if="player.tab=='old-stuff'" class="col right">
+			<button class="back" onclick="showTab('changelog')">&gt;</button><br>
+			<ul>
+			</ul>
+		</div>
+		<div v-if="player.tab=='info'" class="col right">
+			<button class="back" onclick="showTab('tree')">&gt;</button><br>
+			<br>
+			<h2>{{modInfo.name}}</h2>
+			<br>
+			<h3>{{VERSION.withName}}</h3>
+			<br>
+			<br>
+			作者：ducdat0507
+			<br>
+			本游戏为Jacorb及Aarex的作品：The Prestige Tree的游戏模组
+			<br>
+			并使用了Acamaeda的The Modding Tree
+			<br><br>
+			<button class="tabButton" onclick="showTab('changelog')" style="background-color:var(--color)">Game Changelog</button><br>
+			<button class="tabButton" onclick="showDiscordModal()" style="background-color:var(--color)">Discord servers</button><br>
+			<br><br>
+			您已经玩了：{{ formatTimeLong(player.timePlayed) }}<br><br>
+			<h3>Hotkeys</h3><br>
+			<span v-for="key in hotkeys" v-if="player[key.layer].unl"><br>{{key.desc}}</span>
+		</div>
+		<div v-if="player.tab=='achievements'" class="col right">
+			<button class="back" onclick="showTab('tree')">&gt;</button>
+			<br/><br/>
+			<h3>Achievements</h3><br/>
+			<br/>Unfortunately, this world does not have any achievements.
+			<br/>
+			<br/>Current endgame: <spoiler>The Singularity</spoiler>
+		</div>
+		<div v-if="player.tab=='statistics'" class="col right">
+			<button class="back" onclick="showTab('tree')">&gt;</button>
+			<br/><br/>
+			<h3>Statistics</h3>
+			<br/>您已经玩了：{{ formatTimeLong(player.timePlayed) }}.
+			<br/><br/>
+			<h3>Layer Breakdown</h3>
+			<table>
+				<tbody>
+					<tr>
+						<th style="width:240px" colspan="3">Layer / Resource</th>
+						<th style="width:100px">Amount</th>
+						<th style="width:100px">Best</th>
+						<th style="width:100px">Total</th>
+					</tr>
+					<tr v-for="res in statsResources" v-bind:style="{'opacity' : res.unl() ? 1 : 0.3, 'font-size': res.name.startsWith('└') || res.name.startsWith('├') ? '14px' : '16px', 'height': res.name.startsWith('└') || res.name.startsWith('├') ? '12px' : '20px'}">
+						<td style="width:40px;text-align:right">{{res.name.startsWith("└") || res.name.startsWith("├") ? "" : (res.unl() ? res.layer.toUpperCase() : "??")}}</td>
+						<td>&nbsp;</td>
+						<td style="text-align:left">{{res.unl() ? res.name : "??????????"}}</td>
+						<td>{{res.unl() ? res.points() : "??????"}}</td>
+						<td>{{res.unl() ? (res.best ? res.best() : "") : "??????"}}</td>
+						<td>{{res.unl() ? (res.total ? res.total() : "") : "??????"}}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div v-if="player.tab=='options'" class="col right">
+			<button class="back" onclick="showTab('tree')">&gt;</button><br>
+			<div v-if="!player.optionFlavor">
+				<br/><h3>Saving</h3><br/><br/>
+				<div style="display:flex">
+					<button class="option" onclick="save()">Instant save</button>
+					<button class="option" onclick="toggleOpt('autosave')">Autosave: {{ player.autosave?"ENABLED":"DISABLED" }}</button>
+					<button class="option" onclick="exportSave()">Export save to clipboard</button>
+					<button class="option" onclick="importSave()">Import save</button>
+					<button class="option" onclick="hardReset()">HARD RESET THE GAME</button>
+				</div>
+				<br/><h3>Gameplay</h3><br/><br/>
+				<div style="display:flex">
+					<button class="option" onclick="toggleOpt('offlineProd')">Offline Production: {{ player.offlineProd?"ENABLED":"DISABLED" }}</td>
+				</div>
+				<br/><h3>Display</h3><br/><br/>
+				<div style="display:flex">
+					<button class="option" onclick="switchTheme()">Theme: {{ getThemeName().toUpperCase() }}</button>
+					<button class="option" onclick="adjustMSDisp()">Show Milestones: {{ player.msDisplay.toUpperCase() }}</button>
+					<button class="option" onclick="toggleOpt('hqTree')">Tree Quality: {{ player.hqTree?"QUALITY":"PERFORMANCE" }}</button>
+					<button class="option" onclick="toggleOpt('optionFlavor')">Option Tab Flavor: {{ player.optionFlavor?"CLASSIC":"REMADE" }}</button>
+					<button class="option" onclick="toggleOpt('menuFlavor')">Tree Menu Flavor: {{ player.menuFlavor?"CLASSIC":"TOPBAR" }}</button>
+				</div>
+			</div>
+			<table v-if="player.optionFlavor">
+				<tr>
+					<td><button class="opt" onclick="save()">Save</button></td>
+					<td><button class="opt" onclick="toggleOpt('autosave')">Autosave: {{ player.autosave?"ON":"OFF" }}</button></td>
+					<td><button class="opt" onclick="hardReset()">HARD RESET</button></td>
+				</tr>
+				<tr>
+					<td><button class="opt" onclick="exportSave()">Export to clipboard</button></td>
+					<td><button class="opt" onclick="importSave()">Import</button></td>
+					<td><button class="opt" onclick="toggleOpt('offlineProd')">Offline Prod: {{ player.offlineProd?"ON":"OFF" }}</button></td>
+				</tr>
+				<tr>
+					<td><button class="opt" onclick="switchTheme()">Theme: {{ getThemeName() }}</button></td>
+					<td><button class="opt" onclick="adjustMSDisp()">Show Milestones: {{ player.msDisplay.toUpperCase() }}</button></td>
+					<td><button class="opt" onclick="toggleOpt('hqTree')">High-Quality Tree: {{ player.hqTree?"ON":"OFF" }}</button></td>
+				</tr>
+				<tr>
+					<td><button class="opt" onclick="toggleOpt('optionFlavor')">Option Tab Flavor: {{ player.optionFlavor?"CLASSIC":"REMADE" }}</button></td>
+					<td><button class="opt" onclick="toggleOpt('menuFlavor')">Tree Menu Flavor: {{ player.menuFlavor?"CLASSIC":"TOPBAR" }}</button></td>
+				</tr> 
+			</table>
+		</div>
+		<div id="treeTab" v-if="player.tab!='gameEnded'" onscroll="resizeCanvas()" v-bind:class="{ fullWidth: player.tab == 'tree', col: player.tab != 'tree', left: player.tab != 'tree'}">
+			<div v-if="player.menuFlavor">
+				<div id="version" class="overlayThing" style="margin-right: 13px">{{VERSION.withoutName}}</div>
+				<img id="optionWheel"  class="overlayThing" v-if="player.tab!='options'" src="options_wheel.png" onclick="showTab('options')"></img>
+				<div id="info" v-if="player.tab!='info'"  class="overlayThing" onclick="showTab('info')"><br>i</div>
+				<img id="discord" onclick="showDiscordModal()" src="discord.png"  target="_blank"></img>
+				<div id="achievements" class="overlayThing" v-if="player.tab!='achievements'" onclick="showTab('achievements')">🏆</div>
+				<div id="stats" class="overlayThing" v-if="player.tab!='statistics'" onclick="showTab('statistics')">📊</div>
+			</div>
+			<div v-if="!player.menuFlavor" style="width:100%;background-color:#fff3;position:sticky;top:0px;z-index:2147000000;display: flex">
+				<button class="topbarButton" style="width:40%" onclick="showTab('info')"><h5 style="font-weight:700">☀️ {{modInfo.name}} {{VERSION.withoutName}}</h5></button><!--
+				--><button class="topbarButton" style="width:20%" onclick="showTab('achievements')"><h5>🏆 Achievements</h5></button><!--
+				--><button class="topbarButton" style="width:20%" onclick="showTab('statistics')"><h5>📊 Statistics</h5></button><!--
+				--><button class="topbarButton" style="width:20%" onclick="showTab('options')"><h5>⚙️ Options</h5></button>
+			</div>
+			<br/>
+			<h5>{{getWorldName()}}</h5>
+			<h5 v-if="player.devSpeed && player.devSpeed != 1">
+				设备速度：{{format(player.devSpeed)}} 倍<br>
+			</h5>
+			<h5 v-if="player.offTime !== undefined">
+				离线时间：{{formatTime(player.offTime.remain)}}<br>
+			</h5>
+			<br>
+			<span>You have </span>
+			<h2 id="points">{{format(player.points)}}</h2>
+			<span> 点数</span>
+			<!-- <span> {{modInfo.pointsName}}</span> -->
+			<br><br>
+			<!-- *************************** Modify the tree in the table below! *************************** -->
+			<div v-if="player.points.lt(ENDGAME)">
+				<table>
+					<td><layer-node layer='c' abb='金币'></layer-node></td>
+				</table><table>
+					<td><button class="treeNode hidden"></button></td>
+				</table><table>
+					<td><layer-node layer='wf' abb='中介'></layer-node></td>
+					<td><layer-node layer='sp' abb='魂灵'></layer-node></td>
+					<td><layer-node layer='b' abb='银行'></layer-node></td>
+				</table><table>
+					<td><button class="treeNode hidden"></button></td>
+				</table><table>
+					<td><layer-node layer='w' abb='工人'></layer-node></td>
+				</table><table>
+					<td><button class="treeNode hidden"></button></td>
+				</table><table>
+					<td><layer-node layer='bd' abb='建造'></layer-node></td>
+					<td><layer-node layer='so' abb='士兵'></layer-node></td>
+					<td><layer-node layer='m' abb='经理'></layer-node></td>
+					<td><layer-node layer='t' abb='领土'></layer-node></td>
+					<td><layer-node layer='wi' abb='智慧'></layer-node></td>
+				</table>
+				</table><table>
+					<td><button class="treeNode hidden"></button></td>
+				</table><table>
+					<td><layer-node layer='s' abb='奇点'></layer-node></td>
+				</table>
+			</div>
+			<div v-if="player.points.gte(ENDGAME)">
+				<h5>The point of singularity has been reached. Your civilization did not make it through.</h5>
+				<br/><br/>
+				<table>
+					<td><layer-node layer='s' abb='奇点'></layer-node></td>
+				</table>
+			</div>
+			<canvas id="treeCanvas" class="canvas"></canvas>
+			<br><br>
+		</div>
+		<div v-for="layer in LAYERS">
+			<div v-if="player.tab==layer" v-bind:class="'col right'" v-bind:style="tmp.style[layer] ? tmp.style[layer] : {}" style="background-color: var(--background)">
+				<button class="back" onclick="showTab('tree')">&gt;</button><br><br><br>
+				<div v-if="!layers[layer].tabFormat">
+					<main-display :layer="layer"></main-display>
+					<prestige-button :layer="layer"></prestige-button>
+					<span v-if="layers[layer].type=='normal' && tmp.resetGain[layer].lt(100) && player[layer].points.lt(1e3)"><br>您拥有 {{formatWhole(tmp.layerAmt[layer])}} {{layers[layer].baseResource}}。</span>
+					<br><br>
+					<span v-if="player[layer].best != undefined">您最高拥有 {{formatWhole(player[layer].best)}} {{layers[layer].resource}}。<br></span>
+					<span v-if="player[layer].total != undefined">您一共拥有 {{formatWhole(player[layer].total)}} {{layers[layer].resource}}。<br></span>
+					<milestones :layer="layer"></milestones>
+					<buyables :layer="layer"></buyables>
+					<upgrades :layer="layer"></upgrades>
+					<challs :layer="layer"></challs>
+					<br><br>
+				</div>
+				<div v-if="layers[layer].tabFormat">
+					<div v-for="data in layers[layer].tabFormat">
+						<div v-if="!Array.isArray(data)" v-bind:is="data" :layer="layer"></div>
+						<div v-else-if="data.length==3" v-bind:style="(data[2] ? data[2] : {})" v-bind:is="data[0]" :layer="layer" :data="data[1]"></div>
+						<div v-else-if="data.length==2" v-bind:is="data[0]" :layer="layer" :data="data[1]">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="fullWidth" v-if="modal.showing" style="background-color: #000a; display: flex; z-index: 2147483000">
+			<div class="modal">
+				<h3>{{modal.title}}</h3>
+				<p v-html="modal.content"></p>
+				<button class="tabButton" style="background-color: var(--color); padding: 5px 20px 5px 20px" onclick="{modal.showing = false}"><p>Close</p></button>
+			<div>
+		</div>
+	</div>
+	<datalist id="tickmarks" style="color:white">
+	  <option value="0"></option>
+	  <option value="1"></option>
+	  <option value="2"></option>
+	  <option value="3"></option>
+	  <option value="4"></option>
+	  <option value="5"></option>
+	  <option value="6"></option>
+	  <option value="7"></option>
+	  <option value="8"></option>
+	</datalist>
+</body>
+<!--客服 开始-->
+<link rel="stylesheet" href="//g8hh.com/static/css/kf.css" type="text/css" media="screen" charset="utf-8">
+<script src="//g8hh.com/static/js/kf.js"></script>
+<!-- 客服 结束 -->
